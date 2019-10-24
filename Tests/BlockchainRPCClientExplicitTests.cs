@@ -1,9 +1,9 @@
-﻿using MCWrapper.RPC.Connection;
-using MCWrapper.RPC.Constants;
-using MCWrapper.RPC.Extensions;
-using MCWrapper.RPC.Ledger.Entities;
+﻿using MCWrapper.Data.Models.Blockchain;
+using MCWrapper.Ledger.Entities;
+using MCWrapper.Ledger.Entities.Constants;
+using MCWrapper.Ledger.Entities.Extensions;
+using MCWrapper.RPC.Connection;
 using MCWrapper.RPC.Ledger.Factory;
-using MCWrapper.RPC.Ledger.Models.Blockchain;
 using MCWrapper.RPC.Tests.FilterHelpers;
 using MCWrapper.RPC.Tests.ServiceHelpers;
 using NUnit.Framework;

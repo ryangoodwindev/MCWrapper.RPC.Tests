@@ -1,10 +1,10 @@
-﻿using MCWrapper.RPC.Connection;
-using MCWrapper.RPC.Constants;
-using MCWrapper.RPC.Extensions;
-using MCWrapper.RPC.Ledger.Entities;
+﻿using MCWrapper.Data.Models.Raw;
+using MCWrapper.Data.Models.Wallet;
+using MCWrapper.Ledger.Entities;
+using MCWrapper.Ledger.Entities.Constants;
+using MCWrapper.Ledger.Entities.Extensions;
+using MCWrapper.RPC.Connection;
 using MCWrapper.RPC.Ledger.Factory;
-using MCWrapper.RPC.Ledger.Models.Raw;
-using MCWrapper.RPC.Ledger.Models.Wallet;
 using MCWrapper.RPC.Tests.ServiceHelpers;
 using NUnit.Framework;
 using System.Collections.Generic;

@@ -1,4 +1,5 @@
-﻿using MCWrapper.RPC.Extensions;
+﻿using MCWrapper.Ledger.Entities.Options;
+using MCWrapper.RPC.Extensions;
 using MCWrapper.RPC.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

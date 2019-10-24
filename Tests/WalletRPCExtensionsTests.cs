@@ -1,9 +1,8 @@
-﻿using MCWrapper.RPC.Connection;
-using MCWrapper.RPC.Extensions;
+﻿using MCWrapper.Ledger.Entities;
+using MCWrapper.Ledger.Entities.Extensions;
+using MCWrapper.RPC.Connection;
 using MCWrapper.RPC.Ledger.Clients.Utility;
 using MCWrapper.RPC.Ledger.Clients.Wallet;
-using MCWrapper.RPC.Ledger.Entities;
-using MCWrapper.RPC.Ledger.Entities.BaseEntity;
 using MCWrapper.RPC.Tests.FilterHelpers;
 using MCWrapper.RPC.Tests.ServiceHelpers;
 using NUnit.Framework;
