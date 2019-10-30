@@ -1,5 +1,5 @@
 ﻿using MCWrapper.Ledger.Entities;
-using MCWrapper.RPC.Ledger.Clients.Wallet;
+using MCWrapper.RPC.Ledger.Clients;
 using MCWrapper.RPC.Tests.ServiceHelpers;
 using NUnit.Framework;
 using System.Collections.Generic;

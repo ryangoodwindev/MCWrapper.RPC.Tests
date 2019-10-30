@@ -1,6 +1,5 @@
 ﻿using MCWrapper.Ledger.Entities.Options;
 using MCWrapper.RPC.Extensions;
-using MCWrapper.RPC.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -41,7 +40,7 @@ namespace MCWrapper.RPC.Tests.ServiceHelpers
             // implemented a RuntimeParamOptions instance and passed it to the service container. This
             // parameter is entirely option.
             //
-            ServiceCollection.AddMultiChainCoreRPCServices(profile =>
+            ServiceCollection.AddMultiChainCoreRpcServices(profile =>
             {
                 profile.ChainUseSsl = null;
                 profile.ChainSslPath = "";

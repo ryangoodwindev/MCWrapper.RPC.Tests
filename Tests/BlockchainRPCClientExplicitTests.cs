@@ -3,7 +3,7 @@ using MCWrapper.Ledger.Entities;
 using MCWrapper.Ledger.Entities.Constants;
 using MCWrapper.Ledger.Entities.Extensions;
 using MCWrapper.RPC.Connection;
-using MCWrapper.RPC.Ledger.Factory;
+using MCWrapper.RPC.Ledger.Clients;
 using MCWrapper.RPC.Tests.FilterHelpers;
 using MCWrapper.RPC.Tests.ServiceHelpers;
 using NUnit.Framework;
@@ -37,29 +37,25 @@ namespace MCWrapper.RPC.Tests
         [Test]
         public async Task GetAssetInfoTestAsync()
         {
-            // Stage - Fetch RPC clients
-            var wallet = Factory.GetWalletRpcClient();
-            var blockchain = Factory.GetBlockchainRpcClient();
-
             // Stage - Issue a new asset
-            var asset = await wallet.IssueAsync(
-                blockchainName: wallet.BlockchainOptions.ChainName,
+            var asset = await Factory.WalletRpcClient.IssueAsync(
+                blockchainName: Factory.WalletRpcClient.BlockchainOptions.ChainName,
                 id: Guid.NewGuid().ToString("N"),
-                to_address: wallet.BlockchainOptions.ChainAdminAddress,
+                to_address: Factory.WalletRpcClient.BlockchainOptions.ChainAdminAddress,
                 asset_params: new AssetEntity(),
                 quantity: 1,
                 smallest_unit: 0.1, 0, new { text = "Some Text in Hex".ToHex() });
 
             // Act - Try to get verbose Asset information from the blockchain network
-            var verbose = await blockchain.GetAssetInfoAsync(
-                blockchainName: blockchain.BlockchainOptions.ChainName,
+            var verbose = await Factory.BlockchainRpcClient.GetAssetInfoAsync(
+                blockchainName: Factory.BlockchainRpcClient.BlockchainOptions.ChainName,
                 id: nameof(GetAssetInfoTestAsync),
                 asset_identifier: asset.Result,
                 verbose: true);
 
             // Act - Try to get precise Asset information from the blockchain network
-            var nonVerbose = await blockchain.GetAssetInfoAsync(
-                blockchainName: blockchain.BlockchainOptions.ChainName,
+            var nonVerbose = await Factory.BlockchainRpcClient.GetAssetInfoAsync(
+                blockchainName: Factory.BlockchainRpcClient.BlockchainOptions.ChainName,
                 id: nameof(GetAssetInfoTestAsync),
                 asset_identifier: asset.Result,
                 verbose: false);
@@ -78,11 +74,8 @@ namespace MCWrapper.RPC.Tests
         [Test]
         public async Task GetBlockchainInfoTestAsync()
         {
-            // Stage - Fetch RPC client
-            var blockchain = Factory.GetBlockchainRpcClient();
-
             // Act - Ask the network for information about the blockchain
-            var actual = await blockchain.GetBlockchainInfoAsync(blockchain.BlockchainOptions.ChainName, nameof(GetBlockchainInfoTestAsync));
+            var actual = await Factory.BlockchainRpcClient.GetBlockchainInfoAsync(Factory.BlockchainRpcClient.BlockchainOptions.ChainName, nameof(GetBlockchainInfoTestAsync));
 
             // Assert
             Assert.IsNull(actual.Error);
@@ -94,7 +87,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetBestBlockHashTestAsync()
         {
             // Stage - Fetch RPC client
-            var blockchain = Factory.GetBlockchainRpcClient();
+            var blockchain = Factory.BlockchainRpcClient;
 
             // Act - Ask blockchain network for the best block hash value
             var actual = await blockchain.GetBestBlockHashAsync(blockchain.BlockchainOptions.ChainName, nameof(GetBestBlockHashTestAsync));
@@ -109,7 +102,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetBlockCountTestAsync()
         {
             // Stage - Fetch RPC client
-            var blockchain = Factory.GetBlockchainRpcClient();
+            var blockchain = Factory.BlockchainRpcClient;
 
             // Act - Ask blockchain network for block count in longest chain
             var actual = await blockchain.GetBlockCountAsync(blockchain.BlockchainOptions.ChainName, nameof(GetBlockCountTestAsync));
@@ -124,7 +117,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetBlockHashTestAsync()
         {
             // Stage - Fetch RPC client
-            var blockchain = Factory.GetBlockchainRpcClient();
+            var blockchain = Factory.BlockchainRpcClient;
 
             // Act - Ask blockchain network for the block hash of a specific index (block height)
             var actual = await blockchain.GetBlockHashAsync(
@@ -142,7 +135,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetBlockTestAsync()
         {
             // Stage - Fetch RPC client
-            var blockchain = Factory.GetBlockchainRpcClient();
+            var blockchain = Factory.BlockchainRpcClient;
 
             // Act - Ask blockchain network for a block at the specific index in a specific format
             var verbose = await blockchain.GetBlockAsync<RpcResponse<GetBlockVerboseResult>>(
@@ -222,7 +215,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetChainTipsTestAsync()
         {
             // Stage - Fetch RPC client
-            var blockchain = Factory.GetBlockchainRpcClient();
+            var blockchain = Factory.BlockchainRpcClient;
 
             // Act - Ask blockchain network for the tip of the longest chain
             var actual = await blockchain.GetChainTipsAsync(blockchain.BlockchainOptions.ChainName, nameof(GetChainTipsTestAsync));
@@ -237,7 +230,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetDifficultyTestAsync()
         {
             // Stage - Fetch RPC client
-            var blockchain = Factory.GetBlockchainRpcClient();
+            var blockchain = Factory.BlockchainRpcClient;
 
             // Act - Ask blockchain network for the mining difficulty rating
             var actual = await blockchain.GetDifficultyAsync(blockchain.BlockchainOptions.ChainName, nameof(GetDifficultyTestAsync));
@@ -252,8 +245,8 @@ namespace MCWrapper.RPC.Tests
         public async Task GetFilterCodeTestAsync()
         {
             // Stage - Fetch RPC clients
-            var wallet = Factory.GetWalletRpcClient();
-            var blockchain = Factory.GetBlockchainRpcClient();
+            var wallet = Factory.WalletRpcClient;
+            var blockchain = Factory.BlockchainRpcClient;
 
             // Stage - Create filter
             var filter = await wallet.CreateAsync(
@@ -281,7 +274,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetLastBlockInfoTestAsync()
         {
             // Stage - Fetch RPC client
-            var blockchain = Factory.GetBlockchainRpcClient();
+            var blockchain = Factory.BlockchainRpcClient;
 
             // Act - Ask about recent or last blocks in the network
             var actual = await blockchain.GetLastBlockInfoAsync(
@@ -299,7 +292,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetMemPoolInfoTestAsync()
         {
             // Stage - Fetch RPC client
-            var blockchain = Factory.GetBlockchainRpcClient();
+            var blockchain = Factory.BlockchainRpcClient;
 
             // Act - Ask blockchain network for mempool information
             var actual = await blockchain.GetMemPoolInfoAsync(blockchainName: blockchain.BlockchainOptions.ChainName, id: nameof(GetMemPoolInfoTestAsync));
@@ -314,7 +307,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetRawMemPoolTestAsync()
         {
             // Stage - Fetch RPC client
-            var blockchain = Factory.GetBlockchainRpcClient();
+            var blockchain = Factory.BlockchainRpcClient;
 
             // Act - Ask blockchain network for raw mempool information
             var actual = await blockchain.GetRawMemPoolAsync(
@@ -332,7 +325,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetStreamInfoTestAsync()
         {
             // Stage - Fetch RPC client
-            var blockchain = Factory.GetBlockchainRpcClient();
+            var blockchain = Factory.BlockchainRpcClient;
 
             // Act - Fetch information about a specific blockchain stream
             var actual = await blockchain.GetStreamInfoAsync(
@@ -351,8 +344,8 @@ namespace MCWrapper.RPC.Tests
         public async Task GetTxOutTestAsync()
         {
             // Stage - Fetch RPC clients
-            var wallet = Factory.GetWalletRpcClient();
-            var blockchain = Factory.GetBlockchainRpcClient();
+            var wallet = Factory.WalletRpcClient;
+            var blockchain = Factory.BlockchainRpcClient;
 
             // Stage - Issue a new asset to the blockchain node
             var asset = await wallet.IssueAsync(
@@ -391,7 +384,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetTxOutSetInfoTestAsync()
         {
             // Stage - Fetch RPC client
-            var blockchain = Factory.GetBlockchainRpcClient();
+            var blockchain = Factory.BlockchainRpcClient;
 
             // Act - Statistics about the unspent transaction output set
             RpcResponse<GetTxOutSetInfoResult> actual = await blockchain.GetTxOutSetInfoAsync(blockchainName: blockchain.BlockchainOptions.ChainName, id: nameof(GetTxOutSetInfoTestAsync));
@@ -406,7 +399,7 @@ namespace MCWrapper.RPC.Tests
         public async Task ListAssetsTestAsync()
         {
             // Stage - Fetch RPC client
-            var blockchain = Factory.GetBlockchainRpcClient();
+            var blockchain = Factory.BlockchainRpcClient;
 
             // Act - Information about a one or many assets
             RpcResponse<ListAssetsResult[]> actual = await blockchain.ListAssetsAsync(
@@ -427,7 +420,7 @@ namespace MCWrapper.RPC.Tests
         public async Task ListBlocksTestAsync()
         {
             // Stage - Fetch RPC client
-            var blockchain = Factory.GetBlockchainRpcClient();
+            var blockchain = Factory.BlockchainRpcClient;
 
             // Act - Return information about one or many blocks
             RpcResponse<ListBlocksResult[]> actual = await blockchain.ListBlocksAsync(
@@ -446,7 +439,7 @@ namespace MCWrapper.RPC.Tests
         public async Task ListPermissionsTestAsync()
         {
             // Stage - Fetch RPC client
-            var blockchain = Factory.GetBlockchainRpcClient();
+            var blockchain = Factory.BlockchainRpcClient;
 
             // Act - List information about one or many permissions pertaining to one or many addresses
             RpcResponse<ListPermissionsResult[]> actual = await blockchain.ListPermissionsAsync(
@@ -466,7 +459,7 @@ namespace MCWrapper.RPC.Tests
         public async Task ListStreamFiltersTestAsync()
         {
             // Stage - Fetch RPC client
-            var blockchain = Factory.GetBlockchainRpcClient();
+            var blockchain = Factory.BlockchainRpcClient;
 
             // Act - Ask for a list of stream filters
             RpcResponse<ListStreamFiltersResult[]> actual = await blockchain.ListStreamFiltersAsync(
@@ -485,7 +478,7 @@ namespace MCWrapper.RPC.Tests
         public async Task ListStreamsTestAsync()
         {
             // Stage - Fetch RPC client
-            var blockchain = Factory.GetBlockchainRpcClient();
+            var blockchain = Factory.BlockchainRpcClient;
 
             // Act - Ask for a list of streams
             RpcResponse<ListStreamsResult[]> actual = await blockchain.ListStreamsAsync(
@@ -506,7 +499,7 @@ namespace MCWrapper.RPC.Tests
         public async Task ListTxFiltersTestAsync()
         {
             // Stage - Fetch RPC client
-            var blockchain = Factory.GetBlockchainRpcClient();
+            var blockchain = Factory.BlockchainRpcClient;
 
             // Act - List of transaction filters
             RpcResponse<ListTxFiltersResult[]> actual = await blockchain.ListTxFiltersAsync(
@@ -525,7 +518,7 @@ namespace MCWrapper.RPC.Tests
         public async Task ListUpgradesTestAsync()
         {
             // Stage - Fetch RPC client
-            var blockchain = Factory.GetBlockchainRpcClient();
+            var blockchain = Factory.BlockchainRpcClient;
 
             // Act - List of upgrades
             RpcResponse<object> actual = await blockchain.ListUpgradesAsync(
@@ -543,8 +536,8 @@ namespace MCWrapper.RPC.Tests
         public async Task RunStreamFilterTestAsync()
         {
             // Stage - Fetch RPC clients
-            var wallet = Factory.GetWalletRpcClient();
-            var blockchain = Factory.GetBlockchainRpcClient();
+            var wallet = Factory.WalletRpcClient;
+            var blockchain = Factory.BlockchainRpcClient;
 
             // Stage - Create filter
             var streamFilter = await wallet.CreateAsync(
@@ -571,7 +564,7 @@ namespace MCWrapper.RPC.Tests
         public async Task RunTxFilterTestAsync()
         {
             // Stage - Fetch RPC client
-            var blockchain = Factory.GetBlockchainRpcClient();
+            var blockchain = Factory.BlockchainRpcClient;
 
             // Stage - List tx filters
             var txFilter = await blockchain.ListTxFiltersAsync(
@@ -596,7 +589,7 @@ namespace MCWrapper.RPC.Tests
         public async Task TestStreamFilterTestAsync()
         {
             // Stage - Fetch RPC client
-            var blockchain = Factory.GetBlockchainRpcClient();
+            var blockchain = Factory.BlockchainRpcClient;
 
             // Act - Test stream filter
             var actual = await blockchain.TestStreamFilterAsync(
@@ -615,7 +608,7 @@ namespace MCWrapper.RPC.Tests
         public async Task TestTxFilterTestAsync()
         {
             // Stage - Fetch RPC client
-            var blockchain = Factory.GetBlockchainRpcClient();
+            var blockchain = Factory.BlockchainRpcClient;
 
             // Act - Test transaction filter
             RpcResponse<TestTxFilterResult> actual = await blockchain.TestTxFilterAsync(
@@ -634,7 +627,7 @@ namespace MCWrapper.RPC.Tests
         public async Task VerifyChainTestAsync()
         {
             // Stage - Fetch RPC client
-            var blockchain = Factory.GetBlockchainRpcClient();
+            var blockchain = Factory.BlockchainRpcClient;
 
             // Act - Verify blockchain database
             RpcResponse<bool> actual = await blockchain.VerifyChainAsync(
@@ -653,7 +646,7 @@ namespace MCWrapper.RPC.Tests
         public async Task VerifyPermissionTestAsync()
         {
             // Stage - Fetch RPC client
-            var blockchain = Factory.GetBlockchainRpcClient();
+            var blockchain = Factory.BlockchainRpcClient;
 
             // Act - Verify permissions for a specific address
             RpcResponse<bool> actual = await blockchain.VerifyPermissionAsync(

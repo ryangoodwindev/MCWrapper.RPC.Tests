@@ -1,8 +1,7 @@
 ﻿using MCWrapper.Ledger.Entities;
 using MCWrapper.Ledger.Entities.Extensions;
 using MCWrapper.RPC.Connection;
-using MCWrapper.RPC.Ledger.Clients.Utility;
-using MCWrapper.RPC.Ledger.Clients.Wallet;
+using MCWrapper.RPC.Ledger.Clients;
 using MCWrapper.RPC.Tests.FilterHelpers;
 using MCWrapper.RPC.Tests.ServiceHelpers;
 using NUnit.Framework;

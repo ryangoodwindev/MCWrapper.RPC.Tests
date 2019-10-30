@@ -4,7 +4,7 @@ using MCWrapper.Ledger.Entities;
 using MCWrapper.Ledger.Entities.Constants;
 using MCWrapper.Ledger.Entities.Extensions;
 using MCWrapper.RPC.Connection;
-using MCWrapper.RPC.Ledger.Factory;
+using MCWrapper.RPC.Ledger.Clients;
 using MCWrapper.RPC.Tests.ServiceHelpers;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -34,8 +34,8 @@ namespace MCWrapper.RPC.Tests
        [Test]
        public async Task RawTransactionTest()
         {
-            var raw = Factory.GetRawRpcClient();
-            var wallet = Factory.GetWalletRpcClient();
+            var raw = Factory.RawRpcClient;
+            var wallet = Factory.WalletRpcClient;
 
             // Stage - instantiate two new Assets
             var assetModel_0 = new AssetEntity();

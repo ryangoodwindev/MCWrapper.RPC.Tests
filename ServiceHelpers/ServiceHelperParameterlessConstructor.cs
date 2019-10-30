@@ -21,7 +21,7 @@ namespace MCWrapper.RPC.Tests.ServiceHelpers
         public ServiceHelperParameterlessConstructor()
         {
             // Add MultiChain library services to the collection
-            ServiceCollection.AddMultiChainCoreRPCServices();
+            ServiceCollection.AddMultiChainCoreRpcServices();
 
             // build and store Service provider
             ServiceProvider = ServiceCollection.BuildServiceProvider();

@@ -1,7 +1,7 @@
 ﻿using MCWrapper.Data.Models.Network;
 using MCWrapper.Ledger.Entities.Constants;
 using MCWrapper.RPC.Connection;
-using MCWrapper.RPC.Ledger.Clients.Network;
+using MCWrapper.RPC.Ledger.Clients;
 using MCWrapper.RPC.Tests.ServiceHelpers;
 using NUnit.Framework;
 using System.Threading.Tasks;

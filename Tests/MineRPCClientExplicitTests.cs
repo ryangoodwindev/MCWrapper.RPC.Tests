@@ -1,5 +1,5 @@
 ﻿using MCWrapper.RPC.Connection;
-using MCWrapper.RPC.Ledger.Clients.Mining;
+using MCWrapper.RPC.Ledger.Clients;
 using MCWrapper.RPC.Tests.ServiceHelpers;
 using NUnit.Framework;
 using System.Threading.Tasks;

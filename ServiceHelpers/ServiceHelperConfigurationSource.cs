@@ -32,7 +32,7 @@ namespace MCWrapper.RPC.Tests.ServiceHelpers
             IConfiguration configuration = builder.Build();
 
             // Add MultiChain library services to the collection
-            ServiceCollection.AddMultiChainCoreRPCServices(configuration: configuration);
+            ServiceCollection.AddMultiChainCoreRpcServices(configuration: configuration);
 
             // build and store Service provider
             ServiceProvider = ServiceCollection.BuildServiceProvider();
