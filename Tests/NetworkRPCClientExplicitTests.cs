@@ -12,7 +12,7 @@ namespace MCWrapper.RPC.Tests
     public class NetworkRPCClientExplicitTests
     {
         // private field
-        private readonly NetworkRpcClient Network;
+        private readonly IMultiChainRpcNetwork _network;
 
         /// <summary>
         /// Create new NetworkServiceTests instance
@@ -23,15 +23,15 @@ namespace MCWrapper.RPC.Tests
             var provider = new ServiceHelperParameterlessConstructor();
 
             // fetch service from provider
-            Network = provider.GetService<NetworkRpcClient>();
+            _network = provider.GetService<IMultiChainRpcNetwork>();
         }
 
         [Test, Ignore("AddNode test is ignored since I don't care about peers right now")]
         public async Task AddNodeTestAsync()
         {
             // Act - Add a peer
-            var actual = await Network.AddNodeAsync(
-                blockchainName: Network.BlockchainOptions.ChainName,
+            var actual = await _network.AddNodeAsync(
+                blockchainName: _network.RpcOptions.ChainName,
                 id: nameof(AddNodeTestAsync),
                 node: "192.168.0.90:3333",
                 action: PeerConnection.Add);
@@ -46,8 +46,8 @@ namespace MCWrapper.RPC.Tests
         public async Task GetAddNodeInfoTestAsync()
         {
             // Act - Informatinon about added nodes
-            RpcResponse<GetAddNodeInfoResult[]> actual = await Network.GetAddedNodeInfoAsync(
-                blockchainName: Network.BlockchainOptions.ChainName,
+            RpcResponse<GetAddNodeInfoResult[]> actual = await _network.GetAddedNodeInfoAsync(
+                blockchainName: _network.RpcOptions.ChainName,
                 id: nameof(GetAddNodeInfoTestAsync),
                 dns: true,
                 node: "192.168.0.90:3333");
@@ -62,7 +62,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetChunkQueueInfoTestAsync()
         {
             // Act - Fetch chunk queue information
-            var actual = await Network.GetChunkQueueInfoAsync(Network.BlockchainOptions.ChainName, nameof(GetChunkQueueInfoTestAsync));
+            var actual = await _network.GetChunkQueueInfoAsync(_network.RpcOptions.ChainName, nameof(GetChunkQueueInfoTestAsync));
 
             // Assert
             Assert.IsNull(actual.Error);
@@ -74,7 +74,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetChunkQueueTotalsTestAsync()
         {
             // Act - Chunks delivery status
-            var actual = await Network.GetChunkQueueTotalsAsync(Network.BlockchainOptions.ChainName, nameof(GetChunkQueueTotalsTestAsync));
+            var actual = await _network.GetChunkQueueTotalsAsync(_network.RpcOptions.ChainName, nameof(GetChunkQueueTotalsTestAsync));
 
             // Assert
             Assert.IsNull(actual.Error);
@@ -86,7 +86,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetConnectionCountTestAsync()
         {
             // Act - Get number of connection to network
-            var actual = await Network.GetConnectionCountAsync(Network.BlockchainOptions.ChainName, nameof(GetConnectionCountTestAsync));
+            var actual = await _network.GetConnectionCountAsync(_network.RpcOptions.ChainName, nameof(GetConnectionCountTestAsync));
 
             // Assert
             Assert.IsNull(actual.Error);
@@ -98,7 +98,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetNetTotalsTestAsync()
         {
             // Act - Information about network traffic
-            var actual = await Network.GetNetTotalsAsync(Network.BlockchainOptions.ChainName, nameof(GetNetTotalsTestAsync));
+            var actual = await _network.GetNetTotalsAsync(_network.RpcOptions.ChainName, nameof(GetNetTotalsTestAsync));
 
             // Assert
             Assert.IsNull(actual.Error);
@@ -110,7 +110,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetNetworkInfoTestAsync()
         {
             // Act - Request information about the network
-            RpcResponse<GetNetworkInfoResult> actual = await Network.GetNetworkInfoAsync(Network.BlockchainOptions.ChainName, nameof(GetNetworkInfoTestAsync));
+            RpcResponse<GetNetworkInfoResult> actual = await _network.GetNetworkInfoAsync(_network.RpcOptions.ChainName, nameof(GetNetworkInfoTestAsync));
 
             // Assert
             Assert.IsNull(actual.Error);
@@ -122,7 +122,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetPeerInfoTestAsync()
         {
             // Act - Request information about any connected peers
-            var actual = await Network.GetPeerInfoAsync(Network.BlockchainOptions.ChainName, nameof(GetPeerInfoTestAsync));
+            var actual = await _network.GetPeerInfoAsync(_network.RpcOptions.ChainName, nameof(GetPeerInfoTestAsync));
 
             // Assert
             Assert.IsNull(actual.Error);
@@ -134,7 +134,7 @@ namespace MCWrapper.RPC.Tests
         public async Task PingTestAsync()
         {
             // Act - Ping connect peers
-            var actual = await Network.PingAsync(Network.BlockchainOptions.ChainName, nameof(PingTestAsync));
+            var actual = await _network.PingAsync(_network.RpcOptions.ChainName, nameof(PingTestAsync));
 
             // Assert
             Assert.IsNull(actual.Error);

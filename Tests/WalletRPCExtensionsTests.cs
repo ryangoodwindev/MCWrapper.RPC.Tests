@@ -13,18 +13,17 @@ namespace MCWrapper.RPC.Tests
     [TestFixture]
     public class WalletRPCExtensionsTests
     {
-        private readonly WalletRpcClient Wallet;
-        private readonly UtilityRpcClient Utility;
+        private readonly IMultiChainRpcUtility _utility;
+        private readonly IMultiChainRpcWallet _wallet;
 
         public WalletRPCExtensionsTests()
         {
             var provider = new ServiceHelperParameterlessConstructor();
 
             // fetch services from provider
-            Wallet = provider.GetService<WalletRpcClient>();
-            Utility = provider.GetService<UtilityRpcClient>();
+            _utility = provider.GetService<IMultiChainRpcUtility>();
+            _wallet = provider.GetService<IMultiChainRpcWallet>();
         }
-
 
         // *** Create Stream extension tests
 
@@ -37,7 +36,7 @@ namespace MCWrapper.RPC.Tests
             stream.Restrictions.AddRestriction(StreamRestrictTypes.OffChain);
 
             // Act - attempt to create a new Stream using the inferred blockchain name
-            var createStream = await Wallet.CreateStream(stream);
+            var createStream = await _wallet.CreateStream(stream);
 
             // Assert
             Assert.IsNull(createStream.Error);
@@ -54,7 +53,7 @@ namespace MCWrapper.RPC.Tests
             stream.Restrictions.AddRestriction(StreamRestrictTypes.OffChain);
 
             // Act - attempt to create a new Stream using the explicit blockchain name
-            var createStream = await Wallet.CreateStream(Wallet.BlockchainOptions.ChainName, nameof(CreateStreamExplicitTest), stream);
+            var createStream = await _wallet.CreateStream(_wallet.RpcOptions.ChainName, nameof(CreateStreamExplicitTest), stream);
 
             // Assert
             Assert.IsNull(createStream.Error);
@@ -71,7 +70,7 @@ namespace MCWrapper.RPC.Tests
             stream.Restrictions.AddRestriction(StreamRestrictTypes.OffChain);
 
             // Act - attempt to create a new Stream using the inferred blockchain name
-            var createStreamFrom = await Wallet.CreateStreamFrom(Wallet.BlockchainOptions.ChainAdminAddress, stream);
+            var createStreamFrom = await _wallet.CreateStreamFrom(_wallet.RpcOptions.ChainAdminAddress, stream);
 
             // Assert
             Assert.IsNull(createStreamFrom.Error);
@@ -88,7 +87,7 @@ namespace MCWrapper.RPC.Tests
             stream.Restrictions.AddRestriction(StreamRestrictTypes.OffChain);
 
             // Act - attempt to create a new Stream using the explicit blockchain name
-            var createStreamFrom = await Wallet.CreateStreamFrom(Wallet.BlockchainOptions.ChainName, nameof(CreateStreamFromExplicitTest), Wallet.BlockchainOptions.ChainAdminAddress, stream);
+            var createStreamFrom = await _wallet.CreateStreamFrom(_wallet.RpcOptions.ChainName, nameof(CreateStreamFromExplicitTest), _wallet.RpcOptions.ChainAdminAddress, stream);
 
             // Assert
             Assert.IsNull(createStreamFrom.Error);
@@ -113,7 +112,7 @@ namespace MCWrapper.RPC.Tests
             var upgrade = new UpgradeEntity(name: Guid.NewGuid().ToString("N"), customFields: customFields);
 
             // Act - attempt to create a new Upgrade using the inferred blockchain name
-            var createUpgrade = await Wallet.CreateUpgrade(upgrade);
+            var createUpgrade = await _wallet.CreateUpgrade(upgrade);
 
             // Assert
             Assert.IsNull(createUpgrade.Error);
@@ -135,7 +134,7 @@ namespace MCWrapper.RPC.Tests
             var upgrade = new UpgradeEntity(name: Guid.NewGuid().ToString("N"), customFields: customFields);
 
             // Act - attempt to create a new Upgrade using the explicit blockchain name
-            var createUpgrade = await Wallet.CreateUpgrade(Wallet.BlockchainOptions.ChainName, nameof(CreateUpgradeExplicitTest), upgrade);
+            var createUpgrade = await _wallet.CreateUpgrade(_wallet.RpcOptions.ChainName, nameof(CreateUpgradeExplicitTest), upgrade);
 
             // Assert
             Assert.IsNull(createUpgrade.Error);
@@ -157,7 +156,7 @@ namespace MCWrapper.RPC.Tests
             var upgrade = new UpgradeEntity(name: Guid.NewGuid().ToString("N"), customFields: customFields);
 
             // Act - attempt to create a new Upgrade using the inferred blockchain name
-            var createUpgrade = await Wallet.CreateUpgradeFrom(Wallet.BlockchainOptions.ChainAdminAddress, upgrade);
+            var createUpgrade = await _wallet.CreateUpgradeFrom(_wallet.RpcOptions.ChainAdminAddress, upgrade);
 
             // Assert
             Assert.IsNull(createUpgrade.Error);
@@ -179,7 +178,7 @@ namespace MCWrapper.RPC.Tests
             var upgrade = new UpgradeEntity(name: Guid.NewGuid().ToString("N"), customFields: customFields);
 
             // Act - attempt to create a new Upgrade using the explicit blockchain name
-            var createUpgrade = await Wallet.CreateUpgradeFrom(Wallet.BlockchainOptions.ChainName, nameof(CreateUpgradeFromExplicitTest), Wallet.BlockchainOptions.ChainAdminAddress, upgrade);
+            var createUpgrade = await _wallet.CreateUpgradeFrom(_wallet.RpcOptions.ChainName, nameof(CreateUpgradeFromExplicitTest), _wallet.RpcOptions.ChainAdminAddress, upgrade);
 
             // Assert
             Assert.IsNull(createUpgrade.Error);
@@ -201,7 +200,7 @@ namespace MCWrapper.RPC.Tests
             };
 
             // Act - attempt to create a new Stream Filter using the inferred blockchain name
-            var createFilter = await Wallet.CreateStreamFilter(filter);
+            var createFilter = await _wallet.CreateStreamFilter(filter);
 
             // Assert
             Assert.IsNull(createFilter.Error);
@@ -220,7 +219,7 @@ namespace MCWrapper.RPC.Tests
             };
 
             // Act - attempt to create a new Stream Filter using the explicit blockchain name
-            var createFilter = await Wallet.CreateStreamFilter(Wallet.BlockchainOptions.ChainName, nameof(CreateStreamFilterExplicitTest), filter);
+            var createFilter = await _wallet.CreateStreamFilter(_wallet.RpcOptions.ChainName, nameof(CreateStreamFilterExplicitTest), filter);
 
             // Assert
             Assert.IsNull(createFilter.Error);
@@ -239,7 +238,7 @@ namespace MCWrapper.RPC.Tests
             };
 
             // Act - attempt to create a new Stream Filter from an address using the inferred blockchain name
-            var createFilterFrom = await Wallet.CreateStreamFilterFrom(Wallet.BlockchainOptions.ChainAdminAddress, filter);
+            var createFilterFrom = await _wallet.CreateStreamFilterFrom(_wallet.RpcOptions.ChainAdminAddress, filter);
 
             // Assert
             Assert.IsNull(createFilterFrom.Error);
@@ -258,7 +257,7 @@ namespace MCWrapper.RPC.Tests
             };
 
             // Act - attempt to create a new Stream Filter from an address using the explicit blockchain name
-            var createFilterFrom = await Wallet.CreateStreamFilterFrom(Wallet.BlockchainOptions.ChainName, nameof(CreateStreamFilterFromExplicitTest), Wallet.BlockchainOptions.ChainAdminAddress, filter);
+            var createFilterFrom = await _wallet.CreateStreamFilterFrom(_wallet.RpcOptions.ChainName, nameof(CreateStreamFilterFromExplicitTest), _wallet.RpcOptions.ChainAdminAddress, filter);
 
             // Assert
             Assert.IsNull(createFilterFrom.Error);
@@ -278,7 +277,7 @@ namespace MCWrapper.RPC.Tests
             filter.JavaScriptCode = JsCode.DummyTxFilterCode;
 
             // Act - attempt to create a new Tx Filter using the inferred blockchain name
-            var createFilter = await Wallet.CreateTxFilter(filter);
+            var createFilter = await _wallet.CreateTxFilter(filter);
 
             // Assert
             Assert.IsNull(createFilter.Error);
@@ -295,7 +294,7 @@ namespace MCWrapper.RPC.Tests
             filter.JavaScriptCode = JsCode.DummyTxFilterCode;
 
             // Act - attempt to create a new Tx Filter using the explicit blockchain name
-            var createFilter = await Wallet.CreateTxFilter(Wallet.BlockchainOptions.ChainName, nameof(CreateTxFilterExplicitBlockchainNameTest), filter);
+            var createFilter = await _wallet.CreateTxFilter(_wallet.RpcOptions.ChainName, nameof(CreateTxFilterExplicitBlockchainNameTest), filter);
 
             // Assert
             Assert.IsNull(createFilter.Error);
@@ -312,7 +311,7 @@ namespace MCWrapper.RPC.Tests
             filter.JavaScriptCode = JsCode.DummyTxFilterCode;
 
             // Act - attempt to create a new Tx Filter from an address using the inferred blockchain name
-            var createFilterFrom = await Wallet.CreateTxFilterFrom(Wallet.BlockchainOptions.ChainAdminAddress, filter);
+            var createFilterFrom = await _wallet.CreateTxFilterFrom(_wallet.RpcOptions.ChainAdminAddress, filter);
 
             // Assert
             Assert.IsNull(createFilterFrom.Error);
@@ -329,7 +328,7 @@ namespace MCWrapper.RPC.Tests
             filter.JavaScriptCode = JsCode.DummyTxFilterCode;
 
             // Act - attempt to create a new Tx Filter from an address using the explicit blockchain name
-            var createFilterFrom = await Wallet.CreateTxFilterFrom(Wallet.BlockchainOptions.ChainName, nameof(CreateTxFilterExplicitBlockchainNameTest), Wallet.BlockchainOptions.ChainAdminAddress, filter);
+            var createFilterFrom = await _wallet.CreateTxFilterFrom(_wallet.RpcOptions.ChainName, nameof(CreateTxFilterExplicitBlockchainNameTest), _wallet.RpcOptions.ChainAdminAddress, filter);
 
             // Assert
             Assert.IsNull(createFilterFrom.Error);
@@ -347,7 +346,7 @@ namespace MCWrapper.RPC.Tests
             var streamItem = new PublishEntity("root", PublishEntity.GetUUID(), "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await Wallet.PublishStreamItemKey(streamItem);
+            var publish = await _wallet.PublishStreamItemKey(streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -358,7 +357,7 @@ namespace MCWrapper.RPC.Tests
             streamItem = new PublishEntity("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await Wallet.PublishStreamItemKeys(streamItem);
+            publish = await _wallet.PublishStreamItemKeys(streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -370,12 +369,12 @@ namespace MCWrapper.RPC.Tests
         public async Task PublishStreamItemCachedDataInferredTest()
         {
             // Stage - Create a new BinaryCache and then create a new PublishEntity instance
-            var binaryCache = await Utility.CreateBinaryCacheAsync();
+            var binaryCache = await _utility.CreateBinaryCacheAsync();
             var cachedData = new DataCached(binaryCache.Result);
             var streamItem = new PublishEntity<DataCached>("root", PublishEntity.GetUUID(), cachedData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await Wallet.PublishStreamItemKey(streamItem);
+            var publish = await _wallet.PublishStreamItemKey(streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -383,12 +382,12 @@ namespace MCWrapper.RPC.Tests
             Assert.IsInstanceOf<RpcResponse<string>>(publish);
 
             // Stage - Create a new BinaryCache and then create a new PublishEntity instance
-            binaryCache = await Utility.CreateBinaryCacheAsync();
+            binaryCache = await _utility.CreateBinaryCacheAsync();
             cachedData = new DataCached(binaryCache.Result);
             streamItem = new PublishEntity<DataCached>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, cachedData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await Wallet.PublishStreamItemKeys(streamItem);
+            publish = await _wallet.PublishStreamItemKeys(streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -404,7 +403,7 @@ namespace MCWrapper.RPC.Tests
             var streamItem = new PublishEntity<DataJson>("root", PublishEntity.GetUUID(), jsonData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await Wallet.PublishStreamItemKey(streamItem);
+            var publish = await _wallet.PublishStreamItemKey(streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -416,7 +415,7 @@ namespace MCWrapper.RPC.Tests
             streamItem = new PublishEntity<DataJson>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, jsonData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await Wallet.PublishStreamItemKeys(streamItem);
+            publish = await _wallet.PublishStreamItemKeys(streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -432,7 +431,7 @@ namespace MCWrapper.RPC.Tests
             var streamItem = new PublishEntity<DataText>("root", PublishEntity.GetUUID(), textData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await Wallet.PublishStreamItemKey(streamItem);
+            var publish = await _wallet.PublishStreamItemKey(streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -444,7 +443,7 @@ namespace MCWrapper.RPC.Tests
             streamItem = new PublishEntity<DataText>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, textData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await Wallet.PublishStreamItemKeys(streamItem);
+            publish = await _wallet.PublishStreamItemKeys(streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -462,7 +461,7 @@ namespace MCWrapper.RPC.Tests
             var streamItem = new PublishEntity("root", PublishEntity.GetUUID(), "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await Wallet.PublishStreamItemKey(Wallet.BlockchainOptions.ChainName, nameof(PublishStreamItemHexDataExplicitTest), streamItem);
+            var publish = await _wallet.PublishStreamItemKey(_wallet.RpcOptions.ChainName, nameof(PublishStreamItemHexDataExplicitTest), streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -473,7 +472,7 @@ namespace MCWrapper.RPC.Tests
             streamItem = new PublishEntity("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await Wallet.PublishStreamItemKeys(Wallet.BlockchainOptions.ChainName, nameof(PublishStreamItemHexDataExplicitTest), streamItem);
+            publish = await _wallet.PublishStreamItemKeys(_wallet.RpcOptions.ChainName, nameof(PublishStreamItemHexDataExplicitTest), streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -485,12 +484,12 @@ namespace MCWrapper.RPC.Tests
         public async Task PublishStreamItemCachedDataExplicitTest()
         {
             // Stage - Create a new BinaryCache and then create a new PublishEntity instance
-            var binaryCache = await Utility.CreateBinaryCacheAsync();
+            var binaryCache = await _utility.CreateBinaryCacheAsync();
             var cachedData = new DataCached(binaryCache.Result);
             var streamItem = new PublishEntity<DataCached>("root", PublishEntity.GetUUID(), cachedData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await Wallet.PublishStreamItemKey(Wallet.BlockchainOptions.ChainName, nameof(PublishStreamItemCachedDataExplicitTest), streamItem);
+            var publish = await _wallet.PublishStreamItemKey(_wallet.RpcOptions.ChainName, nameof(PublishStreamItemCachedDataExplicitTest), streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -498,12 +497,12 @@ namespace MCWrapper.RPC.Tests
             Assert.IsInstanceOf<RpcResponse<string>>(publish);
 
             // Stage - Create a new BinaryCache and then create a new PublishEntity instance
-            binaryCache = await Utility.CreateBinaryCacheAsync();
+            binaryCache = await _utility.CreateBinaryCacheAsync();
             cachedData = new DataCached(binaryCache.Result);
             streamItem = new PublishEntity<DataCached>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, cachedData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await Wallet.PublishStreamItemKeys(Wallet.BlockchainOptions.ChainName, nameof(PublishStreamItemCachedDataExplicitTest), streamItem);
+            publish = await _wallet.PublishStreamItemKeys(_wallet.RpcOptions.ChainName, nameof(PublishStreamItemCachedDataExplicitTest), streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -519,7 +518,7 @@ namespace MCWrapper.RPC.Tests
             var streamItem = new PublishEntity<DataJson>("root", PublishEntity.GetUUID(), jsonData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await Wallet.PublishStreamItemKey(Wallet.BlockchainOptions.ChainName, nameof(PublishStreamItemJsonDataExplicitTest), streamItem);
+            var publish = await _wallet.PublishStreamItemKey(_wallet.RpcOptions.ChainName, nameof(PublishStreamItemJsonDataExplicitTest), streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -531,7 +530,7 @@ namespace MCWrapper.RPC.Tests
             streamItem = new PublishEntity<DataJson>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, jsonData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await Wallet.PublishStreamItemKeys(Wallet.BlockchainOptions.ChainName, nameof(PublishStreamItemJsonDataExplicitTest), streamItem);
+            publish = await _wallet.PublishStreamItemKeys(_wallet.RpcOptions.ChainName, nameof(PublishStreamItemJsonDataExplicitTest), streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -547,7 +546,7 @@ namespace MCWrapper.RPC.Tests
             var streamItem = new PublishEntity<DataText>("root", PublishEntity.GetUUID(), textData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await Wallet.PublishStreamItemKey(Wallet.BlockchainOptions.ChainName, nameof(PublishStreamItemTextDataExplicitTest), streamItem);
+            var publish = await _wallet.PublishStreamItemKey(_wallet.RpcOptions.ChainName, nameof(PublishStreamItemTextDataExplicitTest), streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -559,7 +558,7 @@ namespace MCWrapper.RPC.Tests
             streamItem = new PublishEntity<DataText>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, textData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await Wallet.PublishStreamItemKeys(Wallet.BlockchainOptions.ChainName, nameof(PublishStreamItemTextDataExplicitTest), streamItem);
+            publish = await _wallet.PublishStreamItemKeys(_wallet.RpcOptions.ChainName, nameof(PublishStreamItemTextDataExplicitTest), streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -577,7 +576,7 @@ namespace MCWrapper.RPC.Tests
             var streamItem = new PublishEntity("root", PublishEntity.GetUUID(), "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await Wallet.PublishStreamItemKeyFrom(Wallet.BlockchainOptions.ChainAdminAddress, streamItem);
+            var publish = await _wallet.PublishStreamItemKeyFrom(_wallet.RpcOptions.ChainAdminAddress, streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -588,7 +587,7 @@ namespace MCWrapper.RPC.Tests
             streamItem = new PublishEntity("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await Wallet.PublishStreamItemKeysFrom(Wallet.BlockchainOptions.ChainAdminAddress, streamItem);
+            publish = await _wallet.PublishStreamItemKeysFrom(_wallet.RpcOptions.ChainAdminAddress, streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -600,12 +599,12 @@ namespace MCWrapper.RPC.Tests
         public async Task PublishStreamItemFromCachedDataInferredTest()
         {
             // Stage - Create a new BinaryCache and then create a new PublishEntity instance
-            var binaryCache = await Utility.CreateBinaryCacheAsync();
+            var binaryCache = await _utility.CreateBinaryCacheAsync();
             var cachedData = new DataCached(binaryCache.Result);
             var streamItem = new PublishEntity<DataCached>("root", PublishEntity.GetUUID(), cachedData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await Wallet.PublishStreamItemKeyFrom(Wallet.BlockchainOptions.ChainAdminAddress, streamItem);
+            var publish = await _wallet.PublishStreamItemKeyFrom(_wallet.RpcOptions.ChainAdminAddress, streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -613,12 +612,12 @@ namespace MCWrapper.RPC.Tests
             Assert.IsInstanceOf<RpcResponse<string>>(publish);
 
             // Stage - Create a new BinaryCache and then create a new PublishEntity instance
-            binaryCache = await Utility.CreateBinaryCacheAsync();
+            binaryCache = await _utility.CreateBinaryCacheAsync();
             cachedData = new DataCached(binaryCache.Result);
             streamItem = new PublishEntity<DataCached>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, cachedData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await Wallet.PublishStreamItemKeysFrom(Wallet.BlockchainOptions.ChainAdminAddress, streamItem);
+            publish = await _wallet.PublishStreamItemKeysFrom(_wallet.RpcOptions.ChainAdminAddress, streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -634,7 +633,7 @@ namespace MCWrapper.RPC.Tests
             var streamItem = new PublishEntity<DataJson>("root", PublishEntity.GetUUID(), jsonData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await Wallet.PublishStreamItemKeyFrom(Wallet.BlockchainOptions.ChainAdminAddress, streamItem);
+            var publish = await _wallet.PublishStreamItemKeyFrom(_wallet.RpcOptions.ChainAdminAddress, streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -646,7 +645,7 @@ namespace MCWrapper.RPC.Tests
             streamItem = new PublishEntity<DataJson>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, jsonData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await Wallet.PublishStreamItemKeysFrom(Wallet.BlockchainOptions.ChainAdminAddress, streamItem);
+            publish = await _wallet.PublishStreamItemKeysFrom(_wallet.RpcOptions.ChainAdminAddress, streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -662,7 +661,7 @@ namespace MCWrapper.RPC.Tests
             var streamItem = new PublishEntity<DataText>("root", PublishEntity.GetUUID(), textData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await Wallet.PublishStreamItemKeyFrom(Wallet.BlockchainOptions.ChainAdminAddress, streamItem);
+            var publish = await _wallet.PublishStreamItemKeyFrom(_wallet.RpcOptions.ChainAdminAddress, streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -674,7 +673,7 @@ namespace MCWrapper.RPC.Tests
             streamItem = new PublishEntity<DataText>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, textData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await Wallet.PublishStreamItemKeysFrom(Wallet.BlockchainOptions.ChainAdminAddress, streamItem);
+            publish = await _wallet.PublishStreamItemKeysFrom(_wallet.RpcOptions.ChainAdminAddress, streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -692,7 +691,7 @@ namespace MCWrapper.RPC.Tests
             var streamItem = new PublishEntity("root", PublishEntity.GetUUID(), "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await Wallet.PublishStreamItemKeyFrom(Wallet.BlockchainOptions.ChainName, nameof(PublishStreamItemHexDataExplicitTest), Wallet.BlockchainOptions.ChainAdminAddress, streamItem);
+            var publish = await _wallet.PublishStreamItemKeyFrom(_wallet.RpcOptions.ChainName, nameof(PublishStreamItemHexDataExplicitTest), _wallet.RpcOptions.ChainAdminAddress, streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -703,7 +702,7 @@ namespace MCWrapper.RPC.Tests
             streamItem = new PublishEntity("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await Wallet.PublishStreamItemKeysFrom(Wallet.BlockchainOptions.ChainName, nameof(PublishStreamItemHexDataExplicitTest), Wallet.BlockchainOptions.ChainAdminAddress, streamItem);
+            publish = await _wallet.PublishStreamItemKeysFrom(_wallet.RpcOptions.ChainName, nameof(PublishStreamItemHexDataExplicitTest), _wallet.RpcOptions.ChainAdminAddress, streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -715,12 +714,12 @@ namespace MCWrapper.RPC.Tests
         public async Task PublishStreamItemFromCachedDataExplicitTest()
         {
             // Stage - Create a new BinaryCache and then create a new PublishEntity instance
-            var binaryCache = await Utility.CreateBinaryCacheAsync();
+            var binaryCache = await _utility.CreateBinaryCacheAsync();
             var cachedData = new DataCached(binaryCache.Result);
             var streamItem = new PublishEntity<DataCached>("root", PublishEntity.GetUUID(), cachedData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await Wallet.PublishStreamItemKeyFrom(Wallet.BlockchainOptions.ChainName, nameof(PublishStreamItemCachedDataExplicitTest), Wallet.BlockchainOptions.ChainAdminAddress, streamItem);
+            var publish = await _wallet.PublishStreamItemKeyFrom(_wallet.RpcOptions.ChainName, nameof(PublishStreamItemCachedDataExplicitTest), _wallet.RpcOptions.ChainAdminAddress, streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -728,12 +727,12 @@ namespace MCWrapper.RPC.Tests
             Assert.IsInstanceOf<RpcResponse<string>>(publish);
 
             // Stage - Create a new BinaryCache and then create a new PublishEntity instance
-            binaryCache = await Utility.CreateBinaryCacheAsync();
+            binaryCache = await _utility.CreateBinaryCacheAsync();
             cachedData = new DataCached(binaryCache.Result);
             streamItem = new PublishEntity<DataCached>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, cachedData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await Wallet.PublishStreamItemKeysFrom(Wallet.BlockchainOptions.ChainName, nameof(PublishStreamItemCachedDataExplicitTest), Wallet.BlockchainOptions.ChainAdminAddress, streamItem);
+            publish = await _wallet.PublishStreamItemKeysFrom(_wallet.RpcOptions.ChainName, nameof(PublishStreamItemCachedDataExplicitTest), _wallet.RpcOptions.ChainAdminAddress, streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -749,7 +748,7 @@ namespace MCWrapper.RPC.Tests
             var streamItem = new PublishEntity<DataJson>("root", PublishEntity.GetUUID(), jsonData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await Wallet.PublishStreamItemKeyFrom(Wallet.BlockchainOptions.ChainName, nameof(PublishStreamItemJsonDataExplicitTest), Wallet.BlockchainOptions.ChainAdminAddress, streamItem);
+            var publish = await _wallet.PublishStreamItemKeyFrom(_wallet.RpcOptions.ChainName, nameof(PublishStreamItemJsonDataExplicitTest), _wallet.RpcOptions.ChainAdminAddress, streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -761,7 +760,7 @@ namespace MCWrapper.RPC.Tests
             streamItem = new PublishEntity<DataJson>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, jsonData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await Wallet.PublishStreamItemKeysFrom(Wallet.BlockchainOptions.ChainName, nameof(PublishStreamItemJsonDataExplicitTest), Wallet.BlockchainOptions.ChainAdminAddress, streamItem);
+            publish = await _wallet.PublishStreamItemKeysFrom(_wallet.RpcOptions.ChainName, nameof(PublishStreamItemJsonDataExplicitTest), _wallet.RpcOptions.ChainAdminAddress, streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -777,7 +776,7 @@ namespace MCWrapper.RPC.Tests
             var streamItem = new PublishEntity<DataText>("root", PublishEntity.GetUUID(), textData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await Wallet.PublishStreamItemKeyFrom(Wallet.BlockchainOptions.ChainName, nameof(PublishStreamItemTextDataExplicitTest), Wallet.BlockchainOptions.ChainAdminAddress, streamItem);
+            var publish = await _wallet.PublishStreamItemKeyFrom(_wallet.RpcOptions.ChainName, nameof(PublishStreamItemTextDataExplicitTest), _wallet.RpcOptions.ChainAdminAddress, streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -789,7 +788,7 @@ namespace MCWrapper.RPC.Tests
             streamItem = new PublishEntity<DataText>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, textData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await Wallet.PublishStreamItemKeysFrom(Wallet.BlockchainOptions.ChainName, nameof(PublishStreamItemTextDataExplicitTest), Wallet.BlockchainOptions.ChainAdminAddress, streamItem);
+            publish = await _wallet.PublishStreamItemKeysFrom(_wallet.RpcOptions.ChainName, nameof(PublishStreamItemTextDataExplicitTest), _wallet.RpcOptions.ChainAdminAddress, streamItem);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -827,7 +826,7 @@ namespace MCWrapper.RPC.Tests
                 DataHex = "Some data string converted to Hex".ToHex()
             };
 
-            var cache = await Utility.CreateBinaryCacheAsync();
+            var cache = await _utility.CreateBinaryCacheAsync();
             var dataCachedEntityKey = new PublishMultiItemKeyEntity<DataCached>
             {
                 For = "root",
@@ -836,7 +835,7 @@ namespace MCWrapper.RPC.Tests
                 Data = new DataCached(cache.Result)
             };
 
-            cache = await Utility.CreateBinaryCacheAsync();
+            cache = await _utility.CreateBinaryCacheAsync();
             var dataCachedEntityKeys = new PublishMultiItemKeysEntity<DataCached>
             {
                 For = "root",
@@ -891,7 +890,7 @@ namespace MCWrapper.RPC.Tests
             });
 
             // Asert - Attempt to Publish multiple items to the blockchain stream
-            var publish = await Wallet.PublishMultiStreamItems(multi);
+            var publish = await _wallet.PublishMultiStreamItems(multi);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -929,7 +928,7 @@ namespace MCWrapper.RPC.Tests
                 DataHex = "Some data string converted to Hex".ToHex()
             };
 
-            var cache = await Utility.CreateBinaryCacheAsync();
+            var cache = await _utility.CreateBinaryCacheAsync();
             var dataCachedEntityKey = new PublishMultiItemKeyEntity<DataCached>
             {
                 For = "root",
@@ -938,7 +937,7 @@ namespace MCWrapper.RPC.Tests
                 Data = new DataCached(cache.Result)
             };
 
-            cache = await Utility.CreateBinaryCacheAsync();
+            cache = await _utility.CreateBinaryCacheAsync();
             var dataCachedEntityKeys = new PublishMultiItemKeysEntity<DataCached>
             {
                 For = "root",
@@ -993,7 +992,7 @@ namespace MCWrapper.RPC.Tests
             });
 
             // Asert - Attempt to Publish multiple items to the blockchain stream
-            var publish = await Wallet.PublishMultiStreamItems(Wallet.BlockchainOptions.ChainName, nameof(PublishMultiStreamItemsExplicitTest), multi);
+            var publish = await _wallet.PublishMultiStreamItems(_wallet.RpcOptions.ChainName, nameof(PublishMultiStreamItemsExplicitTest), multi);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -1031,7 +1030,7 @@ namespace MCWrapper.RPC.Tests
                 DataHex = "Some data string converted to Hex".ToHex()
             };
 
-            var cache = await Utility.CreateBinaryCacheAsync();
+            var cache = await _utility.CreateBinaryCacheAsync();
             var dataCachedEntityKey = new PublishMultiItemKeyEntity<DataCached>
             {
                 For = "root",
@@ -1040,7 +1039,7 @@ namespace MCWrapper.RPC.Tests
                 Data = new DataCached(cache.Result)
             };
 
-            cache = await Utility.CreateBinaryCacheAsync();
+            cache = await _utility.CreateBinaryCacheAsync();
             var dataCachedEntityKeys = new PublishMultiItemKeysEntity<DataCached>
             {
                 For = "root",
@@ -1095,7 +1094,7 @@ namespace MCWrapper.RPC.Tests
             });
 
             // Asert - Attempt to Publish multiple items to the blockchain stream
-            var publish = await Wallet.PublishMultiStreamItemsFrom(Wallet.BlockchainOptions.ChainAdminAddress, multi);
+            var publish = await _wallet.PublishMultiStreamItemsFrom(_wallet.RpcOptions.ChainAdminAddress, multi);
 
             // Assert
             Assert.IsNull(publish.Error);
@@ -1133,7 +1132,7 @@ namespace MCWrapper.RPC.Tests
                 DataHex = "Some data string converted to Hex".ToHex()
             };
 
-            var cache = await Utility.CreateBinaryCacheAsync();
+            var cache = await _utility.CreateBinaryCacheAsync();
             var dataCachedEntityKey = new PublishMultiItemKeyEntity<DataCached>
             {
                 For = "root",
@@ -1142,7 +1141,7 @@ namespace MCWrapper.RPC.Tests
                 Data = new DataCached(cache.Result)
             };
 
-            cache = await Utility.CreateBinaryCacheAsync();
+            cache = await _utility.CreateBinaryCacheAsync();
             var dataCachedEntityKeys = new PublishMultiItemKeysEntity<DataCached>
             {
                 For = "root",
@@ -1197,7 +1196,7 @@ namespace MCWrapper.RPC.Tests
             });
 
             // Asert - Attempt to Publish multiple items to the blockchain stream
-            var publish = await Wallet.PublishMultiStreamItemsFrom(Wallet.BlockchainOptions.ChainName, nameof(PublishMultiStreamItemsExplicitTest), Wallet.BlockchainOptions.ChainAdminAddress, multi);
+            var publish = await _wallet.PublishMultiStreamItemsFrom(_wallet.RpcOptions.ChainName, nameof(PublishMultiStreamItemsExplicitTest), _wallet.RpcOptions.ChainAdminAddress, multi);
 
             // Assert
             Assert.IsNull(publish.Error);

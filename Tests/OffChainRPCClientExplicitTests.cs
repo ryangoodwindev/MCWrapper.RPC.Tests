@@ -9,7 +9,7 @@ namespace MCWrapper.RPC.Tests
     class OffChainRPCClientExplicitTests
     {
         // private field
-        private readonly OffChainRpcClient OffChain;
+        private readonly IMultiChainRpcOffChain _offChain;
 
         /// <summary>
         /// Create new NetworkServiceTests instance
@@ -20,13 +20,13 @@ namespace MCWrapper.RPC.Tests
             var provider = new ServiceHelperParameterlessConstructor();
 
             // fetch service from provider
-            OffChain = provider.GetService<OffChainRpcClient>();
+            _offChain = provider.GetService<IMultiChainRpcOffChain>();
         }
 
         [Test, Ignore("Ignored until I can test with enterprise edition")]
         public async Task PurgePublishedItemsAsyncTest()
         {
-            var purge = await OffChain.PurgePublishedItemsAsync(OffChain.BlockchainOptions.ChainName, nameof(PurgePublishedItemsAsyncTest), "some_txid(s)");
+            var purge = await _offChain.PurgePublishedItemsAsync(_offChain.RpcOptions.ChainName, nameof(PurgePublishedItemsAsyncTest), "some_txid(s)");
 
             Assert.IsNotNull(purge);
         }
@@ -34,7 +34,7 @@ namespace MCWrapper.RPC.Tests
         [Test, Ignore("Ignored until I can test with enterprise edition")]
         public async Task PurgeStreamItemsAsyncTest()
         {
-            var purge = await OffChain.PurgeStreamItemsAsync(OffChain.BlockchainOptions.ChainName, nameof(PurgeStreamItemsAsyncTest), "some_stream_identifier", "some_txid(s)");
+            var purge = await _offChain.PurgeStreamItemsAsync(_offChain.RpcOptions.ChainName, nameof(PurgeStreamItemsAsyncTest), "some_stream_identifier", "some_txid(s)");
 
             Assert.IsNotNull(purge);
         }
@@ -42,7 +42,7 @@ namespace MCWrapper.RPC.Tests
         [Test, Ignore("Ignored until I can test with enterprise edition")]
         public async Task RetrieveStreamItemsAsyncTest()
         {
-            var retrieve = await OffChain.RetrieveStreamItemsAsync(OffChain.BlockchainOptions.ChainName, nameof(RetrieveStreamItemsAsyncTest), "some_stream_identifier", "some_txid(s)");
+            var retrieve = await _offChain.RetrieveStreamItemsAsync(_offChain.RpcOptions.ChainName, nameof(RetrieveStreamItemsAsyncTest), "some_stream_identifier", "some_txid(s)");
 
             Assert.IsNotNull(retrieve);
         }

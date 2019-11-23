@@ -9,7 +9,7 @@ namespace MCWrapper.RPC.Tests
     public class OffChainRPCClientInferredTests
     {
         // private field
-        private readonly OffChainRpcClient OffChain;
+        private readonly IMultiChainRpcOffChain _offchain;
 
         /// <summary>
         /// Create new NetworkServiceTests instance
@@ -20,13 +20,13 @@ namespace MCWrapper.RPC.Tests
             var provider = new ServiceHelperParameterlessConstructor();
 
             // fetch service from provider
-            OffChain = provider.GetService<OffChainRpcClient>();
+            _offchain = provider.GetService<IMultiChainRpcOffChain>();
         }
 
         [Test, Ignore("Ignored until I can test with enterprise edition")]
         public async Task PurgePublishedItemsAsyncTest()
         {
-            var purge = await OffChain.PurgePublishedItemsAsync("some_txid(s)");
+            var purge = await _offchain.PurgePublishedItemsAsync("some_txid(s)");
 
             Assert.IsNotNull(purge);
         }
@@ -34,7 +34,7 @@ namespace MCWrapper.RPC.Tests
         [Test, Ignore("Ignored until I can test with enterprise edition")]
         public async Task PurgeStreamItemsAsyncTest()
         {
-            var purge = await OffChain.PurgeStreamItemsAsync("some_stream_identifier", "some_txid(s)");
+            var purge = await _offchain.PurgeStreamItemsAsync("some_stream_identifier", "some_txid(s)");
 
             Assert.IsNotNull(purge);
         }
@@ -42,7 +42,7 @@ namespace MCWrapper.RPC.Tests
         [Test, Ignore("Ignored until I can test with enterprise edition")]
         public async Task RetrieveStreamItemsAsyncTest()
         {
-            var retrieve = await OffChain.RetrieveStreamItemsAsync("some_stream_identifier", "some_txid(s)");
+            var retrieve = await _offchain.RetrieveStreamItemsAsync("some_stream_identifier", "some_txid(s)");
 
             Assert.IsNotNull(retrieve);
         }

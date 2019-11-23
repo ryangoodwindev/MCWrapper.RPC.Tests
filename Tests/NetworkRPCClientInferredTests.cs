@@ -12,7 +12,7 @@ namespace MCWrapper.RPC.Tests
     public class NetworkRPCClientInferredTests
     {
         // private field
-        private readonly NetworkRpcClient Network;
+        private readonly IMultiChainRpcNetwork _network;
 
         /// <summary>
         /// Create new NetworkServiceTests instance
@@ -23,14 +23,14 @@ namespace MCWrapper.RPC.Tests
             var provider = new ServiceHelperParameterlessConstructor();
 
             // fetch service from provider
-            Network = provider.GetService<NetworkRpcClient>();
+            _network = provider.GetService<IMultiChainRpcNetwork>();
         }
 
         [Test, Ignore("AddNode test is ignored since I don't care about peers right now")]
         public async Task AddNodeTestAsync()
         {
             // Act - Add a peer
-            var actual = await Network.AddNodeAsync(
+            var actual = await _network.AddNodeAsync(
                 node: "192.168.0.90:3333",
                 action: PeerConnection.Add);
 
@@ -44,7 +44,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetAddNodeInfoTestAsync()
         {
             // Act - Informatinon about added nodes
-            RpcResponse<GetAddNodeInfoResult[]> actual = await Network.GetAddedNodeInfoAsync(
+            RpcResponse<GetAddNodeInfoResult[]> actual = await _network.GetAddedNodeInfoAsync(
                 dns: true,
                 node: "192.168.0.90:3333");
 
@@ -58,7 +58,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetChunkQueueInfoTestAsync()
         {
             // Act - Fetch chunk queue information
-            var actual = await Network.GetChunkQueueInfoAsync();
+            var actual = await _network.GetChunkQueueInfoAsync();
 
             // Assert
             Assert.IsNull(actual.Error);
@@ -70,7 +70,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetChunkQueueTotalsTestAsync()
         {
             // Act - Chunks delivery status
-            var actual = await Network.GetChunkQueueTotalsAsync();
+            var actual = await _network.GetChunkQueueTotalsAsync();
 
             // Assert
             Assert.IsNull(actual.Error);
@@ -82,7 +82,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetConnectionCountTestAsync()
         {
             // Act - Get number of connection to network
-            var actual = await Network.GetConnectionCountAsync();
+            var actual = await _network.GetConnectionCountAsync();
 
             // Assert
             Assert.IsNull(actual.Error);
@@ -94,7 +94,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetNetTotalsTestAsync()
         {
             // Act - Information about network traffic
-            var actual = await Network.GetNetTotalsAsync();
+            var actual = await _network.GetNetTotalsAsync();
 
             // Assert
             Assert.IsNull(actual.Error);
@@ -106,7 +106,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetNetworkInfoTestAsync()
         {
             // Act - Request information about the network
-            RpcResponse<GetNetworkInfoResult> actual = await Network.GetNetworkInfoAsync();
+            RpcResponse<GetNetworkInfoResult> actual = await _network.GetNetworkInfoAsync();
 
             // Assert
             Assert.IsNull(actual.Error);
@@ -118,7 +118,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetPeerInfoTestAsync()
         {
             // Act - Request information about any connected peers
-            var actual = await Network.GetPeerInfoAsync();
+            var actual = await _network.GetPeerInfoAsync();
 
             // Assert
             Assert.IsNull(actual.Error);
@@ -130,7 +130,7 @@ namespace MCWrapper.RPC.Tests
         public async Task PingTestAsync()
         {
             // Act - Ping connect peers
-            var actual = await Network.PingAsync();
+            var actual = await _network.PingAsync();
 
             // Assert
             Assert.IsNull(actual.Error);

@@ -13,7 +13,7 @@ namespace MCWrapper.RPC.Tests
     public class ControlRPCClientExplicitTests
     {
         // private field
-        private readonly ControlRpcClient Control;
+        private readonly IMultiChainRpcControl _control;
 
         /// <summary>
         /// Create a new ControlServiceTests instance
@@ -24,15 +24,15 @@ namespace MCWrapper.RPC.Tests
             var provider = new ServiceHelperParameterlessConstructor();
 
             // fetch service from provider
-            Control = provider.GetService<ControlRpcClient>();
+            _control = provider.GetService<IMultiChainRpcControl>();
         }
 
         [Test, Ignore("ClearMemPoolTests should be ran independent of other tests since the network must be paused for incoming and mining tasks")]
         public async Task ClearMemPoolTestAsync()
         {
             // Act - Pause blockchain network actions
-            var pause = await Control.PauseAsync(
-                blockchainName: Control.BlockchainOptions.ChainName,
+            var pause = await _control.PauseAsync(
+                blockchainName: _control.RpcOptions.ChainName,
                 id: nameof(ClearMemPoolTestAsync),
                 tasks: NodeTask.All);
 
@@ -42,7 +42,7 @@ namespace MCWrapper.RPC.Tests
             Assert.IsInstanceOf<RpcResponse<object>>(pause);
 
             // Act - Clear blockchain mem pool
-            var clearMemPool = await Control.ClearMemPoolAsync(Control.BlockchainOptions.ChainName, nameof(ClearMemPoolTestAsync));
+            var clearMemPool = await _control.ClearMemPoolAsync(_control.RpcOptions.ChainName, nameof(ClearMemPoolTestAsync));
 
             // Assert
             Assert.IsNull(pause.Error);
@@ -50,8 +50,8 @@ namespace MCWrapper.RPC.Tests
             Assert.IsInstanceOf<RpcResponse<string>>(clearMemPool);
 
             // Act - Resume blockchain network actions
-            var resume = await Control.ResumeAsync(
-                blockchainName: Control.BlockchainOptions.ChainName,
+            var resume = await _control.ResumeAsync(
+                blockchainName: _control.RpcOptions.ChainName,
                 id: nameof(ClearMemPoolTestAsync),
                 tasks: NodeTask.All);
 
@@ -65,8 +65,8 @@ namespace MCWrapper.RPC.Tests
         public async Task GetBlockchainParamsTestAsync()
         {
             // Act - Ask network for blockchain params
-            var actual = await Control.GetBlockchainParamsAsync(
-                blockchainName: Control.BlockchainOptions.ChainName,
+            var actual = await _control.GetBlockchainParamsAsync(
+                blockchainName: _control.RpcOptions.ChainName,
                 id: nameof(GetBlockchainParamsTestAsync), 
                 display_names: true,
                 with_upgrades: true);
@@ -81,7 +81,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetInfoTestAsync()
         {
             // Act - Ask network for information about this blockchain
-            var actual = await Control.GetInfoAsync(Control.BlockchainOptions.ChainName, nameof(GetInfoTestAsync));
+            var actual = await _control.GetInfoAsync(_control.RpcOptions.ChainName, nameof(GetInfoTestAsync));
 
             // Assert
             Assert.IsNull(actual.Error);
@@ -93,7 +93,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetRuntimeParamsTestAsync()
         {
             // Act - Ask blockchain network for runtime parameters
-            var actual = await Control.GetRuntimeParamsAsync(Control.BlockchainOptions.ChainName, nameof(GetRuntimeParamsTestAsync));
+            var actual = await _control.GetRuntimeParamsAsync(_control.RpcOptions.ChainName, nameof(GetRuntimeParamsTestAsync));
 
             // Assert
             Assert.IsNull(actual.Error);
@@ -105,8 +105,8 @@ namespace MCWrapper.RPC.Tests
         public async Task HelpTestAsync()
         {
             // Act - Get help information based on blockchain method name
-            var actual = await Control.HelpAsync(
-                blockchainName: Control.BlockchainOptions.ChainName,
+            var actual = await _control.HelpAsync(
+                blockchainName: _control.RpcOptions.ChainName,
                 id: nameof(HelpTestAsync),
                 command: BlockchainAction.GetAssetInfoMethod);
 
@@ -120,8 +120,8 @@ namespace MCWrapper.RPC.Tests
         public async Task SetLastBlockTestAsync()
         {
             // Act - Sets last block in blockchain
-            var actual = await Control.SetLastBlockAsync(
-                blockchainName: Control.BlockchainOptions.ChainName,
+            var actual = await _control.SetLastBlockAsync(
+                blockchainName: _control.RpcOptions.ChainName,
                 id: nameof(SetLastBlockTestAsync),
                 hash_or_height: 60);
 
@@ -138,8 +138,8 @@ namespace MCWrapper.RPC.Tests
             var OneMiB = 1048576;
 
             // ### Act - Set a specific runtime parameter with a specific value
-            var actual = await Control.SetRuntimeParamAsync(
-                blockchainName: Control.BlockchainOptions.ChainName,
+            var actual = await _control.SetRuntimeParamAsync(
+                blockchainName: _control.RpcOptions.ChainName,
                 id: nameof(SetRuntimeParamTestAsync),
                 runtimeParam: RuntimeParam.MaxShownData,
                 parameter_value: OneMiB);
@@ -154,7 +154,7 @@ namespace MCWrapper.RPC.Tests
         public async Task StopTestAsync()
         {
             // Act - Stops the current blockchain network
-            var actual = await Control.StopAsync(Control.BlockchainOptions.ChainName, nameof(StopTestAsync));
+            var actual = await _control.StopAsync(_control.RpcOptions.ChainName, nameof(StopTestAsync));
 
             // Assert
             Assert.IsNull(actual.Error);

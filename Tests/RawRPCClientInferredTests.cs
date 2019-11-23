@@ -17,9 +17,9 @@ namespace MCWrapper.RPC.Tests
     public class RawRPCClientInferredTests
     {
         // private field
-        private readonly RawRpcClient Raw;
-        private readonly WalletRpcClient Wallet;
-
+        private readonly IMultiChainRpcWallet _wallet;
+        private readonly IMultiChainRpcRaw _raw;
+        
         /// <summary>
         /// Create a new BlockchainServiceTests instance
         /// </summary>
@@ -29,8 +29,8 @@ namespace MCWrapper.RPC.Tests
             var provider = new ServiceHelperParameterlessConstructor();
 
             // fetch service from provider
-            Raw = provider.GetService<RawRpcClient>();
-            Wallet = provider.GetService<WalletRpcClient>();
+            _wallet = provider.GetService<IMultiChainRpcWallet>();
+            _raw = provider.GetService<IMultiChainRpcRaw>();
         }
 
         [Test]
@@ -40,8 +40,8 @@ namespace MCWrapper.RPC.Tests
             var assetModel_0 = new AssetEntity();
             var assetModel_1 = new AssetEntity();
 
-            var asset_0 = await Wallet.IssueAsync(
-                to_address: Wallet.BlockchainOptions.ChainAdminAddress,
+            var asset_0 = await _wallet.IssueAsync(
+                to_address: _wallet.RpcOptions.ChainAdminAddress,
                 asset_params: assetModel_0,
                 quantity: 100,
                 smallest_unit: 1,
@@ -51,8 +51,8 @@ namespace MCWrapper.RPC.Tests
             Assert.IsNotEmpty(asset_0.Result);
             Assert.IsInstanceOf<RpcResponse<string>>(asset_0);
 
-            var asset_1 = await Wallet.IssueAsync(
-                to_address: Wallet.BlockchainOptions.ChainAdminAddress,
+            var asset_1 = await _wallet.IssueAsync(
+                to_address: _wallet.RpcOptions.ChainAdminAddress,
                 asset_params: assetModel_1,
                 quantity: 100,
                 smallest_unit: 1,
@@ -63,26 +63,26 @@ namespace MCWrapper.RPC.Tests
             Assert.IsInstanceOf<RpcResponse<string>>(asset_1);
 
 
-            var newAddress_0 = await Wallet.GetNewAddressAsync();
+            var newAddress_0 = await _wallet.GetNewAddressAsync();
 
             Assert.IsNull(newAddress_0.Error);
             Assert.IsNotEmpty(newAddress_0.Result);
             Assert.IsInstanceOf<RpcResponse<string>>(newAddress_0);
 
-            var newAddress_1 = await Wallet.GetNewAddressAsync();
+            var newAddress_1 = await _wallet.GetNewAddressAsync();
 
             Assert.IsNull(newAddress_1.Error);
             Assert.IsNotEmpty(newAddress_1.Result);
             Assert.IsInstanceOf<RpcResponse<string>>(newAddress_1);
 
 
-            var grant = await Wallet.GrantFromAsync(Wallet.BlockchainOptions.ChainAdminAddress, $"{newAddress_0.Result},{newAddress_1.Result}", $"{Permission.Receive},{Permission.Send}", 0, 1, Permission.MaxEndblock, "Comment", "CommentTo");
+            var grant = await _wallet.GrantFromAsync(_wallet.RpcOptions.ChainAdminAddress, $"{newAddress_0.Result},{newAddress_1.Result}", $"{Permission.Receive},{Permission.Send}", 0, 1, Permission.MaxEndblock, "Comment", "CommentTo");
 
             Assert.IsNull(grant.Error);
             Assert.IsNotNull(grant.Result);
             Assert.IsInstanceOf<RpcResponse<object>>(grant);
 
-            var listUnspent = await Wallet.ListUnspentAsync(0, 9999, new[] { Wallet.BlockchainOptions.ChainAdminAddress });
+            var listUnspent = await _wallet.ListUnspentAsync(0, 9999, new[] { _wallet.RpcOptions.ChainAdminAddress });
 
             Assert.IsNull(listUnspent.Error);
             Assert.IsNotNull(listUnspent.Result);
@@ -91,7 +91,7 @@ namespace MCWrapper.RPC.Tests
             var unspentAsset_0 = listUnspent.Result.SingleOrDefault(s => s.Assets.Any(a => a.Name == assetModel_0.Name));
             var unspentAsset_1 = listUnspent.Result.SingleOrDefault(s => s.Assets.Any(a => a.Name == assetModel_1.Name));
 
-            var createRaw = await Raw.CreateRawTransactionAsync(
+            var createRaw = await _raw.CreateRawTransactionAsync(
                 transactions: new object[]
                 {
                     new Dictionary<string, object>
@@ -129,31 +129,31 @@ namespace MCWrapper.RPC.Tests
             Assert.IsNotNull(createRaw.Result);
             Assert.IsInstanceOf<RpcResponse<object>>(createRaw);
 
-            var decode = await Raw.DecodeRawTransactionAsync($"{createRaw.Result}");
+            var decode = await _raw.DecodeRawTransactionAsync($"{createRaw.Result}");
 
             Assert.IsNull(decode.Error);
             Assert.IsNotNull(decode.Result);
             Assert.IsInstanceOf<RpcResponse<DecodeRawTransactionResult>>(decode);
 
-            var rawChange = await Raw.AppendRawChangeAsync($"{createRaw.Result}", Raw.BlockchainOptions.ChainAdminAddress, 0);
+            var rawChange = await _raw.AppendRawChangeAsync($"{createRaw.Result}", _raw.RpcOptions.ChainAdminAddress, 0);
 
             Assert.IsNull(rawChange.Error);
             Assert.IsNotNull(rawChange.Result);
             Assert.IsInstanceOf<RpcResponse<object>>(rawChange);
 
-            var rawData = await Raw.AppendRawDataAsync($"{rawChange.Result}", "Some metadta".ToHex());
+            var rawData = await _raw.AppendRawDataAsync($"{rawChange.Result}", "Some metadta".ToHex());
 
             Assert.IsNull(rawData.Error);
             Assert.IsNotNull(rawData.Result);
             Assert.IsInstanceOf<RpcResponse<object>>(rawData);
 
-            var signRaw = await Raw.SignRawTransactionAsync($"{rawData.Result}");
+            var signRaw = await _raw.SignRawTransactionAsync($"{rawData.Result}");
 
             Assert.IsNull(signRaw.Error);
             Assert.IsNotNull(signRaw.Result);
             Assert.IsInstanceOf<RpcResponse<SignRawTransactionResult>>(signRaw);
 
-            var sendRaw = await Raw.SendRawTransactionAsync(signRaw.Result.Hex, false);
+            var sendRaw = await _raw.SendRawTransactionAsync(signRaw.Result.Hex, false);
 
             Assert.IsNull(sendRaw.Error);
             Assert.IsNotNull(sendRaw.Result);

@@ -10,7 +10,7 @@ namespace MCWrapper.RPC.Tests
     public class GenerateRPCClientInferredTests
     {
         // private field
-        private readonly GenerateRpcClient Generate;
+        private readonly IMultiChainRpcGenerate _generate;
 
         /// <summary>
         /// Create a new GenerateServiceTests instance
@@ -21,14 +21,14 @@ namespace MCWrapper.RPC.Tests
             var provider = new ServiceHelperParameterlessConstructor();
 
             // fetch service from provider
-            Generate = provider.GetService<GenerateRpcClient>();
+            _generate = provider.GetService<IMultiChainRpcGenerate>();
         }
 
         [Test]
         public async Task GetGenerateTestAsync()
         {
             // Act - Get coin generation status
-            var actual = await Generate.GetGenerateAsync();
+            var actual = await _generate.GetGenerateAsync();
 
             // Assert
             Assert.IsNull(actual.Error);
@@ -40,7 +40,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetHashesPerSecTestAsync()
         {
             // Act - Fetch hashes per sec statistic
-            var actual = await Generate.GetHashesPerSecAsync();
+            var actual = await _generate.GetHashesPerSecAsync();
 
             // Assert
             Assert.IsNull(actual.Error);
@@ -52,7 +52,7 @@ namespace MCWrapper.RPC.Tests
         public async Task SetGenerateTestAsync()
         {
             // Act - Set coin generation status
-            var actual = await Generate.SetGenerateAsync(generate: true, gen_proc_limit: 1);
+            var actual = await _generate.SetGenerateAsync(generate: true, gen_proc_limit: 1);
 
             // Assert
             Assert.IsNull(actual.Error);

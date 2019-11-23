@@ -10,7 +10,7 @@ namespace MCWrapper.RPC.Tests
     public class MineRPCClientInferredTests
     {
         // private field
-        private readonly MiningRpcClient Mining;
+        private readonly IMultiChainRpcMining _mining;
 
         /// <summary>
         /// Create a new MiningServiceTests instance
@@ -21,14 +21,14 @@ namespace MCWrapper.RPC.Tests
             var provider = new ServiceHelperParameterlessConstructor();
 
             // fetch service from provider
-            Mining = provider.GetService<MiningRpcClient>();
+            _mining = provider.GetService<IMultiChainRpcMining>();
         }
 
         [Test, Ignore("Not supported by MultiChain v2.02")]
         public async Task GetBlockTemplateTestAsync()
         {
             // Act - Fetch a blockchain block template
-            var actual = await Mining.GetBlockTemplateAsync("");
+            var actual = await _mining.GetBlockTemplateAsync("");
 
             // Assert
             Assert.IsNull(actual.Result);
@@ -40,7 +40,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetMiningInfoTestAsync()
         {
             // Act - Ask network for blockchain mining information
-            var actual = await Mining.GetMiningInfoAsync();
+            var actual = await _mining.GetMiningInfoAsync();
 
             // Assert
             Assert.IsNull(actual.Error);
@@ -52,7 +52,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetNetworkHashPsTestAsync()
         {
             // Act - Hash per sec statistic
-            var actual = await Mining.GetNetworkHashPsAsync(blocks: 10, height: 10);
+            var actual = await _mining.GetNetworkHashPsAsync(blocks: 10, height: 10);
 
             // Assert
             Assert.IsNull(actual.Error);
@@ -64,7 +64,7 @@ namespace MCWrapper.RPC.Tests
         public async Task PrioritiseTransactionTestAsync()
         {
             // Act - Prioritize a transaction on the network
-            var actual = await Mining.PrioritiseTransactionAsync(
+            var actual = await _mining.PrioritiseTransactionAsync(
                 txid: "some_txid_when_this_feature_is_supported",
                 priority_delta: 0.0,
                 fee_delta: 1000);
@@ -79,7 +79,7 @@ namespace MCWrapper.RPC.Tests
         public async Task SubmitBlockTestAsync()
         {
             // Act - Submit a block to the blockchain
-            var actual = await Mining.SubmitBlockAsync(hex_data: string.Empty, json_parameters_object: "");
+            var actual = await _mining.SubmitBlockAsync(hex_data: string.Empty, json_parameters_object: "");
 
             // Assert
             Assert.IsNull(actual.Result);
