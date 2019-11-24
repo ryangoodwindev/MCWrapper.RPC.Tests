@@ -34,8 +34,8 @@ namespace MCWrapper.RPC.Tests
        [Test]
        public async Task RawTransactionTest()
         {
-            var raw = _factory.BlockchainRpcRawClient;
-            var wallet = _factory.BlockchainRpcWalletClient;
+            var raw = _factory.MultiChainRpcRawClient;
+            var wallet = _factory.MultiChainRpcWalletClient;
 
             // Stage - instantiate two new Assets
             var assetModel_0 = new AssetEntity();
