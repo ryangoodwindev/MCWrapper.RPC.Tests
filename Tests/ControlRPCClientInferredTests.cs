@@ -82,6 +82,18 @@ namespace MCWrapper.RPC.Tests
         }
 
         [Test]
+        public async Task GetInitStatusAsync()
+        {
+            // Act - Ask netowrk for init status
+            var actual = await _control.GetInitStatusAsync();
+
+            // Assert
+            Assert.IsNull(actual.Error);
+            Assert.IsNotNull(actual.Result);
+            Assert.IsInstanceOf<RpcResponse<GetInitStatusResult>>(actual);
+        }
+
+        [Test]
         public async Task GetRuntimeParamsTestAsync()
         {
             // Act - Ask blockchain network for runtime parameters
