@@ -17,7 +17,8 @@ namespace MCWrapper.RPC.Tests.ServiceHelpers
         /// <summary>
         /// Services container
         /// </summary>
-        private ServiceCollection ServiceCollection { get; set; } = new ServiceCollection();
+        private ServiceCollection ServiceCollection { get; set; } 
+            = new ServiceCollection();
 
         /// <summary>
         /// Constructor
@@ -41,17 +42,9 @@ namespace MCWrapper.RPC.Tests.ServiceHelpers
         /// <summary>
         /// Locate and return service type
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="IMultiChainRpc"></typeparam>
         /// <returns></returns>
-        public T GetService<T>() => ServiceProvider.GetService<T>();
-
-        /// <summary>
-        /// Managed objects
-        /// </summary>
-        public void Dispose()
-        {
-            ServiceProvider.Dispose();
-            ServiceCollection.Clear();
-        }
+        public IMultiChainRpc GetService<IMultiChainRpc>() => 
+            ServiceProvider.GetService<IMultiChainRpc>();
     }
 }

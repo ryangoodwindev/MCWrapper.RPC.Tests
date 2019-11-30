@@ -13,14 +13,17 @@ namespace MCWrapper.RPC.Tests.ServiceHelpers
         /// <summary>
         /// Services container
         /// </summary>
-        private ServiceCollection ServiceCollection { get; set; } = new ServiceCollection();
+        private ServiceCollection ServiceCollection { get; set; } 
+            = new ServiceCollection();
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ServiceHelperParameterlessConstructor()
         {
-            // Add MultiChain library services to the collection
+            // Add MultiChain library services to the collection.
+            // Parameterless constructor use indicates that we will
+            // look to the local environment store for configuration values
             ServiceCollection.AddMultiChainCoreRpcServices();
 
             // build and store Service provider
@@ -30,17 +33,8 @@ namespace MCWrapper.RPC.Tests.ServiceHelpers
         /// <summary>
         /// Locate and return service type
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="IMultiChainRpc"></typeparam>
         /// <returns></returns>
-        public T GetService<T>() => ServiceProvider.GetService<T>();
-
-        /// <summary>
-        /// Managed objects
-        /// </summary>
-        public void Dispose()
-        {
-            ServiceProvider.Dispose();
-            ServiceCollection.Clear();
-        }
+        public IMultiChainRpc GetService<IMultiChainRpc>() => ServiceProvider.GetService<IMultiChainRpc>();
     }
 }

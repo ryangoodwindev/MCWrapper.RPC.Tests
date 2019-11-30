@@ -1,6 +1,4 @@
-﻿using MCWrapper.Ledger.Entities.Options;
-using MCWrapper.RPC.Extensions;
-using Microsoft.Extensions.Configuration;
+﻿using MCWrapper.RPC.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MCWrapper.RPC.Tests.ServiceHelpers
@@ -15,20 +13,14 @@ namespace MCWrapper.RPC.Tests.ServiceHelpers
         /// <summary>
         /// Services container
         /// </summary>
-        private ServiceCollection ServiceCollection { get; set; } = new ServiceCollection();
+        private ServiceCollection ServiceCollection { get; set; } 
+            = new ServiceCollection();
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ServiceHelperExplicitSource()
         {
-            // fetch JSON config values
-            var builder = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-
-            // Configuration interface
-            IConfiguration configuration = builder.Build();
-
             // Add MultiChain library services to the collection
             // Our values are null and empty since our local testing environment has the necessary
             // variables preloaded as environment variables. This just demonstrates how a 
@@ -42,16 +34,15 @@ namespace MCWrapper.RPC.Tests.ServiceHelpers
             //
             ServiceCollection.AddMultiChainCoreRpcServices(profile =>
             {
-                profile.ChainUseSsl = null;
-                profile.ChainSslPath = "";
-                profile.ChainUsername = "";
-                profile.ChainPassword = "";
-                profile.ChainName = "";
-                profile.ChainRpcPort = null;
-                profile.ChainAdminAddress = "";
-                profile.ChainHostname = @"";
-                profile.ChainBurnAddress = "";
-            }, runtime => new RuntimeParamOptions());
+                profile.ChainUseSsl = false;
+                profile.ChainUsername = "multichainrpc";
+                profile.ChainPassword = "8qLZFDz65RBCDofXRjBDRDJoKy5y3weowZy6HQ3ej9tr"; // example password
+                profile.ChainName = "Version3Chain"; // example blockchain name
+                profile.ChainRpcPort = 8384; // example port
+                profile.ChainAdminAddress = "1QsgeUKXKBR7hA8ey5j9qgPT1faQetLDUXi3Pn"; // example admin address
+                profile.ChainHostname = "localhost";
+                profile.ChainBurnAddress = "1XXXXXXXSXXXXXXXSnXXXXXXZvXXXXXXZ3Mi3Q"; // example burn address
+            });
 
             // build and store Service provider
             ServiceProvider = ServiceCollection.BuildServiceProvider();
@@ -60,17 +51,9 @@ namespace MCWrapper.RPC.Tests.ServiceHelpers
         /// <summary>
         /// Locate and return service type
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="IMultiChainRpc"></typeparam>
         /// <returns></returns>
-        public T GetService<T>() => ServiceProvider.GetService<T>();
-
-        /// <summary>
-        /// Managed objects
-        /// </summary>
-        public void Dispose()
-        {
-            ServiceProvider.Dispose();
-            ServiceCollection.Clear();
-        }
+        public IMultiChainRpc GetService<IMultiChainRpc>() => 
+            ServiceProvider.GetService<IMultiChainRpc>();
     }
 }
