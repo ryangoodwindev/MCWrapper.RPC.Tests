@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace MCWrapper.RPC.Tests
 {
     [TestFixture]
-    public class UtilityRPCClientExplicitTests
+    public class IMultiChainRpcUtilityTests
     {
         // private field
         private readonly IMultiChainRpcUtility _utility;
@@ -18,7 +18,7 @@ namespace MCWrapper.RPC.Tests
         /// <summary>
         /// Create a new UtilityServiceTests instance
         /// </summary>
-        public UtilityRPCClientExplicitTests()
+        public IMultiChainRpcUtilityTests()
         {
             var provider = new ServiceHelperParameterlessConstructor();
 
@@ -164,6 +164,131 @@ namespace MCWrapper.RPC.Tests
                 blockchainName: _wallet.RpcOptions.ChainName,
                 id: nameof(VerifyMessageTestAsync),
                 address: _wallet.RpcOptions.ChainAdminAddress,
+                signature: signature.Result,
+                message: defaultMessage);
+
+            // Assert
+            Assert.IsNull(actual.Error);
+            Assert.IsNotNull(actual.Result);
+            Assert.IsInstanceOf<RpcResponse<bool>>(actual);
+        }
+
+        // Inferred blockchainName tests //
+
+        [Test]
+        public async Task BinaryCacheInferredTestAsync()
+        {
+            // Act - Create a binary cache
+            var cache = await _utility.CreateBinaryCacheAsync();
+
+            // Assert
+            Assert.IsNull(cache.Error);
+            Assert.IsNotNull(cache.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(cache);
+
+            // Act - Append to binary cache
+            var append = await _utility.AppendBinaryCacheAsync(
+                identifier: cache.Result,
+                data_hex: "Some string data we can use to generate dat hex content. An then a bit more at the end".ToHex());
+
+            // Assert
+            Assert.IsNull(append.Error);
+            Assert.IsNotNull(append.Result);
+            Assert.IsInstanceOf<RpcResponse<int>>(append);
+
+            // Act - Delete binary cache
+            var delete = await _utility.DeleteBinaryCacheAsync(identifier: cache.Result);
+
+            // Assert
+            Assert.IsNull(delete.Error);
+            Assert.IsNull(delete.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(delete);
+        }
+
+        [Test]
+        public async Task CreateKeyPairsInferredTestAsync()
+        {
+            // Act - Ask network for a new key pair
+            RpcResponse<CreateKeyPairsResult[]> actual = await _utility.CreateKeyPairsAsync(count: 3);
+
+            // Assert
+            Assert.IsNull(actual.Error);
+            Assert.IsNotNull(actual.Result);
+            Assert.IsInstanceOf<RpcResponse<CreateKeyPairsResult[]>>(actual);
+        }
+
+        [Test]
+        public async Task CreateMultiSigInferredTestAsync()
+        {
+            // Act - Create an address that requires the node's signature
+            RpcResponse<CreateMultiSigResult> actual = await _utility.CreateMultiSigAsync(
+                n_required: 1,
+                keys: new string[]
+                {
+                    _utility.RpcOptions.ChainAdminAddress,
+                });
+
+            // Assert
+            Assert.IsNull(actual.Error);
+            Assert.IsNotNull(actual.Result);
+            Assert.IsInstanceOf<RpcResponse<CreateMultiSigResult>>(actual);
+        }
+
+        [Test]
+        public async Task EstimateFeeInferredTestAsync()
+        {
+            // Act - Estimate fee according to kB and number of blocks
+            var actual = await _utility.EstimateFeeAsync(n_blocks: 78);
+
+            // Assert
+            Assert.IsNull(actual.Error);
+            Assert.IsNotNull(actual.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+        }
+
+        [Test]
+        public async Task EstimatePriorityInferredTestAsync()
+        {
+            // Act - Estimate zero-fee transaction 
+            var actual = await _utility.EstimatePriorityAsync(n_blocks: 78);
+
+            // Assert
+            Assert.IsNull(actual.Error);
+            Assert.IsNotNull(actual.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+        }
+
+        [Test]
+        public async Task ValidateAddressInferredTestAsync()
+        {
+            // Act - Return information about the given address
+            RpcResponse<ValidateAddressResult> actual = await _utility.ValidateAddressAsync(_utility.RpcOptions.ChainAdminAddress);
+
+            // Assert
+            Assert.IsNull(actual.Error);
+            Assert.IsNotNull(actual.Result);
+            Assert.IsInstanceOf<RpcResponse<ValidateAddressResult>>(actual);
+        }
+
+        [Test]
+        public async Task VerifyMessageInferredTestAsync()
+        {
+            // Stage - Default test message
+            var defaultMessage = "Some Test Message for this distributed blockchain network.";
+
+            // Act - Sign message
+            var signature = await _wallet.SignMessageAsync(
+                address_privkey: _wallet.RpcOptions.ChainAdminAddress,
+                message: defaultMessage);
+
+            // Assert
+            Assert.IsNull(signature.Error);
+            Assert.IsNotNull(signature.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(signature);
+
+            // Act - Verify signed message
+            var actual = await _utility.VerifyMessageAsync(
+                address: _utility.RpcOptions.ChainAdminAddress,
                 signature: signature.Result,
                 message: defaultMessage);
 

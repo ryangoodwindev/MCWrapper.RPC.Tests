@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 namespace MCWrapper.RPC.Tests
 {
     [TestFixture]
-    public class WalletRPCExtensionsTests
+    public class IMultiChainRpcWalletExtensionsTests
     {
         private readonly IMultiChainRpcUtility _utility;
         private readonly IMultiChainRpcWallet _wallet;
 
-        public WalletRPCExtensionsTests()
+        public IMultiChainRpcWalletExtensionsTests()
         {
             var provider = new ServiceHelperParameterlessConstructor();
 

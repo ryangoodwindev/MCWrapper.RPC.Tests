@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace MCWrapper.RPC.Tests
 {
     [TestFixture]
-    public class NetworkRPCClientExplicitTests
+    public class IMultiChainRpcNetworkTests
     {
         // private field
         private readonly IMultiChainRpcNetwork _network;
@@ -17,7 +17,7 @@ namespace MCWrapper.RPC.Tests
         /// <summary>
         /// Create new NetworkServiceTests instance
         /// </summary>
-        public NetworkRPCClientExplicitTests()
+        public IMultiChainRpcNetworkTests()
         {
             // instantiate test services provider
             var provider = new ServiceHelperParameterlessConstructor();
@@ -135,6 +135,120 @@ namespace MCWrapper.RPC.Tests
         {
             // Act - Ping connect peers
             var actual = await _network.PingAsync(_network.RpcOptions.ChainName, nameof(PingTestAsync));
+
+            // Assert
+            Assert.IsNull(actual.Error);
+            Assert.IsNull(actual.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+        }
+
+        // Inferred blockchainName tests //
+
+        [Test, Ignore("AddNode test is ignored since I don't care about peers right now")]
+        public async Task AddNodeInferredTestAsync()
+        {
+            // Act - Add a peer
+            var actual = await _network.AddNodeAsync(
+                node: "192.168.0.90:3333",
+                action: PeerConnection.Add);
+
+            // Assert
+            Assert.IsNull(actual.Error);
+            Assert.IsNotNull(actual.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+        }
+
+        [Test, Ignore("GetAddNodeInfo test is ignored since I don't care about peers right now")]
+        public async Task GetAddNodeInfoInferredTestAsync()
+        {
+            // Act - Informatinon about added nodes
+            RpcResponse<GetAddNodeInfoResult[]> actual = await _network.GetAddedNodeInfoAsync(
+                dns: true,
+                node: "192.168.0.90:3333");
+
+            // Assert
+            Assert.IsNull(actual.Error);
+            Assert.IsNotNull(actual.Result);
+            Assert.IsInstanceOf<RpcResponse<GetAddNodeInfoResult[]>>(actual);
+        }
+
+        [Test]
+        public async Task GetChunkQueueInfoInferredTestAsync()
+        {
+            // Act - Fetch chunk queue information
+            var actual = await _network.GetChunkQueueInfoAsync();
+
+            // Assert
+            Assert.IsNull(actual.Error);
+            Assert.IsNotNull(actual.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+        }
+
+        [Test]
+        public async Task GetChunkQueueTotalsInferredTestAsync()
+        {
+            // Act - Chunks delivery status
+            var actual = await _network.GetChunkQueueTotalsAsync();
+
+            // Assert
+            Assert.IsNull(actual.Error);
+            Assert.IsNotNull(actual.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+        }
+
+        [Test]
+        public async Task GetConnectionCountInferredTestAsync()
+        {
+            // Act - Get number of connection to network
+            var actual = await _network.GetConnectionCountAsync();
+
+            // Assert
+            Assert.IsNull(actual.Error);
+            Assert.IsNotNull(actual.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+        }
+
+        [Test]
+        public async Task GetNetTotalsInferredTestAsync()
+        {
+            // Act - Information about network traffic
+            var actual = await _network.GetNetTotalsAsync();
+
+            // Assert
+            Assert.IsNull(actual.Error);
+            Assert.IsNotNull(actual.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+        }
+
+        [Test]
+        public async Task GetNetworkInfoInferredTestAsync()
+        {
+            // Act - Request information about the network
+            RpcResponse<GetNetworkInfoResult> actual = await _network.GetNetworkInfoAsync();
+
+            // Assert
+            Assert.IsNull(actual.Error);
+            Assert.IsNotNull(actual.Result);
+            Assert.IsInstanceOf<RpcResponse<GetNetworkInfoResult>>(actual);
+        }
+
+        [Test]
+        public async Task GetPeerInfoInferredTestAsync()
+        {
+            // Act - Request information about any connected peers
+            var actual = await _network.GetPeerInfoAsync();
+
+            // Assert
+            Assert.IsNull(actual.Error);
+            Assert.IsNotNull(actual.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+        }
+
+        [Test]
+        public async Task PingInferredTestAsync()
+        {
+            // Act - Ping connect peers
+            var actual = await _network.PingAsync();
 
             // Assert
             Assert.IsNull(actual.Error);
