@@ -43,11 +43,11 @@ namespace MCWrapper.RPC.Tests
             var asset_0 = await _wallet.IssueAsync(
                 blockchainName: _wallet.RpcOptions.ChainName,
                 id: nameof(RawTransactionTest),
-                to_address: _wallet.RpcOptions.ChainAdminAddress,
-                asset_params: assetModel_0,
+                toAddress: _wallet.RpcOptions.ChainAdminAddress,
+                assetParams: assetModel_0,
                 quantity: 100,
-                smallest_unit: 1,
-                native_amount: 0, new { text = "Some text in Hex".ToHex() });
+                smallestUnit: 1,
+                nativeCurrencyAmount: 0, new Dictionary<string, string> { { "text", "Some text in Hex".ToHex() } });
 
             Assert.IsNull(asset_0.Error);
             Assert.IsNotEmpty(asset_0.Result);
@@ -56,11 +56,11 @@ namespace MCWrapper.RPC.Tests
             var asset_1 = await _wallet.IssueAsync(
                 blockchainName: _wallet.RpcOptions.ChainName,
                 id: nameof(RawTransactionTest),
-                to_address: _wallet.RpcOptions.ChainAdminAddress,
-                asset_params: assetModel_1,
+                toAddress: _wallet.RpcOptions.ChainAdminAddress,
+                assetParams: assetModel_1,
                 quantity: 100,
-                smallest_unit: 1,
-                native_amount: 0, new { text = "Some text in Hex".ToHex() });
+                smallestUnit: 1,
+                nativeCurrencyAmount: 0, new Dictionary<string, string> { { "text", "Some text in Hex".ToHex() } });
 
             Assert.IsNull(asset_1.Error);
             Assert.IsNotEmpty(asset_1.Result);
@@ -84,7 +84,7 @@ namespace MCWrapper.RPC.Tests
 
             Assert.IsNull(grant.Error);
             Assert.IsNotNull(grant.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(grant);
+            Assert.IsInstanceOf<RpcResponse<string>>(grant);
 
             var listUnspent = await _wallet.ListUnspentAsync(_wallet.RpcOptions.ChainName, nameof(RawTransactionTest), 0, 9999, new[] { _wallet.RpcOptions.ChainAdminAddress });
 
@@ -165,29 +165,29 @@ namespace MCWrapper.RPC.Tests
         }
 
         [Test]
-        public async Task RawTransaction_offChainTest()
+        public async Task RawTransaction()
         {
             // Stage - instantiate two new Assets
             var assetModel_0 = new AssetEntity();
             var assetModel_1 = new AssetEntity();
 
             var asset_0 = await _wallet.IssueAsync(
-                to_address: _wallet.RpcOptions.ChainAdminAddress,
-                asset_params: assetModel_0,
+                toAddress: _wallet.RpcOptions.ChainAdminAddress,
+                assetParams: assetModel_0,
                 quantity: 100,
-                smallest_unit: 1,
-                native_amount: 0, new { text = "Some text in Hex".ToHex() });
+                smallestUnit: 1,
+                nativeCurrencyAmount: 0, new Dictionary<string, string> { { "text", "Some text in Hex".ToHex() } });
 
             Assert.IsNull(asset_0.Error);
             Assert.IsNotEmpty(asset_0.Result);
             Assert.IsInstanceOf<RpcResponse<string>>(asset_0);
 
             var asset_1 = await _wallet.IssueAsync(
-                to_address: _wallet.RpcOptions.ChainAdminAddress,
-                asset_params: assetModel_1,
+                 toAddress: _wallet.RpcOptions.ChainAdminAddress,
+                assetParams: assetModel_1,
                 quantity: 100,
-                smallest_unit: 1,
-                native_amount: 0, new { text = "Some text in Hex".ToHex() });
+                smallestUnit: 1,
+                nativeCurrencyAmount: 0, new Dictionary<string, string> { { "text", "Some text in Hex".ToHex() } });
 
             Assert.IsNull(asset_1.Error);
             Assert.IsNotEmpty(asset_1.Result);
@@ -211,7 +211,7 @@ namespace MCWrapper.RPC.Tests
 
             Assert.IsNull(grant.Error);
             Assert.IsNotNull(grant.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(grant);
+            Assert.IsInstanceOf<RpcResponse<string>>(grant);
 
             var listUnspent = await _wallet.ListUnspentAsync(0, 9999, new[] { _wallet.RpcOptions.ChainAdminAddress });
 

@@ -44,10 +44,10 @@ namespace MCWrapper.RPC.Tests
             var asset = await _wallet.IssueAsync(
                 blockchainName: _wallet.RpcOptions.ChainName,
                 id: UUID.NoHyphens,
-                to_address: _wallet.RpcOptions.ChainAdminAddress,
-                asset_params: new AssetEntity(),
+                toAddress: _wallet.RpcOptions.ChainAdminAddress,
+                assetParams: new AssetEntity(),
                 quantity: 1,
-                smallest_unit: 0.1, 0, new { text = "Some Text in Hex".ToHex() });
+                smallestUnit: 0.1, 0, new Dictionary<string, string> { { "text", "Some Text in Hex".ToHex() } });
 
             // Act - Try to get verbose Asset information from the blockchain network
             var verbose = await _blockchain.GetAssetInfoAsync(
@@ -208,7 +208,7 @@ namespace MCWrapper.RPC.Tests
                 entity_type: Entity.TxFilter,
                 entity_name: StreamFilterEntity.GetUUID(),
                 restrictions_or_open: new { },
-                custom_fields: JsCode.DummyTxFilterCode);
+                customFields: JsCode.DummyTxFilterCode);
 
 
             // Act - Retrieve filtercode by name, txid, or reference
@@ -288,10 +288,10 @@ namespace MCWrapper.RPC.Tests
             var asset = await _wallet.IssueAsync(
                 blockchainName: _wallet.RpcOptions.ChainName,
                 id: UUID.NoHyphens,
-                to_address: _wallet.RpcOptions.ChainAdminAddress,
-                asset_params: new AssetEntity(),
+                toAddress: _wallet.RpcOptions.ChainAdminAddress,
+                assetParams: new AssetEntity(),
                 quantity: 1,
-                smallest_unit: 0.1);
+                smallestUnit: 0.1, nativeCurrencyAmount: 0, null);
 
             // Stage - Load new asset Unspent
             var unspent = await _wallet.PrepareLockUnspentAsync(
@@ -434,15 +434,15 @@ namespace MCWrapper.RPC.Tests
         public async Task ListUpgradesExplicitTestAsync()
         {
             // Act - List of upgrades
-            RpcResponse<object> actual = await _blockchain.ListUpgradesAsync(
+            RpcResponse<ListUpgradesResult[]> actual = await _blockchain.ListUpgradesAsync(
                 blockchainName: _blockchain.RpcOptions.ChainName,
                 id: UUID.NoHyphens,
-                upgrade_identifiers: "*");
+                upgrade_identifier: "*");
 
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse<ListUpgradesResult[]>>(actual);
         }
 
         [Test]
@@ -455,7 +455,7 @@ namespace MCWrapper.RPC.Tests
                 entity_type: Entity.StreamFilter,
                 entity_name: StreamFilterEntity.GetUUID(),
                 restrictions_or_open: new { },
-                custom_fields: JsCode.DummyStreamFilterCode);
+                customFields: JsCode.DummyStreamFilterCode);
 
             // Act - Execute stream filter
             var actual = await _blockchain.RunStreamFilterAsync(
@@ -562,10 +562,10 @@ namespace MCWrapper.RPC.Tests
         {
             // Stage - Issue a new asset to the blockchain node
             RpcResponse<string> asset = await _wallet.IssueAsync(
-                to_address: _wallet.RpcOptions.ChainAdminAddress,
-                asset_params: new AssetEntity(),
+                toAddress: _wallet.RpcOptions.ChainAdminAddress,
+                assetParams: new AssetEntity(),
                 quantity: 1,
-                smallest_unit: 0.1);
+                smallestUnit: 0.1, nativeCurrencyAmount: 0, null);
 
             // Act - Try to get Asset information from the blockchain network
             RpcResponse<GetAssetInfoResult> verbose = await _blockchain.GetAssetInfoAsync(
@@ -720,7 +720,7 @@ namespace MCWrapper.RPC.Tests
                 entity_type: Entity.TxFilter,
                 entity_name: StreamFilterEntity.GetUUID(),
                 restrictions_or_open: new { },
-                custom_fields: JsCode.DummyTxFilterCode);
+                customFields: JsCode.DummyTxFilterCode);
 
 
             // Act - Retrieve filtercode by name, txid, or reference
@@ -787,10 +787,10 @@ namespace MCWrapper.RPC.Tests
         {
             // Stage - Issue a new asset to the blockchain node
             var asset = await _wallet.IssueAsync(
-                to_address: _wallet.RpcOptions.ChainAdminAddress,
-                asset_params: new AssetEntity(),
+                toAddress: _wallet.RpcOptions.ChainAdminAddress,
+                assetParams: new AssetEntity(),
                 quantity: 1,
-                smallest_unit: 0.1);
+                smallestUnit: 0.1, nativeCurrencyAmount: 0, null);
 
             // Stage - Load new asset Unspent
             var unspent = await _wallet.PrepareLockUnspentAsync(
@@ -907,12 +907,12 @@ namespace MCWrapper.RPC.Tests
         public async Task ListUpgradesInferredTestAsync()
         {
             // Act - List of upgrades
-            RpcResponse<object> actual = await _blockchain.ListUpgradesAsync(upgrade_identifiers: "*");
+            RpcResponse<ListUpgradesResult[]> actual = await _blockchain.ListUpgradesAsync(upgrade_identifier: "*");
 
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse<ListUpgradesResult[]>>(actual);
         }
 
         [Test]
@@ -923,7 +923,7 @@ namespace MCWrapper.RPC.Tests
                 entity_type: Entity.StreamFilter,
                 entity_name: StreamFilterEntity.GetUUID(),
                 restrictions_or_open: new { },
-                custom_fields: JsCode.DummyStreamFilterCode);
+                customFields: JsCode.DummyStreamFilterCode);
 
             // Act - Execute stream filter
             RpcResponse<RunStreamFilterResult> actual = await _blockchain.RunStreamFilterAsync(filter_identifier: streamFilter.Result, tx_hex: null, vout: 0);

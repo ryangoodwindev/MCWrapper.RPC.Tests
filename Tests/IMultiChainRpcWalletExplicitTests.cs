@@ -57,16 +57,16 @@ namespace MCWrapper.RPC.Tests
             // Stage - Issue a new asset to the blockchain node 
             RpcResponse<string> asset = await _wallet.IssueAsync(
                 blockchainName: _wallet.RpcOptions.ChainName,
-                id: nameof(IssueTestAsync),
-                to_address: _wallet.RpcOptions.ChainAdminAddress,
-                asset_params: new AssetEntity(),
+                id: UUID.NoHyphens,
+                toAddress: _wallet.RpcOptions.ChainAdminAddress,
+                assetParams: new AssetEntity(),
                 quantity: 100,
-                smallest_unit: 1);
+                smallestUnit: 1, nativeCurrencyAmount: 0, null);
 
             // Act
             RpcResponse<PrepareLockUnspentFromResult> prepareLockUnspent = await _wallet.PrepareLockUnspentFromAsync(
                 blockchainName: _wallet.RpcOptions.ChainName,
-                id: nameof(AppendRawExchangeTestAsync),
+                id: UUID.NoHyphens,
                 from_address: _wallet.RpcOptions.ChainAdminAddress,
                 asset_quantities: new Dictionary<string, decimal> { { asset.Result, 10 } },
                 _lock: true);
@@ -74,7 +74,7 @@ namespace MCWrapper.RPC.Tests
             // Act
             RpcResponse<string> rawExchange = await _wallet.CreateRawExchangeAsync(
                 blockchainName: _wallet.RpcOptions.ChainName,
-                id: nameof(AppendRawExchangeTestAsync),
+                id: UUID.NoHyphens,
                 txid: prepareLockUnspent.Result.Txid,
                 vout: prepareLockUnspent.Result.Vout,
                 ask_assets: new Dictionary<string, int> { { "", 0 } });
@@ -82,7 +82,7 @@ namespace MCWrapper.RPC.Tests
             // Act
             RpcResponse<AppendRawExchangeResult> appendRaw = await _wallet.AppendRawExchangeAsync(
                 blockchainName: _wallet.RpcOptions.ChainName,
-                id: nameof(AppendRawExchangeTestAsync),
+                id: UUID.NoHyphens,
                 hex: rawExchange.Result,
                 txid: prepareLockUnspent.Result.Txid,
                 vout: prepareLockUnspent.Result.Vout,
@@ -211,7 +211,8 @@ namespace MCWrapper.RPC.Tests
             // Act
             var asset = new AssetEntity();
 
-            var issue = await _wallet.IssueAsync(_wallet.RpcOptions.ChainAdminAddress, asset, 100, 1, 0, new { text = "Some Text".ToHex() });
+            var issue = await _wallet.IssueAsync(_wallet.RpcOptions.ChainAdminAddress, asset, 100, 1, 0,
+                new Dictionary<string, string> { { "text", "Some Text".ToHex() } });
             RpcResponse<PrepareLockUnspentResult> prepareLockUnspent = await _wallet.PrepareLockUnspentAsync(_wallet.RpcOptions.ChainName, nameof(CreateRawExchangeTestAsync), new Dictionary<string, int> { { asset.Name, 2 } }, true);
 
             // Act
@@ -267,7 +268,7 @@ namespace MCWrapper.RPC.Tests
             // Act
             var asset = new AssetEntity();
 
-            var issue = await _wallet.IssueAsync(_wallet.RpcOptions.ChainAdminAddress, asset, 100, 1);
+            var issue = await _wallet.IssueAsync(_wallet.RpcOptions.ChainAdminAddress, asset, 100, 1, 0, null);
             RpcResponse<PrepareLockUnspentResult> prepareLockUnspent = await _wallet.PrepareLockUnspentAsync(_wallet.RpcOptions.ChainName, nameof(DecodeRawExchangeTestAsync), new Dictionary<string, int> { { asset.Name, 2 } }, true);
 
             // Act
@@ -306,7 +307,7 @@ namespace MCWrapper.RPC.Tests
             // Act
             var asset = new AssetEntity();
 
-            var issue = await _wallet.IssueAsync(_wallet.RpcOptions.ChainAdminAddress, asset, 100, 1, 0, new { text = "Some Text".ToHex() });
+            var issue = await _wallet.IssueAsync(_wallet.RpcOptions.ChainAdminAddress, asset, 100, 1, 0, new Dictionary<string, string> { { "text", "Some Text".ToHex() } });
             RpcResponse<PrepareLockUnspentResult> prepareLockUnspent = await _wallet.PrepareLockUnspentAsync(_wallet.RpcOptions.ChainName, nameof(DisableRawTransactionTestAsync), new Dictionary<string, int> { { asset.Name, 2 } }, true);
 
             // Act
@@ -431,7 +432,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetAddressTransactionTestAsync()
         {
             // Stage
-            var transaction = await _wallet.IssueAsync(_wallet.RpcOptions.ChainName, nameof(GetAddressTransactionTestAsync), _wallet.RpcOptions.ChainAdminAddress, new AssetEntity(), 100, 1, 0, new { });
+            var transaction = await _wallet.IssueAsync(_wallet.RpcOptions.ChainName, nameof(GetAddressTransactionTestAsync), _wallet.RpcOptions.ChainAdminAddress, new AssetEntity(), 100, 1, 0, default);
 
             // Act
             RpcResponse<GetAddressTransactionResult> actual = await _wallet.GetAddressTransactionAsync(_wallet.RpcOptions.ChainName, nameof(GetAddressTransactionTestAsync), _wallet.RpcOptions.ChainAdminAddress, transaction.Result, true);
@@ -458,7 +459,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetAssetTransactionTestAsync()
         {
             // Stage
-            var asset = await _wallet.IssueAsync(_wallet.RpcOptions.ChainName, nameof(GetAssetTransactionTestAsync), _wallet.RpcOptions.ChainAdminAddress, new AssetEntity(), 100, 1, 0, new { });
+            var asset = await _wallet.IssueAsync(_wallet.RpcOptions.ChainName, nameof(GetAssetTransactionTestAsync), _wallet.RpcOptions.ChainAdminAddress, new AssetEntity(), 100, 1, 0, default);
 
             // Stage
             await _wallet.SubscribeAsync(_wallet.RpcOptions.ChainName, nameof(GetAssetTransactionTestAsync), asset.Result, false, "");
@@ -605,7 +606,7 @@ namespace MCWrapper.RPC.Tests
         public async Task GetTransactionTestAsync()
         {
             // Stage
-            var txid = await _wallet.IssueFromAsync(_wallet.RpcOptions.ChainName, nameof(GetTransactionTestAsync), _wallet.RpcOptions.ChainAdminAddress, _wallet.RpcOptions.ChainAdminAddress, new AssetEntity(), 100, 1, 0, new { description = "Some Description" });
+            var txid = await _wallet.IssueFromAsync(_wallet.RpcOptions.ChainName, nameof(GetTransactionTestAsync), _wallet.RpcOptions.ChainAdminAddress, _wallet.RpcOptions.ChainAdminAddress, new AssetEntity(), 100, 1, 0, new Dictionary<string, string> { { "description", "Some Description" } });
 
             // Act
             RpcResponse<GetTransactionResult> actual = await _wallet.GetTransactionAsync(_wallet.RpcOptions.ChainName, nameof(GetTransactionTestAsync), txid.Result, true);
@@ -680,12 +681,12 @@ namespace MCWrapper.RPC.Tests
             var newAddress = await _wallet.GetNewAddressAsync(blockchainName: _wallet.RpcOptions.ChainName, nameof(GrantFromTestAsync), "");
 
             // Act
-            RpcResponse<object> actual = await _wallet.GrantFromAsync(_wallet.RpcOptions.ChainName, nameof(GrantFromTestAsync), _wallet.RpcOptions.ChainAdminAddress, newAddress.Result, Permission.Receive, 0, 1, 1000, "", "");
+            RpcResponse<string> actual = await _wallet.GrantFromAsync(_wallet.RpcOptions.ChainName, nameof(GrantFromTestAsync), _wallet.RpcOptions.ChainAdminAddress, newAddress.Result, Permission.Receive, 0, 1, 1000, "", "");
 
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse<string>>(actual);
         }
 
         [Test]
@@ -695,12 +696,12 @@ namespace MCWrapper.RPC.Tests
             var newAddress = await _wallet.GetNewAddressAsync(blockchainName: _wallet.RpcOptions.ChainName, nameof(GrantFromTestAsync), "");
 
             // Act
-            RpcResponse<object> actual = await _wallet.GrantAsync(_wallet.RpcOptions.ChainName, nameof(GrantTestAsync), newAddress.Result, Permission.Receive, 0, 1, 1000, "", "");
+            RpcResponse<string> actual = await _wallet.GrantAsync(_wallet.RpcOptions.ChainName, nameof(GrantTestAsync), newAddress.Result, Permission.Receive, 0, 1, 1000, "", "");
 
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse<string>>(actual);
         }
 
         [Test]
@@ -710,12 +711,12 @@ namespace MCWrapper.RPC.Tests
             var newAddress = await _wallet.GetNewAddressAsync(blockchainName: _wallet.RpcOptions.ChainName, nameof(GrantFromTestAsync), "");
 
             // Act
-            RpcResponse<object> actual = await _wallet.GrantWithDataFromAsync(_wallet.RpcOptions.ChainName, nameof(GrantWithDataFromTestAsync), _wallet.RpcOptions.ChainAdminAddress, newAddress.Result, Permission.Receive, "some_data".ToHex(), 0, 1, 1000);
+            RpcResponse<string> actual = await _wallet.GrantWithDataFromAsync(_wallet.RpcOptions.ChainName, nameof(GrantWithDataFromTestAsync), _wallet.RpcOptions.ChainAdminAddress, newAddress.Result, Permission.Receive, "some_data".ToHex(), 0, 1, 1000);
 
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse<string>>(actual);
         }
 
         [Test]
@@ -725,12 +726,12 @@ namespace MCWrapper.RPC.Tests
             var newAddress = await _wallet.GetNewAddressAsync(blockchainName: _wallet.RpcOptions.ChainName, nameof(GrantFromTestAsync), "");
 
             // Act
-            RpcResponse<object> actual = await _wallet.GrantWithDataAsync(_wallet.RpcOptions.ChainName, nameof(GrantWithDataTestAsync), newAddress.Result, Permission.Receive, "some_data".ToHex(), 0, 1, 1000);
+            RpcResponse<string> actual = await _wallet.GrantWithDataAsync(_wallet.RpcOptions.ChainName, nameof(GrantWithDataTestAsync), newAddress.Result, Permission.Receive, "some_data".ToHex(), 0, 1, 1000);
 
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse<string>>(actual);
         }
 
         [Test, Ignore("I don't want to import any addresses during unit testing")]
@@ -769,63 +770,185 @@ namespace MCWrapper.RPC.Tests
             Assert.IsInstanceOf<RpcResponse<object>>(actual);
         }
 
-        public async Task IssueFromTestAsync()
+        public async Task IssueFromTestStronglyTypedAsync()
         {
             // Act
-            RpcResponse<string> actual = await _wallet.IssueFromAsync(_wallet.RpcOptions.ChainName, nameof(IssueFromTestAsync), _wallet.RpcOptions.ChainAdminAddress, _wallet.RpcOptions.ChainAdminAddress, new AssetEntity(), 100, 1, 0.1m, new { });
+            RpcResponse<string> act_1 = await _wallet.IssueFromAsync(_wallet.RpcOptions.ChainName, UUID.NoHyphens, _wallet.RpcOptions.ChainAdminAddress, _wallet.RpcOptions.ChainAdminAddress, new AssetEntity(), 100, 1, 0.1m, new Dictionary<string, string> { { "text", "Some test data text".ToHex() } });
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(actual);
+            Assert.IsNull(act_1.Error);
+            Assert.IsNotNull(act_1.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(act_1);
+
+            // Act
+            RpcResponse<string> act_2 = await _wallet.IssueFromAsync(_wallet.RpcOptions.ChainName, UUID.NoHyphens, _wallet.RpcOptions.ChainAdminAddress, _wallet.RpcOptions.ChainAdminAddress, new AssetEntity(), 100, 1, 0.1m, new { text = "Some test data text".ToHex() });
+
+            // Assert
+            Assert.IsNull(act_2.Error);
+            Assert.IsNotNull(act_2.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(act_2);
+        }
+
+        public async Task IssueFromTestGenericallyTypedAsync()
+        {
+            // Act
+            RpcResponse<string> act_1 = await _wallet.IssueFromAsync(_wallet.RpcOptions.ChainName, UUID.NoHyphens, _wallet.RpcOptions.ChainAdminAddress, _wallet.RpcOptions.ChainAdminAddress, new { name = UUID.NoHyphens }, 100, 1, 0.1m, new Dictionary<string, string> { { "text", "Some test data text".ToHex() } });
+
+            // Assert
+            Assert.IsNull(act_1.Error);
+            Assert.IsNotNull(act_1.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(act_1);
+
+            // Act
+            RpcResponse<string> act_2 = await _wallet.IssueFromAsync(_wallet.RpcOptions.ChainName, UUID.NoHyphens, _wallet.RpcOptions.ChainAdminAddress, _wallet.RpcOptions.ChainAdminAddress, new { name = UUID.NoHyphens }, 100, 1, 0.1m, new { text = "Some test data text".ToHex() });
+
+            // Assert
+            Assert.IsNull(act_2.Error);
+            Assert.IsNotNull(act_2.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(act_2);
+        }
+
+        public async Task IssueFromTestStringNameAsync()
+        {
+            // Act
+            RpcResponse<string> act_1 = await _wallet.IssueFromAsync(_wallet.RpcOptions.ChainName, UUID.NoHyphens, _wallet.RpcOptions.ChainAdminAddress, _wallet.RpcOptions.ChainAdminAddress, UUID.NoHyphens, 100, 1, 0.1m, new Dictionary<string, string> { { "text", "Some test data text".ToHex() } });
+
+            // Assert
+            Assert.IsNull(act_1.Error);
+            Assert.IsNotNull(act_1.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(act_1);
+
+            // Act
+            RpcResponse<string> act_2 = await _wallet.IssueFromAsync(_wallet.RpcOptions.ChainName, UUID.NoHyphens, _wallet.RpcOptions.ChainAdminAddress, _wallet.RpcOptions.ChainAdminAddress, UUID.NoHyphens, 100, 1, 0.1m, new { text = "Some test data text".ToHex() });
+
+            // Assert
+            Assert.IsNull(act_2.Error);
+            Assert.IsNotNull(act_2.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(act_2);
         }
 
         [Test]
         public async Task IssueMoreFromTestAsync()
         {
             // Stage
-            var issue = await _wallet.IssueFromAsync(_wallet.RpcOptions.ChainName, nameof(IssueMoreFromTestAsync), _wallet.RpcOptions.ChainAdminAddress, _wallet.RpcOptions.ChainAdminAddress, new AssetEntity(), 100, 1, 0, new { });
+            var issue = await _wallet.IssueFromAsync(_wallet.RpcOptions.ChainName, UUID.NoHyphens, _wallet.RpcOptions.ChainAdminAddress, _wallet.RpcOptions.ChainAdminAddress, new AssetEntity(), 100, 1, 0, new Dictionary<string, string> { { "text", "some text in hex".ToHex() } });
 
             // Act
-            RpcResponse<object> actual = await _wallet.IssueMoreFromAsync(_wallet.RpcOptions.ChainName, nameof(IssueMoreFromTestAsync), _wallet.RpcOptions.ChainAdminAddress, _wallet.RpcOptions.ChainAdminAddress, issue.Result.ToString(), 100, 0, new { });
+            RpcResponse<object> act_1 = await _wallet.IssueMoreFromAsync(_wallet.RpcOptions.ChainName, UUID.NoHyphens, _wallet.RpcOptions.ChainAdminAddress, _wallet.RpcOptions.ChainAdminAddress, issue.Result.ToString(), 100, 0, new Dictionary<string, string> { { "text", "some text in hex".ToHex() } });
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsNull(act_1.Error);
+            Assert.IsNotNull(act_1.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(act_1);
+
+            // Act
+            RpcResponse<object> act_2 = await _wallet.IssueMoreFromAsync(_wallet.RpcOptions.ChainName, UUID.NoHyphens, _wallet.RpcOptions.ChainAdminAddress, _wallet.RpcOptions.ChainAdminAddress, issue.Result.ToString(), 100, 0, new { text = "some text in hex".ToHex() });
+
+            // Assert
+            Assert.IsNull(act_2.Error);
+            Assert.IsNotNull(act_2.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(act_2);
         }
 
         [Test]
         public async Task IssueMoreTestAsync()
         {
             // Stage
-            var issue = await _wallet.IssueAsync(_wallet.RpcOptions.ChainName, nameof(IssueMoreTestAsync), _wallet.RpcOptions.ChainAdminAddress, new AssetEntity(), 100, 1, 0, new { });
+            var issue = await _wallet.IssueAsync(_wallet.RpcOptions.ChainName, UUID.NoHyphens, _wallet.RpcOptions.ChainAdminAddress, new AssetEntity(), 100, 1, 0, new Dictionary<string, string> { { "text", "some text in hex".ToHex() } });
 
             // Act
-            RpcResponse<object> actual = await _wallet.IssueMoreAsync(_wallet.RpcOptions.ChainName, nameof(IssueMoreTestAsync), _wallet.RpcOptions.ChainAdminAddress, issue.Result.ToString(), 100, 0, new { });
+            RpcResponse<object> act_1 = await _wallet.IssueMoreAsync(_wallet.RpcOptions.ChainName, UUID.NoHyphens, _wallet.RpcOptions.ChainAdminAddress, issue.Result.ToString(), 100, 0, new Dictionary<string, string> { { "text", "some text in hex".ToHex() } });
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsNull(act_1.Error);
+            Assert.IsNotNull(act_1.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(act_1);
+
+            // Act
+            RpcResponse<object> act_2 = await _wallet.IssueMoreAsync(_wallet.RpcOptions.ChainName, UUID.NoHyphens, _wallet.RpcOptions.ChainAdminAddress, issue.Result.ToString(), 100, 0, new { text = "some text in hex".ToHex() });
+
+            // Assert
+            Assert.IsNull(act_2.Error);
+            Assert.IsNotNull(act_2.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(act_2);
         }
 
         [Test]
-        public async Task IssueTestAsync()
+        public async Task IssueTestStronglyTypedAsync()
         {
             // Stage
             var newAddress = await _wallet.GetNewAddressAsync(blockchainName: _wallet.RpcOptions.ChainName, nameof(GrantFromTestAsync), "");
 
             // Stage
-            await _wallet.GrantAsync(_wallet.RpcOptions.ChainName, nameof(IssueTestAsync), newAddress.Result, $"{Permission.Receive},{Permission.Send}", 0, 1, 10000, "", "");
+            await _wallet.GrantAsync(_wallet.RpcOptions.ChainName, UUID.NoHyphens, newAddress.Result, $"{Permission.Receive},{Permission.Send}", 0, 1, 10000, "", "");
 
             // Act
-            RpcResponse<string> actual = await _wallet.IssueAsync(_wallet.RpcOptions.ChainName, nameof(IssueTestAsync), newAddress.Result, new AssetEntity(), 100, 1, 0, new { text = "some text in hex".ToHex() });
+            RpcResponse<string> act_1 = await _wallet.IssueAsync(_wallet.RpcOptions.ChainName, UUID.NoHyphens, newAddress.Result, new AssetEntity(), 100, 1, 0, new Dictionary<string, string> { { "text", "some text in hex".ToHex() } });
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(actual);
+            Assert.IsNull(act_1.Error);
+            Assert.IsNotNull(act_1.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(act_1);
+
+            // Act
+            RpcResponse<string> act_2 = await _wallet.IssueAsync(_wallet.RpcOptions.ChainName, UUID.NoHyphens, newAddress.Result, new AssetEntity(), 100, 1, 0, new { text = "some text in hex".ToHex() });
+
+            // Assert
+            Assert.IsNull(act_2.Error);
+            Assert.IsNotNull(act_2.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(act_2);
+        }
+
+        [Test]
+        public async Task IssueTestGenericallyTypedAsync()
+        {
+            // Stage
+            var newAddress = await _wallet.GetNewAddressAsync(blockchainName: _wallet.RpcOptions.ChainName, nameof(GrantFromTestAsync), "");
+
+            // Stage
+            await _wallet.GrantAsync(_wallet.RpcOptions.ChainName, UUID.NoHyphens, newAddress.Result, $"{Permission.Receive},{Permission.Send}", 0, 1, 10000, "", "");
+
+            // Act
+            RpcResponse<string> act_1 = await _wallet.IssueAsync(_wallet.RpcOptions.ChainName, UUID.NoHyphens, newAddress.Result, new { name = UUID.NoHyphens }, 100, 1, 0, new Dictionary<string, string> { { "text", "some text in hex".ToHex() } });
+
+            // Assert
+            Assert.IsNull(act_1.Error);
+            Assert.IsNotNull(act_1.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(act_1);
+
+            // Act
+            RpcResponse<string> act_2 = await _wallet.IssueAsync(_wallet.RpcOptions.ChainName, UUID.NoHyphens, newAddress.Result, new { name = UUID.NoHyphens }, 100, 1, 0, new { text = "some text in hex".ToHex() });
+
+            // Assert
+            Assert.IsNull(act_2.Error);
+            Assert.IsNotNull(act_2.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(act_2);
+        }
+
+        [Test]
+        public async Task IssueTestStringNameAsync()
+        {
+            // Stage
+            var newAddress = await _wallet.GetNewAddressAsync(blockchainName: _wallet.RpcOptions.ChainName, nameof(GrantFromTestAsync), "");
+
+            // Stage
+            await _wallet.GrantAsync(_wallet.RpcOptions.ChainName, UUID.NoHyphens, newAddress.Result, $"{Permission.Receive},{Permission.Send}", 0, 1, 10000, "", "");
+
+            // Act
+            RpcResponse<string> act_1 = await _wallet.IssueAsync(_wallet.RpcOptions.ChainName, UUID.NoHyphens, newAddress.Result, UUID.NoHyphens, 100, 1, 0, new Dictionary<string, string> { { "text", "some text in hex".ToHex() } });
+
+            // Assert
+            Assert.IsNull(act_1.Error);
+            Assert.IsNotNull(act_1.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(act_1);
+
+            // Act
+            RpcResponse<string> act_2 = await _wallet.IssueAsync(_wallet.RpcOptions.ChainName, UUID.NoHyphens, newAddress.Result, UUID.NoHyphens, 100, 1, 0, new { text = "some text in hex".ToHex() });
+
+            // Assert
+            Assert.IsNull(act_2.Error);
+            Assert.IsNotNull(act_2.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(act_2);
         }
 
         [Test]
@@ -892,7 +1015,7 @@ namespace MCWrapper.RPC.Tests
         public async Task ListAssetTransactionsTestAsync()
         {
             // Stage
-            var issue = await _wallet.IssueAsync(_wallet.RpcOptions.ChainName, nameof(ListAssetTransactionsTestAsync), _wallet.RpcOptions.ChainAdminAddress, new AssetEntity(), 100, 1, 0, new { });
+            var issue = await _wallet.IssueAsync(_wallet.RpcOptions.ChainName, nameof(ListAssetTransactionsTestAsync), _wallet.RpcOptions.ChainAdminAddress, new AssetEntity(), 100, 1, 0, default);
 
             // Stage
             await _wallet.SubscribeAsync(_wallet.RpcOptions.ChainName, nameof(ListAssetTransactionsTestAsync), issue.Result, false, "");
@@ -1100,7 +1223,7 @@ namespace MCWrapper.RPC.Tests
 
             var issue = await _wallet.IssueAsync(
                 _wallet.RpcOptions.ChainName, nameof(LockUnspentTestAsync), _wallet.RpcOptions.ChainAdminAddress, asset, 100, 1, 0,
-                new { text = "some text in hex".ToHex() });
+                    new Dictionary<string, string> { { "text", "some text in hex".ToHex() } });
 
             var unspent = await _wallet.PrepareLockUnspentAsync(_wallet.RpcOptions.ChainName, nameof(LockUnspentTestAsync),
                 new Dictionary<string, int> { { asset.Name, 1 } }, false);
@@ -1135,7 +1258,7 @@ namespace MCWrapper.RPC.Tests
 
             var issue = await _wallet.IssueAsync(
                 _wallet.RpcOptions.ChainName, nameof(PrepareLockUnspentTestAsync), _wallet.RpcOptions.ChainAdminAddress, asset, 100, 1, 0,
-                new { text = "some text in hex".ToHex() });
+                    new Dictionary<string, string> { { "text", "some text in hex".ToHex() } });
 
             var actual = await _wallet.PrepareLockUnspentAsync(_wallet.RpcOptions.ChainName, nameof(PrepareLockUnspentTestAsync),
                 new Dictionary<string, int> { { asset.Name, 1 } }, false);
@@ -1154,7 +1277,7 @@ namespace MCWrapper.RPC.Tests
 
             var issue = await _wallet.IssueAsync(
                 _wallet.RpcOptions.ChainName, nameof(PrepareLockUnspentFromTestAsync), _wallet.RpcOptions.ChainAdminAddress, asset, 100, 1, 0,
-                new { text = "some text in hex".ToHex() });
+                    new Dictionary<string, string> { { "text", "some text in hex".ToHex() } });
 
             var actual = await _wallet.PrepareLockUnspentFromAsync(_wallet.RpcOptions.ChainName, nameof(PrepareLockUnspentFromTestAsync),
                 _wallet.RpcOptions.ChainAdminAddress, new Dictionary<string, int> { { asset.Name, 1 } }, false);
@@ -1277,7 +1400,7 @@ namespace MCWrapper.RPC.Tests
         public async Task SendAssetTestAsync()
         {
             // Stage
-            var asset = await _wallet.IssueAsync(_wallet.RpcOptions.ChainName, nameof(SendAssetTestAsync), _wallet.RpcOptions.ChainAdminAddress, new AssetEntity(), 100, 1, 0, new { });
+            var asset = await _wallet.IssueAsync(_wallet.RpcOptions.ChainName, nameof(SendAssetTestAsync), _wallet.RpcOptions.ChainAdminAddress, new AssetEntity(), 100, 1, 0, default);
 
             // Act
             RpcResponse<object> actual = await _wallet.SendAssetAsync(_wallet.RpcOptions.ChainName, nameof(SendAssetTestAsync), _wallet.RpcOptions.ChainAdminAddress, asset.Result, 1, 0, "Comment text", "Comment_To text");
@@ -1298,7 +1421,7 @@ namespace MCWrapper.RPC.Tests
             await _wallet.GrantAsync(_wallet.RpcOptions.ChainName, nameof(SendAssetFromTestAsync), newAddress.Result, $"{Permission.Receive},{Permission.Send}", 0, 1, 10000, "", "");
 
             // Stage
-            var asset = await _wallet.IssueAsync(_wallet.RpcOptions.ChainName, nameof(SendAssetFromTestAsync), _wallet.RpcOptions.ChainAdminAddress, new AssetEntity(), 100, 1, 0, new { text = "text to hex".ToHex() });
+            var asset = await _wallet.IssueAsync(_wallet.RpcOptions.ChainName, nameof(SendAssetFromTestAsync), _wallet.RpcOptions.ChainAdminAddress, new AssetEntity(), 100, 1, 0, new Dictionary<string, string> { { "text", "text to hex".ToHex() } });
 
             // Act
             RpcResponse<object> actual = await _wallet.SendAssetFromAsync(_wallet.RpcOptions.ChainName, nameof(SendAssetFromTestAsync), _wallet.RpcOptions.ChainAdminAddress, newAddress.Result, asset.Result, 1, 0, "Comment text", "Comment_To text");

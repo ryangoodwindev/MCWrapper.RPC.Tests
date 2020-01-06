@@ -125,7 +125,7 @@ namespace MCWrapper.RPC.Tests
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse<string>>(actual);
         }
 
         [Test, Ignore("Test is ignored since it can be destructive to the current blockchain")]
@@ -263,7 +263,7 @@ namespace MCWrapper.RPC.Tests
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse<string>>(actual);
         }
 
         [Test, Ignore("Test is ignored since it can be destructive to the current blockchain")]
@@ -275,7 +275,7 @@ namespace MCWrapper.RPC.Tests
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse<string>>(actual);
         }
 
         [Test]
