@@ -1,6 +1,7 @@
 ﻿using MCWrapper.Data.Models.Control;
 using MCWrapper.Ledger.Actions;
 using MCWrapper.Ledger.Entities.Constants;
+using MCWrapper.Ledger.Entities.Extensions;
 using MCWrapper.RPC.Connection;
 using MCWrapper.RPC.Ledger.Clients;
 using MCWrapper.RPC.Tests.ServiceHelpers;
@@ -119,7 +120,7 @@ namespace MCWrapper.RPC.Tests
             // Act - Get help information based on blockchain method name
             var actual = await _control.HelpAsync(
                 blockchainName: _control.RpcOptions.ChainName,
-                id: nameof(HelpExplicitTestAsync),
+                id: UUID.NoHyphens,
                 command: BlockchainAction.GetAssetInfoMethod);
 
             // Assert
@@ -134,7 +135,7 @@ namespace MCWrapper.RPC.Tests
             // Act - Sets last block in blockchain
             var actual = await _control.SetLastBlockAsync(
                 blockchainName: _control.RpcOptions.ChainName,
-                id: nameof(SetLastBlockExplicitTestAsync),
+                id: UUID.NoHyphens,
                 hash_or_height: 60);
 
             // Assert
@@ -150,16 +151,11 @@ namespace MCWrapper.RPC.Tests
             var OneMiB = 1048576;
 
             // ### Act - Set a specific runtime parameter with a specific value
-            var actual = await _control.SetRuntimeParamAsync(
+            await _control.SetRuntimeParamAsync(
                 blockchainName: _control.RpcOptions.ChainName,
-                id: nameof(SetRuntimeParamExplicitTestAsync),
+                id: UUID.NoHyphens,
                 runtimeParam: RuntimeParam.MaxShownData,
                 parameter_value: OneMiB);
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
         }
 
         [Test, Ignore("Test is ignored since it can be destructive to the current blockchain")]
@@ -176,7 +172,8 @@ namespace MCWrapper.RPC.Tests
 
         // Inferred blockchainName tests //
 
-        [Test, Ignore("ClearMemPoolTests should be ran independent of other tests since the network must be paused for incoming and mining tasks")]
+        [Test]
+        [Ignore("ClearMemPoolTests should be ran independent of other tests since the network must be paused for incoming and mining tasks")]
         public async Task ClearMemPoolInferredTestAsync()
         {
             // Act - Pause blockchain network actions
@@ -185,7 +182,7 @@ namespace MCWrapper.RPC.Tests
             // Assert
             Assert.IsNull(pause.Error);
             Assert.IsNotNull(pause.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(pause);
+            Assert.IsInstanceOf<RpcResponse<string>>(pause);
 
             // Act - Clear blockchain mem pool
             var clearMemPool = await _control.ClearMemPoolAsync();
@@ -201,7 +198,7 @@ namespace MCWrapper.RPC.Tests
             // Assert
             Assert.IsNull(pause.Error);
             Assert.IsNotNull(pause.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(resume);
+            Assert.IsInstanceOf<RpcResponse<string>>(resume);
         }
 
         [Test]
@@ -285,14 +282,9 @@ namespace MCWrapper.RPC.Tests
             var OneMiB = 1048576;
 
             // ### Act - Set a specific runtime parameter with a specific value
-            var actual = await _control.SetRuntimeParamAsync(
+            await _control.SetRuntimeParamAsync(
                 runtimeParam: RuntimeParam.MaxShownData,
                 parameter_value: OneMiB);
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
         }
 
         [Test, Ignore("Test is ignored since it can be destructive to the current blockchain")]

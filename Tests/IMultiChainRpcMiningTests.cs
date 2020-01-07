@@ -1,4 +1,5 @@
-﻿using MCWrapper.Ledger.Entities.Extensions;
+﻿using MCWrapper.Data.Models.Mining;
+using MCWrapper.Ledger.Entities.Extensions;
 using MCWrapper.RPC.Connection;
 using MCWrapper.RPC.Ledger.Clients;
 using MCWrapper.RPC.Tests.ServiceHelpers;
@@ -46,7 +47,7 @@ namespace MCWrapper.RPC.Tests
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse<GetMiningInfoResult>>(actual);
         }
 
         [Test]
@@ -62,7 +63,7 @@ namespace MCWrapper.RPC.Tests
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse<int>>(actual);
         }
 
         [Test, Ignore("Not supported by MultiChain v2.02")]
@@ -120,7 +121,7 @@ namespace MCWrapper.RPC.Tests
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse<GetMiningInfoResult>>(actual);
         }
 
         [Test]
@@ -132,7 +133,7 @@ namespace MCWrapper.RPC.Tests
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse<int>>(actual);
         }
 
         [Test, Ignore("Not supported by MultiChain v2.02")]

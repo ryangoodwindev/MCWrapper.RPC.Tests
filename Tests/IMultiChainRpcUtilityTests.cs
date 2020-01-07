@@ -59,7 +59,7 @@ namespace MCWrapper.RPC.Tests
             // Assert
             Assert.IsNull(delete.Error);
             Assert.IsNull(delete.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(delete);
+            Assert.IsInstanceOf<RpcResponse>(delete);
         }
 
         [Test]
@@ -108,7 +108,7 @@ namespace MCWrapper.RPC.Tests
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse<long>>(actual);
         }
 
         [Test]
@@ -123,7 +123,7 @@ namespace MCWrapper.RPC.Tests
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse<float>>(actual);
         }
 
         [Test]
@@ -202,7 +202,7 @@ namespace MCWrapper.RPC.Tests
             // Assert
             Assert.IsNull(delete.Error);
             Assert.IsNull(delete.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(delete);
+            Assert.IsInstanceOf<RpcResponse>(delete);
         }
 
         [Test]
@@ -243,7 +243,7 @@ namespace MCWrapper.RPC.Tests
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse<long>>(actual);
         }
 
         [Test]
@@ -255,7 +255,7 @@ namespace MCWrapper.RPC.Tests
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse<float>>(actual);
         }
 
         [Test]

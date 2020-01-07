@@ -53,12 +53,7 @@ namespace MCWrapper.RPC.Tests
         public async Task SetGenerateExplicitTestAsync()
         {
             // Act - Set coin generation status
-            var actual = await _generate.SetGenerateAsync(_generate.RpcOptions.ChainName, UUID.NoHyphens, true, 1);
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            await _generate.SetGenerateAsync(_generate.RpcOptions.ChainName, UUID.NoHyphens, true, 1);
         }
 
         // Inferred blockchainName tests //
@@ -91,12 +86,7 @@ namespace MCWrapper.RPC.Tests
         public async Task SetGenerateInferredTestAsync()
         {
             // Act - Set coin generation status
-            var actual = await _generate.SetGenerateAsync(true, 1);
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            await _generate.SetGenerateAsync(true, 1);
         }
     }
 }

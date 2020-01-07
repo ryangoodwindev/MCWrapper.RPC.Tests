@@ -67,7 +67,7 @@ namespace MCWrapper.RPC.Tests
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse<GetChunkQueueInfoResult>>(actual);
         }
 
         [Test]
@@ -79,7 +79,7 @@ namespace MCWrapper.RPC.Tests
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse<GetChunkQueueInfoTotalsResult>>(actual);
         }
 
         [Test]
@@ -91,7 +91,7 @@ namespace MCWrapper.RPC.Tests
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse<int>>(actual);
         }
 
         [Test]
@@ -103,7 +103,7 @@ namespace MCWrapper.RPC.Tests
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse<GetNetTotalsResult>>(actual);
         }
 
         [Test]
@@ -127,7 +127,7 @@ namespace MCWrapper.RPC.Tests
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse<GetPeerInfoResult[]>>(actual);
         }
 
         [Test]
@@ -139,7 +139,7 @@ namespace MCWrapper.RPC.Tests
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse>(actual);
         }
 
         // Inferred blockchainName tests //
@@ -181,7 +181,7 @@ namespace MCWrapper.RPC.Tests
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse<GetChunkQueueInfoResult>>(actual);
         }
 
         [Test]
@@ -193,7 +193,7 @@ namespace MCWrapper.RPC.Tests
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse<GetChunkQueueInfoTotalsResult>>(actual);
         }
 
         [Test]
@@ -205,7 +205,7 @@ namespace MCWrapper.RPC.Tests
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse<int>>(actual);
         }
 
         [Test]
@@ -217,7 +217,7 @@ namespace MCWrapper.RPC.Tests
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse<GetNetTotalsResult>>(actual);
         }
 
         [Test]
@@ -241,7 +241,7 @@ namespace MCWrapper.RPC.Tests
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse<GetPeerInfoResult[]>>(actual);
         }
 
         [Test]
@@ -253,7 +253,7 @@ namespace MCWrapper.RPC.Tests
             // Assert
             Assert.IsNull(actual.Error);
             Assert.IsNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsInstanceOf<RpcResponse>(actual);
         }
     }
 }

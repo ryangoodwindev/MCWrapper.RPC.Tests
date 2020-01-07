@@ -143,13 +143,13 @@ namespace MCWrapper.RPC.Tests
 
             Assert.IsNull(rawChange.Error);
             Assert.IsNotNull(rawChange.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(rawChange);
+            Assert.IsInstanceOf<RpcResponse<string>>(rawChange);
 
             var rawData = await _raw.AppendRawDataAsync(_raw.RpcOptions.ChainName, nameof(RawTransactionTest), $"{rawChange.Result}", "Some metadta".ToHex());
 
             Assert.IsNull(rawData.Error);
             Assert.IsNotNull(rawData.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(rawData);
+            Assert.IsInstanceOf<RpcResponse<string>>(rawData);
 
             var signRaw = await _raw.SignRawTransactionAsync(_raw.RpcOptions.ChainName, nameof(RawTransactionTest), $"{rawData.Result}");
 
@@ -161,7 +161,7 @@ namespace MCWrapper.RPC.Tests
 
             Assert.IsNull(sendRaw.Error);
             Assert.IsNotNull(sendRaw.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(sendRaw);
+            Assert.IsInstanceOf<RpcResponse<string>>(sendRaw);
         }
 
         [Test]
@@ -270,13 +270,13 @@ namespace MCWrapper.RPC.Tests
 
             Assert.IsNull(rawChange.Error);
             Assert.IsNotNull(rawChange.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(rawChange);
+            Assert.IsInstanceOf<RpcResponse<string>>(rawChange);
 
             var rawData = await _raw.AppendRawDataAsync($"{rawChange.Result}", "Some metadta".ToHex());
 
             Assert.IsNull(rawData.Error);
             Assert.IsNotNull(rawData.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(rawData);
+            Assert.IsInstanceOf<RpcResponse<string>>(rawData);
 
             var signRaw = await _raw.SignRawTransactionAsync($"{rawData.Result}");
 
@@ -288,7 +288,7 @@ namespace MCWrapper.RPC.Tests
 
             Assert.IsNull(sendRaw.Error);
             Assert.IsNotNull(sendRaw.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(sendRaw);
+            Assert.IsInstanceOf<RpcResponse<string>>(sendRaw);
         }
     }
 }
