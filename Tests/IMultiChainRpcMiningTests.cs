@@ -20,7 +20,7 @@ namespace MCWrapper.RPC.Tests
         public IMultiChainRpcMiningTests()
         {
             // instantiate test serviecs provider
-            var provider = new ServiceHelperParameterlessConstructor();
+            var provider = new ParameterlessMockServices();
 
             // fetch service from provider
             _mining = provider.GetService<IMultiChainRpcMining>();

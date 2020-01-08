@@ -20,7 +20,7 @@ namespace MCWrapper.RPC.Tests
         /// </summary>
         public IMultiChainRpcUtilityTests()
         {
-            var provider = new ServiceHelperParameterlessConstructor();
+            var provider = new ParameterlessMockServices();
 
             // fetch services from provider
             _utility = provider.GetService<IMultiChainRpcUtility>();

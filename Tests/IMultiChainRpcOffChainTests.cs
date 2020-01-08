@@ -17,7 +17,7 @@ namespace MCWrapper.RPC.Tests
         public IMultiChainRpcOffChainTests()
         {
             // instantiate test services provider
-            var provider = new ServiceHelperParameterlessConstructor();
+            var provider = new ParameterlessMockServices();
 
             // fetch service from provider
             _offChain = provider.GetService<IMultiChainRpcOffChain>();
