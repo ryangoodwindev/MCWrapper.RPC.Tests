@@ -12,7 +12,7 @@ namespace MCWrapper.RPC.Tests
         private readonly IMultiChainRpcOffChain _offChain;
         private readonly string ChainName;
 
-        // Create new NetworkServiceTests instance
+        // Create new RpcOffChainClientTests instance
         public RpcOffChainClientTests()
         {
             // instantiate mock services container

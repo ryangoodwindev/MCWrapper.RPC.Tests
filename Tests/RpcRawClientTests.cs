@@ -23,7 +23,7 @@ namespace MCWrapper.RPC.Tests
         private readonly string ChainName;
         private readonly string Address;
 
-        // Create a new BlockchainServiceTests instance
+        // Create a new RpcRawClientTests instance
         public RpcRawClientTests()
         {
             // instantiate mock service container

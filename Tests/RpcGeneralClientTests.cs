@@ -5,9 +5,8 @@ using MCWrapper.Ledger.Entities.Extensions;
 using MCWrapper.RPC.Connection;
 using MCWrapper.RPC.Ledger.Clients;
 using MCWrapper.RPC.Tests.FilterHelpers;
-using MCWrapper.RPC.Tests.ServiceHelpers;
+using MCWrapper.RPC.Tests.ServicesPipeline;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,22 +16,19 @@ namespace MCWrapper.RPC.Tests
     [TestFixture]
     public class RpcGeneralClientTests
     {
-        /// <summary>
-        /// Remote Procedure Call (RPC) clients
-        /// </summary>
-        private readonly IMultiChainRpcWallet _wallet;
+        // Inject services
         private readonly IMultiChainRpcGeneral _blockchain;
+        private readonly IMultiChainRpcWallet _wallet;
 
-        /// <summary>
-        /// Create a new BlockchainServiceTests instance
-        /// </summary>
+        // Create a new RpcGeneralClientTests instance
         public RpcGeneralClientTests()
         {
-            // instantiate test services provider
-            var provider = new ParameterlessMockServices();
+            // instantiate mock services container
+            var services = new ParameterlessMockServices();
 
-            _wallet = provider.GetService<IMultiChainRpcWallet>();
-            _blockchain = provider.GetService<IMultiChainRpcGeneral>();
+            // fetch services from service container
+            _blockchain = services.GetRequiredService<IMultiChainRpcGeneral>();
+            _wallet = services.GetRequiredService<IMultiChainRpcWallet>();
         }
 
         // Explicit blockchainName tests

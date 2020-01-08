@@ -2,7 +2,7 @@
 using MCWrapper.Ledger.Entities.Extensions;
 using MCWrapper.RPC.Connection;
 using MCWrapper.RPC.Ledger.Clients;
-using MCWrapper.RPC.Tests.ServiceHelpers;
+using MCWrapper.RPC.Tests.ServicesPipeline;
 using NUnit.Framework;
 using System.Threading.Tasks;
 
@@ -11,20 +11,19 @@ namespace MCWrapper.RPC.Tests
     [TestFixture]
     public class RpcUtilityClientTests
     {
-        // private field
+        // Inject services
         private readonly IMultiChainRpcUtility _utility;
         private readonly IMultiChainRpcWallet _wallet;
 
-        /// <summary>
-        /// Create a new UtilityServiceTests instance
-        /// </summary>
+        // Create a new RpcUtilityClientTests instance
         public RpcUtilityClientTests()
         {
-            var provider = new ParameterlessMockServices();
+            // instantiate mock services container
+            var services = new ParameterlessMockServices();
 
-            // fetch services from provider
-            _utility = provider.GetService<IMultiChainRpcUtility>();
-            _wallet = provider.GetService<IMultiChainRpcWallet>();
+            // fetch service from service container
+            _utility = services.GetRequiredService<IMultiChainRpcUtility>();
+            _wallet = services.GetRequiredService<IMultiChainRpcWallet>();
         }
 
         [Test]

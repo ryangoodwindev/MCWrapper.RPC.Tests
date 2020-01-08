@@ -4,7 +4,7 @@ using MCWrapper.Ledger.Entities.Constants;
 using MCWrapper.Ledger.Entities.Extensions;
 using MCWrapper.RPC.Connection;
 using MCWrapper.RPC.Ledger.Clients;
-using MCWrapper.RPC.Tests.ServiceHelpers;
+using MCWrapper.RPC.Tests.ServicesPipeline;
 using NUnit.Framework;
 using System.Threading.Tasks;
 
@@ -13,19 +13,17 @@ namespace MCWrapper.RPC.Tests
     [TestFixture]
     public class RpcControlClientTests
     {
-        // private field
+        // Inject services
         private readonly IMultiChainRpcControl _control;
 
-        /// <summary>
-        /// Create a new ControlServiceTests instance
-        /// </summary>
+        // Create a new RpcControlClientTests instance
         public RpcControlClientTests()
         {
-            // instantiate new test services provider
-            var provider = new ParameterlessMockServices();
+            // instantiate mock services container
+            var services = new ParameterlessMockServices();
 
             // fetch service from provider
-            _control = provider.GetService<IMultiChainRpcControl>();
+            _control = services.GetRequiredService<IMultiChainRpcControl>();
         }
 
         [Test, Ignore("ClearMemPoolTests should be ran independent of other tests since the network must be paused for incoming and mining tasks")]

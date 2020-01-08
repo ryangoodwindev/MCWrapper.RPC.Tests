@@ -15,13 +15,13 @@ namespace MCWrapper.RPC.Tests
         private readonly IMultiChainRpcMining _mining;
         private readonly string ChainName;
 
-        // Create a new MiningServiceTests instance
+        // Create a new RpcMiningClientTests instance
         public RpcMiningClientTests()
         {
-            // instantiate test services provider
+            // instantiate mock services container
             var services = new ParameterlessMockServices();
 
-            // fetch service from provider
+            // fetch service from service container
             _mining = services.GetRequiredService<IMultiChainRpcMining>();
 
             ChainName = _mining.RpcOptions.ChainName;

@@ -17,20 +17,20 @@ namespace MCWrapper.RPC.Tests
     [TestFixture]
     public class RpcWalletClientTests
     {
-        // Inject RPC services
+        // Inject services
         private readonly IMultiChainRpcGeneral _blockchain;
         private readonly IMultiChainRpcUtility _utility;
         private readonly IMultiChainRpcWallet _wallet;
         private readonly string ChainName;
         private readonly string Address;
 
-        // Create a new WalletServiceTests instance
+        // Create a new RpcWalletClientTests instance
         public RpcWalletClientTests()
         {
-            // instantiate mock services provider
+            // instantiate mock services container
             var services = new ParameterlessMockServices();
 
-            // fetch required services from service container
+            // fetch service from service container
             _blockchain = services.GetRequiredService<IMultiChainRpcGeneral>();
             _utility = services.GetRequiredService<IMultiChainRpcUtility>();
             _wallet = services.GetRequiredService<IMultiChainRpcWallet>();

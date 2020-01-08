@@ -16,13 +16,13 @@ namespace MCWrapper.RPC.Tests
         private readonly IMultiChainRpcNetwork _network;
         private readonly string ChainName;
 
-        // Create new NetworkServiceTests instance
+        // Create new RpcNetworkClientTests instance
         public RpcNetworkClientTests()
         {
-            // instantiate test services provider
+            // instantiate mock services container
             var services = new ParameterlessMockServices();
 
-            // fetch service from provider
+            // fetch service from service container
             _network = services.GetRequiredService<IMultiChainRpcNetwork>();
 
             ChainName = _network.RpcOptions.ChainName;
