@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace MCWrapper.RPC.Tests
 {
     [TestFixture]
-    public class IMultiChainRpcGenerateTests
+    public class RpcGenerateClientTests
     {
         // private field
         private readonly IMultiChainRpcGenerate _generate;
@@ -16,7 +16,7 @@ namespace MCWrapper.RPC.Tests
         /// <summary>
         /// Create a new GenerateServiceTests instance
         /// </summary>
-        public IMultiChainRpcGenerateTests()
+        public RpcGenerateClientTests()
         {
             // instantiate test services provider
             var provider = new ParameterlessMockServices();

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace MCWrapper.RPC.Tests
 {
     [TestFixture]
-    public class IMultiChainRpcControlTests
+    public class RpcControlClientTests
     {
         // private field
         private readonly IMultiChainRpcControl _control;
@@ -19,7 +19,7 @@ namespace MCWrapper.RPC.Tests
         /// <summary>
         /// Create a new ControlServiceTests instance
         /// </summary>
-        public IMultiChainRpcControlTests()
+        public RpcControlClientTests()
         {
             // instantiate new test services provider
             var provider = new ParameterlessMockServices();

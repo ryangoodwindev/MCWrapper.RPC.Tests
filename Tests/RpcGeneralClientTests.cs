@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace MCWrapper.RPC.Tests
 {
     [TestFixture]
-    public class IMultiChainRpcGeneralTests
+    public class RpcGeneralClientTests
     {
         /// <summary>
         /// Remote Procedure Call (RPC) clients
@@ -26,7 +26,7 @@ namespace MCWrapper.RPC.Tests
         /// <summary>
         /// Create a new BlockchainServiceTests instance
         /// </summary>
-        public IMultiChainRpcGeneralTests()
+        public RpcGeneralClientTests()
         {
             // instantiate test services provider
             var provider = new ParameterlessMockServices();
