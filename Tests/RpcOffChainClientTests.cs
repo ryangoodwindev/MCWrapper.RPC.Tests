@@ -16,7 +16,7 @@ namespace MCWrapper.RPC.Tests
         public RpcOffChainClientTests()
         {
             // instantiate mock services container
-            var services = new ParameterlessMockServices();
+            var services = new ParameterlessStartup();
 
             // fetch service from service container
             _offChain = services.GetRequiredService<IMultiChainRpcOffChain>();

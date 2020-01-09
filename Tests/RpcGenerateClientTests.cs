@@ -12,30 +12,36 @@ namespace MCWrapper.RPC.Tests
     {
         // Inject services
         private readonly IMultiChainRpcGenerate _generate;
-        private readonly string ChainName;
+        private readonly string _chainName;
+
+        // Use mock startup service container
+        private readonly ExplicitStartup _services = new ExplicitStartup();
 
         // Create a new RpcGenerateClientTests instance
         public RpcGenerateClientTests()
         {
-            // instantiate mock services container
-            var services = new ParameterlessMockServices();
-
-            // fetch service from service container
-            _generate = services.GetRequiredService<IMultiChainRpcGenerate>();
-
-            ChainName = _generate.RpcOptions.ChainName;
+            _generate = _services.GetRequiredService<IMultiChainRpcGenerate>();
+            _chainName = _generate.RpcOptions.ChainName;
         }
 
         [Test]
         public async Task GetGenerateTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act
-            var expGet = await _generate.GetGenerateAsync(ChainName, UUID.NoHyphens);
+            var expGet = await _generate.GetGenerateAsync(_chainName, UUID.NoHyphens);
 
             // Assert
             Assert.IsNull(expGet.Error);
             Assert.IsNotNull(expGet.Result);
             Assert.IsInstanceOf<RpcResponse<bool>>(expGet);
+
+            /*
+              Inferred blockchain name test
+           */
 
             // Act
             var infGet = await _generate.GetGenerateAsync();
@@ -49,13 +55,21 @@ namespace MCWrapper.RPC.Tests
         [Test]
         public async Task GetHashesPerSecTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act
-            var expGet = await _generate.GetHashesPerSecAsync(ChainName, UUID.NoHyphens);
+            var expGet = await _generate.GetHashesPerSecAsync(_chainName, UUID.NoHyphens);
 
             // Assert
             Assert.IsNull(expGet.Error);
             Assert.IsNotNull(expGet.Result);
             Assert.IsInstanceOf<RpcResponse<int>>(expGet);
+
+            /*
+              Inferred blockchain name test
+           */
 
             // Act
             var infGet = await _generate.GetHashesPerSecAsync();
@@ -69,13 +83,21 @@ namespace MCWrapper.RPC.Tests
         [Test, Ignore("SetGenerate tests should be ran independent of other tests")]
         public async Task SetGenerateTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act
-            var expSet = await _generate.SetGenerateAsync(ChainName, UUID.NoHyphens, true, 1);
+            var expSet = await _generate.SetGenerateAsync(_chainName, UUID.NoHyphens, true, 1);
 
             // Assert
             Assert.IsNull(expSet.Error);
             Assert.IsInstanceOf<object>(expSet.Result);
             Assert.IsInstanceOf<RpcResponse>(expSet);
+
+            /*
+              Inferred blockchain name test
+           */
 
             var infSet = await _generate.SetGenerateAsync(true, 1);
 

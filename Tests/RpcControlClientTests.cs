@@ -15,286 +15,305 @@ namespace MCWrapper.RPC.Tests
     {
         // Inject services
         private readonly IMultiChainRpcControl _control;
+        private readonly string _chainName;
+
+        // Use mock startup service container
+        private readonly ExplicitStartup _services = new ExplicitStartup();
 
         // Create a new RpcControlClientTests instance
         public RpcControlClientTests()
         {
-            // instantiate mock services container
-            var services = new ParameterlessMockServices();
-
-            // fetch service from provider
-            _control = services.GetRequiredService<IMultiChainRpcControl>();
-        }
-
-        [Test, Ignore("ClearMemPoolTests should be ran independent of other tests since the network must be paused for incoming and mining tasks")]
-        public async Task ClearMemPoolExplicitTestAsync()
-        {
-            // Act - Pause blockchain network actions
-            var pause = await _control.PauseAsync(
-                blockchainName: _control.RpcOptions.ChainName,
-                id: nameof(ClearMemPoolExplicitTestAsync),
-                tasks: NodeTask.All);
-
-            // Assert
-            Assert.IsNull(pause.Error);
-            Assert.IsNotNull(pause.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(pause);
-
-            // Act - Clear blockchain mem pool
-            var clearMemPool = await _control.ClearMemPoolAsync(_control.RpcOptions.ChainName, nameof(ClearMemPoolExplicitTestAsync));
-
-            // Assert
-            Assert.IsNull(pause.Error);
-            Assert.IsNotNull(pause.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(clearMemPool);
-
-            // Act - Resume blockchain network actions
-            var resume = await _control.ResumeAsync(
-                blockchainName: _control.RpcOptions.ChainName,
-                id: nameof(ClearMemPoolExplicitTestAsync),
-                tasks: NodeTask.All);
-
-            // Assert
-            Assert.IsNull(pause.Error);
-            Assert.IsNotNull(pause.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(resume);
+            _control = _services.GetRequiredService<IMultiChainRpcControl>();
+            _chainName = _control.RpcOptions.ChainName;
         }
 
         [Test]
         public async Task GetBlockchainParamsExplicitTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act - Ask network for blockchain params
-            var actual = await _control.GetBlockchainParamsAsync(
-                blockchainName: _control.RpcOptions.ChainName,
-                id: nameof(GetBlockchainParamsExplicitTestAsync), 
-                display_names: true,
-                with_upgrades: true);
+            var expParams = await _control.GetBlockchainParamsAsync(_chainName, UUID.NoHyphens, true, true);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetBlockchainParamsResult>>(actual);
+            Assert.IsNull(expParams.Error);
+            Assert.IsNotNull(expParams.Result);
+            Assert.IsInstanceOf<RpcResponse<GetBlockchainParamsResult>>(expParams);
+
+            /*
+               Inferred blockchain name test
+            */
+
+            // Act - Ask network for blockchain params
+            var infParams = await _control.GetBlockchainParamsAsync(true, true);
+
+            // Assert
+            Assert.IsNull(infParams.Error);
+            Assert.IsNotNull(infParams.Result);
+            Assert.IsInstanceOf<RpcResponse<GetBlockchainParamsResult>>(infParams);
         }
 
         [Test]
         public async Task GetInfoExplicitTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act - Ask network for information about this blockchain
-            var actual = await _control.GetInfoAsync(_control.RpcOptions.ChainName, nameof(GetInfoExplicitTestAsync));
+            var expInfo = await _control.GetInfoAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetInfoResult>>(actual);
+            Assert.IsNull(expInfo.Error);
+            Assert.IsNotNull(expInfo.Result);
+            Assert.IsInstanceOf<RpcResponse<GetInfoResult>>(expInfo);
+
+            /*
+               Inferred blockchain name test
+            */
+
+            // Act - Ask network for information about this blockchain
+            var infInfo = await _control.GetInfoAsync();
+
+            // Assert
+            Assert.IsNull(infInfo.Error);
+            Assert.IsNotNull(infInfo.Result);
+            Assert.IsInstanceOf<RpcResponse<GetInfoResult>>(infInfo);
         }
 
         [Test]
         public async Task GetInitStatusExplicitTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act - Ask netowrk for init status
-            var actual = await _control.GetInitStatusAsync(_control.RpcOptions.ChainName, nameof(GetInitStatusExplicitTestAsync));
+            var expInit = await _control.GetInitStatusAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetInitStatusResult>>(actual);
+            Assert.IsNull(expInit.Error);
+            Assert.IsNotNull(expInit.Result);
+            Assert.IsInstanceOf<RpcResponse<GetInitStatusResult>>(expInit);
+
+            /*
+               Inferred blockchain name test
+            */
+
+            // Act - Ask netowrk for init status
+            var infInit = await _control.GetInitStatusAsync();
+
+            // Assert
+            Assert.IsNull(infInit.Error);
+            Assert.IsNotNull(infInit.Result);
+            Assert.IsInstanceOf<RpcResponse<GetInitStatusResult>>(infInit);
         }
 
         [Test]
         public async Task GetRuntimeParamsExplicitTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act - Ask blockchain network for runtime parameters
-            var actual = await _control.GetRuntimeParamsAsync(_control.RpcOptions.ChainName, nameof(GetRuntimeParamsExplicitTestAsync));
+            var expParams = await _control.GetRuntimeParamsAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetRuntimeParamsResult>>(actual);
+            Assert.IsNull(expParams.Error);
+            Assert.IsNotNull(expParams.Result);
+            Assert.IsInstanceOf<RpcResponse<GetRuntimeParamsResult>>(expParams);
+
+            /*
+               Inferred blockchain name test
+            */
+
+            // Act - Ask blockchain network for runtime parameters
+            var infParams = await _control.GetRuntimeParamsAsync();
+
+            // Assert
+            Assert.IsNull(infParams.Error);
+            Assert.IsNotNull(infParams.Result);
+            Assert.IsInstanceOf<RpcResponse<GetRuntimeParamsResult>>(infParams);
         }
 
         [Test]
         public async Task HelpExplicitTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act - Get help information based on blockchain method name
-            var actual = await _control.HelpAsync(
-                blockchainName: _control.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                command: BlockchainAction.GetAssetInfoMethod);
+            var expHelp = await _control.HelpAsync(_chainName, UUID.NoHyphens, BlockchainAction.GetAssetInfoMethod);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(actual);
-        }
+            Assert.IsNull(expHelp.Error);
+            Assert.IsNotNull(expHelp.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expHelp);
 
-        [Test, Ignore("Test is ignored since it can be destructive to the current blockchain")]
-        public async Task SetLastBlockExplicitTestAsync()
-        {
-            // Act - Sets last block in blockchain
-            var actual = await _control.SetLastBlockAsync(
-                blockchainName: _control.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                hash_or_height: 60);
+            /*
+               Inferred blockchain name test
+            */
+
+            // Act - Get help information based on blockchain method name
+            var infHelp = await _control.HelpAsync(BlockchainAction.GetAssetInfoMethod);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsNull(infHelp.Error);
+            Assert.IsNotNull(infHelp.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infHelp);
         }
 
         [Test]
         public async Task SetRuntimeParamExplicitTestAsync()
         {
-            // Stage - One mebibyte
-            var OneMiB = 1048576;
+            /*
+               Explicit blockchain name test
+            */
 
             // ### Act - Set a specific runtime parameter with a specific value
-            await _control.SetRuntimeParamAsync(
-                blockchainName: _control.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                runtimeParam: RuntimeParam.MaxShownData,
-                parameter_value: OneMiB);
-        }
-
-        [Test, Ignore("Test is ignored since it can be destructive to the current blockchain")]
-        public async Task StopExplicitTestAsync()
-        {
-            // Act - Stops the current blockchain network
-            var actual = await _control.StopAsync(_control.RpcOptions.ChainName, nameof(StopExplicitTestAsync));
+            var expSet = await _control.SetRuntimeParamAsync(_chainName, UUID.NoHyphens, RuntimeParam.MaxShownData, 1048576);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(actual);
+            Assert.IsNull(expSet.Error);
+            Assert.IsNull(expSet.Result);
+            Assert.IsInstanceOf<RpcResponse>(expSet);
+
+            /*
+               Inferred blockchain name test
+            */
+
+            // ### Act - Set a specific runtime parameter with a specific value
+            var infSet = await _control.SetRuntimeParamAsync(RuntimeParam.MaxShownData, 1048576);
+
+            // Assert
+            Assert.IsNull(infSet.Error);
+            Assert.IsNull(infSet.Result);
+            Assert.IsInstanceOf<RpcResponse>(infSet);
         }
 
-        // Inferred blockchainName tests //
-
-        [Test]
-        [Ignore("ClearMemPoolTests should be ran independent of other tests since the network must be paused for incoming and mining tasks")]
-        public async Task ClearMemPoolInferredTestAsync()
+        [Test, Ignore("ClearMemPoolTests should be ran independent of other tests since the network must be paused for incoming and mining tasks")]
+        public async Task ClearMemPoolExplicitTestAsync()
         {
+            /*
+                Explicit blockchain name tests
+             */
+
             // Act - Pause blockchain network actions
-            var pause = await _control.PauseAsync(tasks: NodeTask.All);
+            var expPause = await _control.PauseAsync(_chainName, UUID.NoHyphens, NodeTask.All);
 
             // Assert
-            Assert.IsNull(pause.Error);
-            Assert.IsNotNull(pause.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(pause);
+            Assert.IsNull(expPause.Error);
+            Assert.IsNotNull(expPause.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expPause);
 
             // Act - Clear blockchain mem pool
-            var clearMemPool = await _control.ClearMemPoolAsync();
+            var expClearMemPool = await _control.ClearMemPoolAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(pause.Error);
-            Assert.IsNotNull(pause.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(clearMemPool);
+            Assert.IsNull(expClearMemPool.Error);
+            Assert.IsNotNull(expClearMemPool.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expClearMemPool);
 
             // Act - Resume blockchain network actions
-            var resume = await _control.ResumeAsync(tasks: NodeTask.All);
+            var expResume = await _control.ResumeAsync(_chainName, UUID.NoHyphens, NodeTask.All);
 
             // Assert
-            Assert.IsNull(pause.Error);
-            Assert.IsNotNull(pause.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(resume);
-        }
+            Assert.IsNull(expResume.Error);
+            Assert.IsNotNull(expResume.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expResume);
 
-        [Test]
-        public async Task GetBlockchainParamsInferredTestAsync()
-        {
-            // Act - Ask network for blockchain params
-            var actual = await _control.GetBlockchainParamsAsync(
-                display_names: true,
-                with_upgrades: true);
+            /*
+                Inferred blockchain name tests
+             */
+
+            // Act - Pause blockchain network actions
+            var infPause = await _control.PauseAsync(tasks: NodeTask.All);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetBlockchainParamsResult>>(actual);
-        }
+            Assert.IsNull(infPause.Error);
+            Assert.IsNotNull(infPause.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infPause);
 
-        [Test]
-        public async Task GetInfoInferredTestAsync()
-        {
-            // Act - Ask network for information about this blockchain
-            var actual = await _control.GetInfoAsync();
+            // Act - Clear blockchain mem pool
+            var infClearMemPool = await _control.ClearMemPoolAsync();
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetInfoResult>>(actual);
-        }
+            Assert.IsNull(infClearMemPool.Error);
+            Assert.IsNotNull(infClearMemPool.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infClearMemPool);
 
-        [Test]
-        public async Task GetInitStatusInferredTestAsync()
-        {
-            // Act - Ask netowrk for init status
-            var actual = await _control.GetInitStatusAsync();
+            // Act - Resume blockchain network actions
+            var infResume = await _control.ResumeAsync(tasks: NodeTask.All);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetInitStatusResult>>(actual);
+            Assert.IsNull(infResume.Error);
+            Assert.IsNotNull(infResume.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infResume);
         }
 
-        [Test]
-        public async Task GetRuntimeParamsInferredTestAsync()
+        [Test, Ignore("Test is ignored since it can be destructive to the target blockchain")]
+        public async Task SetLastBlockExplicitTestAsync()
         {
-            // Act - Ask blockchain network for runtime parameters
-            var actual = await _control.GetRuntimeParamsAsync();
+            /*
+               Explicit blockchain name test
+            */
 
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetRuntimeParamsResult>>(actual);
-        }
-
-        [Test]
-        public async Task HelpInferredTestAsync()
-        {
-            // Act - Get help information based on blockchain method name
-            var actual = await _control.HelpAsync(command: BlockchainAction.GetAssetInfoMethod);
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(actual);
-        }
-
-        [Test, Ignore("Test is ignored since it can be destructive to the current blockchain")]
-        public async Task SetLastBlockInferredTestAsync()
-        {
             // Act - Sets last block in blockchain
-            var actual = await _control.SetLastBlockAsync(hash_or_height: 60);
+            await _control.PauseAsync(_chainName, UUID.NoHyphens);
+            var expSet = await _control.SetLastBlockAsync(_chainName, UUID.NoHyphens, "Enter a block hash or height index");
+            await _control.ResumeAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(actual);
+            Assert.IsNull(expSet.Error);
+            Assert.IsNotNull(expSet.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expSet);
+
+            /*
+               Inferred blockchain name test
+            */
+
+            // Act - Sets last block in blockchain
+            await _control.PauseAsync();
+            var infSet = await _control.SetLastBlockAsync("Enter a block hash or height index");
+            await _control.ResumeAsync();
+
+            // Assert
+            Assert.IsNull(infSet.Error);
+            Assert.IsNotNull(infSet.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infSet);
         }
 
-        [Test]
-        public async Task SetRuntimeParamInferredTestAsync()
+        [Test, Ignore("Test is ignored since it can be destructive to the target blockchain")]
+        public async Task StopExplicitTestAsync()
         {
-            // Stage - One mebibyte
-            var OneMiB = 1048576;
+            /*
+               Explicit blockchain name test
+            */
 
-            // ### Act - Set a specific runtime parameter with a specific value
-            await _control.SetRuntimeParamAsync(
-                runtimeParam: RuntimeParam.MaxShownData,
-                parameter_value: OneMiB);
-        }
-
-        [Test, Ignore("Test is ignored since it can be destructive to the current blockchain")]
-        public async Task StopInferredTestAsync()
-        {
             // Act - Stops the current blockchain network
-            var actual = await _control.StopAsync();
+            var expStop = await _control.StopAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(actual);
+            Assert.IsNull(expStop.Error);
+            Assert.IsNotNull(expStop.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expStop);
+
+            /*
+               Inferred blockchain name test - Test is commented out since
+               we cannot call the stop method twice in a row due the blockchain node having already shutdown
+            */
+
+            // Act - Stops the current blockchain network
+            // var infStop = await _control.StopAsync();
+
+            // Assert
+            // Assert.IsNull(infStop.Error);
+            // Assert.IsNotNull(infStop.Result);
+            // Assert.IsInstanceOf<RpcResponse<string>>(infStop);
         }
     }
 }

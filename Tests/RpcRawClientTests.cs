@@ -27,7 +27,7 @@ namespace MCWrapper.RPC.Tests
         public RpcRawClientTests()
         {
             // instantiate mock service container
-            var services = new ParameterlessMockServices();
+            var services = new ParameterlessStartup();
 
             // fetch services from service container
             _wallet = services.GetRequiredService<IMultiChainRpcWallet>();

@@ -19,7 +19,7 @@ namespace MCWrapper.RPC.Tests
         public RpcMiningClientTests()
         {
             // instantiate mock services container
-            var services = new ParameterlessMockServices();
+            var services = new ParameterlessStartup();
 
             // fetch service from service container
             _mining = services.GetRequiredService<IMultiChainRpcMining>();

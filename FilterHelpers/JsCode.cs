@@ -3,7 +3,7 @@
     /// <summary>
     /// Please note that you CANNOT have any whitespace trailing the closing semi-colon prior to the "}" bracket else multichain-cli.exe will return a javascript parsing error
     /// </summary>
-    public struct JsCode
+    public static class JsCode
     {
         /// <summary>
         /// Unescaped Transaction Filter used for testing purposes
