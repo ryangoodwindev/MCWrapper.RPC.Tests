@@ -201,13 +201,13 @@ namespace MCWrapper.RPC.Tests
             {
                 new Dictionary<string, object>
                 {
-                    { "txid", unspentAsset_0.Txid },
-                    { "vout", unspentAsset_0.Vout }
+                    { "txid", expUnspentAsset_0.Txid },
+                    { "vout", expUnspentAsset_0.Vout }
                 },
                 new Dictionary<string, object>
                 {
-                    { "txid", unspentAsset_1.Txid },
-                    { "vout", unspentAsset_1.Vout }
+                    { "txid", expUnspentAsset_1.Txid },
+                    { "vout", expUnspentAsset_1.Vout }
                 }
             },
             assets: new Dictionary<string, Dictionary<string, int>>
