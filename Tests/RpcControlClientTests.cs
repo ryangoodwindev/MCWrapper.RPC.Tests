@@ -46,7 +46,7 @@ namespace MCWrapper.RPC.Tests
         }
 
         [Test]
-        public async Task GetBlockchainParamsExplicitTestAsync()
+        public async Task GetBlockchainParamsTestAsync()
         {
             /*
                Explicit blockchain name test
@@ -74,7 +74,7 @@ namespace MCWrapper.RPC.Tests
         }
 
         [Test]
-        public async Task GetInfoExplicitTestAsync()
+        public async Task GetInfoTestAsync()
         {
             /*
                Explicit blockchain name test
@@ -102,7 +102,7 @@ namespace MCWrapper.RPC.Tests
         }
 
         [Test]
-        public async Task GetInitStatusExplicitTestAsync()
+        public async Task GetInitStatusTestAsync()
         {
             /*
                Explicit blockchain name test
@@ -130,7 +130,7 @@ namespace MCWrapper.RPC.Tests
         }
 
         [Test]
-        public async Task GetRuntimeParamsExplicitTestAsync()
+        public async Task GetRuntimeParamsTestAsync()
         {
             /*
                Explicit blockchain name test
@@ -158,7 +158,7 @@ namespace MCWrapper.RPC.Tests
         }
 
         [Test]
-        public async Task HelpExplicitTestAsync()
+        public async Task HelpTestAsync()
         {
             /*
                Explicit blockchain name test
@@ -186,7 +186,7 @@ namespace MCWrapper.RPC.Tests
         }
 
         [Test]
-        public async Task SetRuntimeParamExplicitTestAsync()
+        public async Task SetRuntimeParamTestAsync()
         {
             /*
                Explicit blockchain name test
@@ -214,7 +214,7 @@ namespace MCWrapper.RPC.Tests
         }
 
         [Test, Ignore("ClearMemPoolTests should be ran independent of other tests since the network must be paused for incoming and mining tasks")]
-        public async Task ClearMemPoolExplicitTestAsync()
+        public async Task ClearMemPoolTestAsync()
         {
             /*
                 Explicit blockchain name tests
@@ -306,7 +306,7 @@ namespace MCWrapper.RPC.Tests
         }
 
         [Test, Ignore("Test is ignored since it can be destructive to the target blockchain")]
-        public async Task StopExplicitTestAsync()
+        public async Task StopTestAsync()
         {
             /*
                Explicit blockchain name test

@@ -44,7 +44,7 @@ namespace MCWrapper.RPC.Tests
         }
 
         [Test, Ignore("Not supported by MultiChain v2.02")]
-        public async Task GetBlockTemplateExplicitTestAsync()
+        public async Task GetBlockTemplateTestAsync()
         {
             /*
                Explicit blockchain name test
@@ -72,7 +72,7 @@ namespace MCWrapper.RPC.Tests
         }
 
         [Test]
-        public async Task GetMiningInfoExplicitTestAsync()
+        public async Task GetMiningInfoTestAsync()
         {
             /*
                Explicit blockchain name test
@@ -100,7 +100,7 @@ namespace MCWrapper.RPC.Tests
         }
 
         [Test]
-        public async Task GetNetworkHashPsExplicitTestAsync()
+        public async Task GetNetworkHashPsTestAsync()
         {
             /*
                Explicit blockchain name test
@@ -128,7 +128,7 @@ namespace MCWrapper.RPC.Tests
         }
 
         [Test, Ignore("Not supported by MultiChain v2.02")]
-        public async Task PrioritiseTransactionExplicitTestAsync()
+        public async Task PrioritiseTransactionTestAsync()
         {
             /*
                Explicit blockchain name test
@@ -156,7 +156,7 @@ namespace MCWrapper.RPC.Tests
         }
 
         [Test, Ignore("SubmitBlock is ignored because I don't understand how to use it yet")]
-        public async Task SubmitBlockExplicitTestAsync()
+        public async Task SubmitBlockTestAsync()
         {
             /*
                Explicit blockchain name test

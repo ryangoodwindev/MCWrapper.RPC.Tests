@@ -37,978 +37,942 @@ namespace MCWrapper.RPC.Tests
         // Inject services
         private readonly IMultiChainRpcGeneral _blockchain;
         private readonly IMultiChainRpcWallet _wallet;
+        private readonly string _chainName;
+        private readonly string _address;
+
+        // Use mock startup service container
+        private readonly ExplicitStartup _services = new ExplicitStartup();
 
         // Create a new RpcGeneralClientTests instance
         public RpcGeneralClientTests()
         {
-            // instantiate mock services container
-            var services = new ParameterlessStartup();
-
-            // fetch services from service container
-            _blockchain = services.GetRequiredService<IMultiChainRpcGeneral>();
-            _wallet = services.GetRequiredService<IMultiChainRpcWallet>();
+            _blockchain = _services.GetRequiredService<IMultiChainRpcGeneral>();
+            _wallet = _services.GetRequiredService<IMultiChainRpcWallet>();
+            _address = _wallet.RpcOptions.ChainAdminAddress;
+            _chainName = _wallet.RpcOptions.ChainName;
         }
 
-        // Explicit blockchainName tests
-
         [Test]
-        public async Task GetAssetInfoExplicitTestAsync()
+        public async Task GetAssetInfoTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Stage - Issue a new asset
-            var asset = await _wallet.IssueAsync(
-                blockchainName: _wallet.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                toAddress: _wallet.RpcOptions.ChainAdminAddress,
-                assetParams: new AssetEntity(),
-                quantity: 1,
-                smallestUnit: 0.1, 0, new Dictionary<string, string> { { "text", "Some Text in Hex".ToHex() } });
+            var expAsset = await _wallet.IssueAsync(_chainName, UUID.NoHyphens, _address, new AssetEntity(), 1, 0.1, 0, new Dictionary<string, string> { { "text", "Some Text in Hex".ToHex() } });
 
             // Act - Try to get verbose Asset information from the blockchain network
-            var verbose = await _blockchain.GetAssetInfoAsync(
-                blockchainName: _blockchain.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                asset_identifier: asset.Result,
-                verbose: true);
+            var expVerbose = await _blockchain.GetAssetInfoAsync(_chainName, UUID.NoHyphens, expAsset.Result, true);
+
+            // Assert
+            Assert.IsNull(expVerbose.Error);
+            Assert.IsNotNull(expVerbose.Result);
+            Assert.IsInstanceOf<RpcResponse<GetAssetInfoResult>>(expVerbose);
 
             // Act - Try to get precise Asset information from the blockchain network
-            var nonVerbose = await _blockchain.GetAssetInfoAsync(
-                blockchainName: _blockchain.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                asset_identifier: asset.Result,
-                verbose: false);
+            var expNonVerbose = await _blockchain.GetAssetInfoAsync(_chainName, UUID.NoHyphens, expAsset.Result, false);
 
             // Assert
-            Assert.IsNull(verbose.Error);
-            Assert.IsNotNull(verbose.Result);
-            Assert.IsInstanceOf<RpcResponse<GetAssetInfoResult>>(verbose);
+            Assert.IsNull(expNonVerbose.Error);
+            Assert.IsNotNull(expNonVerbose.Result);
+            Assert.IsInstanceOf<RpcResponse<GetAssetInfoResult>>(expNonVerbose);
+
+            /*
+              Inferred blockchain name test
+           */
+
+            // Stage - Issue a new asset to the blockchain node
+            var infAsset = await _wallet.IssueAsync(_address, new AssetEntity(), 1, 0.1, 0, null);
+
+            // Act - Try to get Asset information from the blockchain network
+            var infVerbose = await _blockchain.GetAssetInfoAsync(infAsset.Result, true);
 
             // Assert
-            Assert.IsNull(nonVerbose.Error);
-            Assert.IsNotNull(nonVerbose.Result);
-            Assert.IsInstanceOf<RpcResponse<GetAssetInfoResult>>(nonVerbose);
+            Assert.IsNull(infVerbose.Error);
+            Assert.IsNotNull(infVerbose.Result);
+            Assert.IsInstanceOf<RpcResponse<GetAssetInfoResult>>(infVerbose);
+
+            // Act - Try to get Asset information from the blockchain network
+            var infNonVerbose = await _blockchain.GetAssetInfoAsync(infAsset.Result, false);
+
+            // Assert
+            Assert.IsNull(infNonVerbose.Error);
+            Assert.IsNotNull(infNonVerbose.Result);
+            Assert.IsInstanceOf<RpcResponse<GetAssetInfoResult>>(infNonVerbose);
         }
 
         [Test]
-        public async Task GetBlockchainInfoExplicitTestAsync()
+        public async Task GetBlockchainInfoTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act - Ask the network for information about the blockchain
-            var actual = await _blockchain.GetBlockchainInfoAsync(_blockchain.RpcOptions.ChainName, UUID.NoHyphens);
+            var expGet = await _blockchain.GetBlockchainInfoAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetBlockchainInfoResult>>(actual);
+            Assert.IsNull(expGet.Error);
+            Assert.IsNotNull(expGet.Result);
+            Assert.IsInstanceOf<RpcResponse<GetBlockchainInfoResult>>(expGet);
+
+            /*
+              Inferred blockchain name test
+           */
+
+            // Act - Ask the network for information about the blockchain
+            var infGet = await _blockchain.GetBlockchainInfoAsync();
+
+            // Assert
+            Assert.IsNull(infGet.Error);
+            Assert.IsNotNull(infGet.Result);
+            Assert.IsInstanceOf<RpcResponse<GetBlockchainInfoResult>>(infGet);
         }
 
         [Test]
-        public async Task GetBestBlockHashExplicitTestAsync()
+        public async Task GetBestBlockHashTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act - Ask blockchain network for the best block hash value
-            var actual = await _blockchain.GetBestBlockHashAsync(_blockchain.RpcOptions.ChainName, UUID.NoHyphens);
+            var expGet = await _blockchain.GetBestBlockHashAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(actual);
+            Assert.IsNull(expGet.Error);
+            Assert.IsNotNull(expGet.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expGet);
+
+            /*
+              Inferred blockchain name test
+           */
+
+            // Act - Ask blockchain network for the best block hash value
+            var infGet = await _blockchain.GetBestBlockHashAsync();
+
+            // Assert
+            Assert.IsNull(infGet.Error);
+            Assert.IsNotNull(infGet.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infGet);
         }
 
         [Test]
-        public async Task GetBlockCountExplicitTestAsync()
+        public async Task GetBlockCountTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act - Ask blockchain network for block count in longest chain
-            var actual = await _blockchain.GetBlockCountAsync(_blockchain.RpcOptions.ChainName, UUID.NoHyphens);
+            var expGet = await _blockchain.GetBlockCountAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<long>>(actual);
+            Assert.IsNull(expGet.Error);
+            Assert.IsNotNull(expGet.Result);
+            Assert.IsInstanceOf<RpcResponse<long>>(expGet);
+
+            /*
+              Inferred blockchain name test
+           */
+
+            // Act - Ask blockchain network for block count in longest chain
+            var infGet = await _blockchain.GetBlockCountAsync();
+
+            // Assert
+            Assert.IsNull(infGet.Error);
+            Assert.IsNotNull(infGet.Result);
+            Assert.IsInstanceOf<RpcResponse<long>>(infGet);
         }
 
         [Test]
-        public async Task GetBlockHashExplicitTestAsync()
+        public async Task GetBlockHashTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act - Ask blockchain network for the block hash of a specific index (block height)
-            var actual = await _blockchain.GetBlockHashAsync(blockchainName: _blockchain.RpcOptions.ChainName, id: UUID.NoHyphens, index: 1);
+            var expGet = await _blockchain.GetBlockHashAsync(_chainName, UUID.NoHyphens, 1);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(actual);
+            Assert.IsNull(expGet.Error);
+            Assert.IsNotNull(expGet.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expGet);
+
+            /*
+              Inferred blockchain name test
+           */
+
+            // Act - Ask blockchain network for the block hash of a specific index (block height)
+            var infGet = await _blockchain.GetBlockHashAsync(1);
+
+            // Assert
+            Assert.IsNull(infGet.Error);
+            Assert.IsNotNull(infGet.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infGet);
         }
 
         [Test]
-        public async Task GetBlockExplicitTestAsync()
+        public async Task GetBlockTestAsync()
         {
-            // Act - Ask blockchain network for a block at the specific index in a specific format
-            var encoded = await _blockchain.GetBlockEncodedAsync(_blockchain.RpcOptions.ChainName, UUID.NoHyphens, "1");
-
-            // Assert
-            Assert.IsNull(encoded.Error);
-            Assert.IsNotNull(encoded.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(encoded);
+            /*
+               Explicit blockchain name test
+            */
 
             // Act - Ask blockchain network for a block at the specific index in a specific format
-            var verbose = await _blockchain.GetBlockVerboseAsync(_blockchain.RpcOptions.ChainName, UUID.NoHyphens, "1");
+            var expEncoded = await _blockchain.GetBlockEncodedAsync(_chainName, UUID.NoHyphens, "1");
 
             // Assert
-            Assert.IsNull(verbose.Error);
-            Assert.IsNotNull(verbose.Result);
-            Assert.IsInstanceOf<RpcResponse<GetBlockVerboseResult>>(verbose);
+            Assert.IsNull(expEncoded.Error);
+            Assert.IsNotNull(expEncoded.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expEncoded);
 
             // Act - Ask blockchain network for a block at the specific index in a specific format
-            var version1 = await _blockchain.GetBlockV1Async(_blockchain.RpcOptions.ChainName, UUID.NoHyphens, "1");
+            var expVerbose = await _blockchain.GetBlockVerboseAsync(_chainName, UUID.NoHyphens, "1");
 
             // Assert
-            Assert.IsNull(version1.Error);
-            Assert.IsNotNull(version1.Result);
-            Assert.IsInstanceOf<RpcResponse<GetBlockV1Result>>(version1);
+            Assert.IsNull(expVerbose.Error);
+            Assert.IsNotNull(expVerbose.Result);
+            Assert.IsInstanceOf<RpcResponse<GetBlockVerboseResult>>(expVerbose);
 
             // Act - Ask blockchain network for a block at the specific index in a specific format
-            var version2 = await _blockchain.GetBlockV2Async(_blockchain.RpcOptions.ChainName, UUID.NoHyphens, "1");
+            var expVersion1 = await _blockchain.GetBlockV1Async(_chainName, UUID.NoHyphens, "1");
 
             // Assert
-            Assert.IsNull(version2.Error);
-            Assert.IsNotNull(version2.Result);
-            Assert.IsInstanceOf<RpcResponse<GetBlockV2Result>>(version2);
+            Assert.IsNull(expVersion1.Error);
+            Assert.IsNotNull(expVersion1.Result);
+            Assert.IsInstanceOf<RpcResponse<GetBlockV1Result>>(expVersion1);
 
             // Act - Ask blockchain network for a block at the specific index in a specific format
-            var version3 = await _blockchain.GetBlockV3Async(_blockchain.RpcOptions.ChainName, UUID.NoHyphens, "1");
+            var expVersion2 = await _blockchain.GetBlockV2Async(_chainName, UUID.NoHyphens, "1");
 
             // Assert
-            Assert.IsNull(version3.Error);
-            Assert.IsNotNull(version3.Result);
-            Assert.IsInstanceOf<RpcResponse<GetBlockV3Result>>(version3);
+            Assert.IsNull(expVersion2.Error);
+            Assert.IsNotNull(expVersion2.Result);
+            Assert.IsInstanceOf<RpcResponse<GetBlockV2Result>>(expVersion2);
 
             // Act - Ask blockchain network for a block at the specific index in a specific format
-            var version4 = await _blockchain.GetBlockV4Async(_blockchain.RpcOptions.ChainName, UUID.NoHyphens, "1");
+            var expVersion3 = await _blockchain.GetBlockV3Async(_chainName, UUID.NoHyphens, "1");
 
             // Assert
-            Assert.IsNull(version4.Error);
-            Assert.IsNotNull(version4.Result);
-            Assert.IsInstanceOf<RpcResponse<GetBlockV4Result>>(version4);
+            Assert.IsNull(expVersion3.Error);
+            Assert.IsNotNull(expVersion3.Result);
+            Assert.IsInstanceOf<RpcResponse<GetBlockV3Result>>(expVersion3);
+
+            // Act - Ask blockchain network for a block at the specific index in a specific format
+            var expVersion4 = await _blockchain.GetBlockV4Async(_chainName, UUID.NoHyphens, "1");
+
+            // Assert
+            Assert.IsNull(expVersion4.Error);
+            Assert.IsNotNull(expVersion4.Result);
+            Assert.IsInstanceOf<RpcResponse<GetBlockV4Result>>(expVersion4);
+
+            /*
+              Inferred blockchain name test
+           */
+
+            // Act - Ask blockchain network for a block at the specific index in a specific format
+            var infEncoded = await _blockchain.GetBlockEncodedAsync("1");
+
+            // Assert
+            Assert.IsNull(infEncoded.Error);
+            Assert.IsNotNull(infEncoded.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infEncoded);
+
+            // Act - Ask blockchain network for a block at the specific index in a specific format
+            var infVerbose = await _blockchain.GetBlockVerboseAsync("1");
+
+            // Assert
+            Assert.IsNull(infVerbose.Error);
+            Assert.IsNotNull(infVerbose.Result);
+            Assert.IsInstanceOf<RpcResponse<GetBlockVerboseResult>>(infVerbose);
+
+            // Act - Ask blockchain network for a block at the specific index in a specific format
+            var infVersion1 = await _blockchain.GetBlockV1Async("1");
+
+            // Assert
+            Assert.IsNull(infVersion1.Error);
+            Assert.IsNotNull(infVersion1.Result);
+            Assert.IsInstanceOf<RpcResponse<GetBlockV1Result>>(infVersion1);
+
+            // Act - Ask blockchain network for a block at the specific index in a specific format
+            var infVersion2 = await _blockchain.GetBlockV2Async("1");
+
+            // Assert
+            Assert.IsNull(infVersion2.Error);
+            Assert.IsNotNull(infVersion2.Result);
+            Assert.IsInstanceOf<RpcResponse<GetBlockV2Result>>(infVersion2);
+
+            // Act - Ask blockchain network for a block at the specific index in a specific format
+            var infVersion3 = await _blockchain.GetBlockV3Async("1");
+
+            // Assert
+            Assert.IsNull(infVersion3.Error);
+            Assert.IsNotNull(infVersion3.Result);
+            Assert.IsInstanceOf<RpcResponse<GetBlockV3Result>>(infVersion3);
+
+            // Act - Ask blockchain network for a block at the specific index in a specific format
+            var infVersion4 = await _blockchain.GetBlockV4Async("1");
+
+            // Assert
+            Assert.IsNull(infVersion4.Error);
+            Assert.IsNotNull(infVersion4.Result);
+            Assert.IsInstanceOf<RpcResponse<GetBlockV4Result>>(infVersion4);
         }
 
         [Test]
-        public async Task GetChainTipsExplicitTestAsync()
+        public async Task GetChainTipsTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act - Ask blockchain network for the tip of the longest chain
-            var actual = await _blockchain.GetChainTipsAsync(_blockchain.RpcOptions.ChainName, UUID.NoHyphens);
+            var expGet = await _blockchain.GetChainTipsAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetChainTipsResult[]>>(actual);
+            Assert.IsNull(expGet.Error);
+            Assert.IsNotNull(expGet.Result);
+            Assert.IsInstanceOf<RpcResponse<GetChainTipsResult[]>>(expGet);
+
+            /*
+              Inferred blockchain name test
+           */
+
+            // Act - Ask blockchain network for the tip of the longest chain
+            var infGet = await _blockchain.GetChainTipsAsync();
+
+            // Assert
+            Assert.IsNull(infGet.Error);
+            Assert.IsNotNull(infGet.Result);
+            Assert.IsInstanceOf<RpcResponse<GetChainTipsResult[]>>(infGet);
         }
 
         [Test]
-        public async Task GetDifficultyExplicitTestAsync()
+        public async Task GetDifficultyTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act - Ask blockchain network for the mining difficulty rating
-            var actual = await _blockchain.GetDifficultyAsync(_blockchain.RpcOptions.ChainName, UUID.NoHyphens);
+            var expGet = await _blockchain.GetDifficultyAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<double>>(actual);
+            Assert.IsNull(expGet.Error);
+            Assert.IsNotNull(expGet.Result);
+            Assert.IsInstanceOf<RpcResponse<double>>(expGet);
+
+            /*
+              Inferred blockchain name test
+           */
+
+            // Act - Ask blockchain network for the mining difficulty rating
+            var infGet = await _blockchain.GetDifficultyAsync();
+
+            // Assert
+            Assert.IsNull(infGet.Error);
+            Assert.IsNotNull(infGet.Result);
+            Assert.IsInstanceOf<RpcResponse<double>>(infGet);
         }
 
         [Test]
-        public async Task GetFilterCodeExplicitTestAsync()
+        public async Task GetFilterCodeTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Stage - Create filter
-            var filter = await _wallet.CreateAsync(
-                blockchainName: _wallet.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                entity_type: Entity.TxFilter,
-                entity_name: StreamFilterEntity.GetUUID(),
-                restrictions_or_open: new { },
-                customFields: JsCode.DummyTxFilterCode);
+            var expFilter = await _wallet.CreateAsync(_chainName, UUID.NoHyphens, Entity.TxFilter, StreamFilterEntity.GetUUID(), new { }, JsCode.DummyTxFilterCode);
 
 
             // Act - Retrieve filtercode by name, txid, or reference
-            var actual = await _blockchain.GetFilterCodeAsync(
-                blockchainName: _blockchain.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                filter_identifier: filter.Result);
+            var expGet = await _blockchain.GetFilterCodeAsync(_chainName, UUID.NoHyphens, expFilter.Result);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(actual);
+            Assert.IsNull(expGet.Error);
+            Assert.IsNotNull(expGet.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expGet);
+
+            /*
+              Inferred blockchain name test
+           */
+
+            // Stage - Create filter
+            var infFilter = await _wallet.CreateAsync(Entity.TxFilter, StreamFilterEntity.GetUUID(), new { }, JsCode.DummyTxFilterCode);
+
+
+            // Act - Retrieve filtercode by name, txid, or reference
+            var infGet = await _blockchain.GetFilterCodeAsync(infFilter.Result);
+
+            // Assert
+            Assert.IsNull(infGet.Error);
+            Assert.IsNotNull(infGet.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infGet);
         }
 
         [Test]
-        public async Task GetLastBlockInfoExplicitTestAsync()
+        public async Task GetLastBlockInfoTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act - Ask about recent or last blocks in the network
-            var actual = await _blockchain.GetLastBlockInfoAsync(
-                blockchainName: _blockchain.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                skip: 10);
+            var expGet = await _blockchain.GetLastBlockInfoAsync(_chainName, UUID.NoHyphens, 10);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetLastBlockInfoResult>>(actual);
+            Assert.IsNull(expGet.Error);
+            Assert.IsNotNull(expGet.Result);
+            Assert.IsInstanceOf<RpcResponse<GetLastBlockInfoResult>>(expGet);
+
+            /*
+              Inferred blockchain name test
+           */
+
+            // Act - Ask about recent or last blocks in the network
+            var infGet = await _blockchain.GetLastBlockInfoAsync(10);
+
+            // Assert
+            Assert.IsNull(infGet.Error);
+            Assert.IsNotNull(infGet.Result);
+            Assert.IsInstanceOf<RpcResponse<GetLastBlockInfoResult>>(infGet);
         }
 
         [Test]
-        public async Task GetMemPoolInfoExplicitTestAsync()
+        public async Task GetMemPoolInfoTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act - Ask blockchain network for mempool information
-            var actual = await _blockchain.GetMemPoolInfoAsync(_blockchain.RpcOptions.ChainName, id: UUID.NoHyphens);
+            var expGet = await _blockchain.GetMemPoolInfoAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetMemPoolInfoResult>>(actual);
+            Assert.IsNull(expGet.Error);
+            Assert.IsNotNull(expGet.Result);
+            Assert.IsInstanceOf<RpcResponse<GetMemPoolInfoResult>>(expGet);
+
+            /*
+              Inferred blockchain name test
+           */
+
+            // Act - Ask blockchain network for mempool information
+            var infGet = await _blockchain.GetMemPoolInfoAsync();
+
+            // Assert
+            Assert.IsNull(infGet.Error);
+            Assert.IsNotNull(infGet.Result);
+            Assert.IsInstanceOf<RpcResponse<GetMemPoolInfoResult>>(infGet);
         }
 
         [Test]
-        public async Task GetRawMemPoolExplicitTestAsync()
+        public async Task GetRawMemPoolTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act - Ask blockchain network for raw mempool information
-            var actual = await _blockchain.GetRawMemPoolAsync(
-                blockchainName: _blockchain.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                verbose: true);
+            var expGet = await _blockchain.GetRawMemPoolAsync(_chainName, UUID.NoHyphens, true);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetRawMemPoolResult>>(actual);
+            Assert.IsNull(expGet.Error);
+            Assert.IsNotNull(expGet.Result);
+            Assert.IsInstanceOf<RpcResponse<GetRawMemPoolResult>>(expGet);
+
+            /*
+              Inferred blockchain name test
+           */
+
+            // Act - Ask blockchain network for raw mempool information
+            var infGet = await _blockchain.GetRawMemPoolAsync(true);
+
+            // Assert
+            Assert.IsNull(infGet.Error);
+            Assert.IsNotNull(infGet.Result);
+            Assert.IsInstanceOf<RpcResponse<GetRawMemPoolResult>>(infGet);
         }
 
         [Test]
-        public async Task GetStreamInfoExplicitTestAsync()
+        public async Task GetStreamInfoTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act - Fetch information about a specific blockchain stream
-            var actual = await _blockchain.GetStreamInfoAsync(
-                blockchainName: _blockchain.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                stream_identifier: "root",
-                verbose: true);
+            var expGet = await _blockchain.GetStreamInfoAsync(_chainName, UUID.NoHyphens, "root", true);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetStreamInfoResult>>(actual);
+            Assert.IsNull(expGet.Error);
+            Assert.IsNotNull(expGet.Result);
+            Assert.IsInstanceOf<RpcResponse<GetStreamInfoResult>>(expGet);
+
+            /*
+              Inferred blockchain name test
+           */
+
+            // Act - Fetch information about a specific blockchain stream
+            var infGet = await _blockchain.GetStreamInfoAsync("root", true);
+
+            // Assert
+            Assert.IsNull(infGet.Error);
+            Assert.IsNotNull(infGet.Result);
+            Assert.IsInstanceOf<RpcResponse<GetStreamInfoResult>>(infGet);
         }
 
         [Test]
         public async Task GetTxOutExplicitTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Stage - Issue a new asset to the blockchain node
-            var asset = await _wallet.IssueAsync(
-                blockchainName: _wallet.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                toAddress: _wallet.RpcOptions.ChainAdminAddress,
-                assetParams: new AssetEntity(),
-                quantity: 1,
-                smallestUnit: 0.1, nativeCurrencyAmount: 0, null);
+            var expIssue = await _wallet.IssueAsync(_chainName, UUID.NoHyphens, _address, new AssetEntity(), 1, 0.1, 0, null);
 
             // Stage - Load new asset Unspent
-            var unspent = await _wallet.PrepareLockUnspentAsync(
-                blockchainName: _wallet.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                asset_quantities: new Dictionary<string, decimal>
+            var expUnspent = await _wallet.PrepareLockUnspentAsync(_chainName, UUID.NoHyphens,
+                new Dictionary<string, decimal>
                 {
-                    { asset.Result, 1 }
-                }, false);
-
+                    { expIssue.Result, 1 }
+                },
+                false);
 
             // Act - Fetch details about unspent transaction output
-            var actual = await _blockchain.GetTxOutAsync(
-                blockchainName: _blockchain.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                txid: unspent.Result.Txid,
-                n: unspent.Result.Vout,
-                include_mem_pool: true);
+            var expGet = await _blockchain.GetTxOutAsync(_chainName, UUID.NoHyphens, expUnspent.Result.Txid, expUnspent.Result.Vout, true);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetTxOutResult>>(actual);
-        }
+            Assert.IsNull(expGet.Error);
+            Assert.IsNotNull(expGet.Result);
+            Assert.IsInstanceOf<RpcResponse<GetTxOutResult>>(expGet);
 
-        [Test]
-        public async Task GetTxOutSetInfoExplicitTestAsync()
-        {
-            // Act - Statistics about the unspent transaction output set
-            RpcResponse<GetTxOutSetInfoResult> actual = await _blockchain.GetTxOutSetInfoAsync(blockchainName: _blockchain.RpcOptions.ChainName, id: UUID.NoHyphens);
+            /*
+              Inferred blockchain name test
+           */
 
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetTxOutSetInfoResult>>(actual);
-        }
-
-        [Test]
-        public async Task ListAssetsExplicitTestAsync()
-        {
-            // Act - Information about a one or many assets
-            RpcResponse<ListAssetsResult[]> actual = await _blockchain.ListAssetsAsync(
-                blockchainName: _blockchain.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                asset_identifiers: "*",
-                verbose: true,
-                count: 10,
-                start: 0);
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<ListAssetsResult[]>>(actual);
-        }
-
-        [Test]
-        public async Task ListBlocksExplicitTestAsync()
-        {
-            // Act - Return information about one or many blocks
-            RpcResponse<ListBlocksResult[]> actual = await _blockchain.ListBlocksAsync(
-                blockchainName: _blockchain.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                block_set_identifier: "1, 8",
-                verbose: true);
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<ListBlocksResult[]>>(actual);
-        }
-
-        [Test]
-        public async Task ListPermissionsExplicitTestAsync()
-        {
-            // Act - List information about one or many permissions pertaining to one or many addresses
-            RpcResponse<ListPermissionsResult[]> actual = await _blockchain.ListPermissionsAsync(
-                blockchainName: _blockchain.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                permissions: $"{Permission.Send},{Permission.Receive}",
-                addresses: _blockchain.RpcOptions.ChainAdminAddress,
-                verbose: true);
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<ListPermissionsResult[]>>(actual);
-        }
-
-        [Test]
-        public async Task ListStreamFiltersExplicitTestAsync()
-        {
-            // Act - Ask for a list of stream filters
-            RpcResponse<ListStreamFiltersResult[]> actual = await _blockchain.ListStreamFiltersAsync(
-                blockchainName: _blockchain.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                filter_identifers: "*",
-                verbose: true);
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<ListStreamFiltersResult[]>>(actual);
-        }
-
-        [Test]
-        public async Task ListStreamsExplicitTestAsync()
-        {
-            // Act - Ask for a list of streams
-            RpcResponse<ListStreamsResult[]> actual = await _blockchain.ListStreamsAsync(
-                blockchainName: _blockchain.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                stream_identifiers: "*",
-                verbose: true,
-                count: 10,
-                start: 0);
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<ListStreamsResult[]>>(actual);
-        }
-
-        [Test]
-        public async Task ListTxFiltersExplicitTestAsync()
-        {
-            // Act - List of transaction filters
-            RpcResponse<ListTxFiltersResult[]> actual = await _blockchain.ListTxFiltersAsync(
-                blockchainName: _blockchain.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                filter_identifiers: "*",
-                verbose: true);
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<ListTxFiltersResult[]>>(actual);
-        }
-
-        [Test]
-        public async Task ListUpgradesExplicitTestAsync()
-        {
-            // Act - List of upgrades
-            RpcResponse<ListUpgradesResult[]> actual = await _blockchain.ListUpgradesAsync(
-                blockchainName: _blockchain.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                upgrade_identifier: "*");
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<ListUpgradesResult[]>>(actual);
-        }
-
-        [Test]
-        public async Task RunStreamFilterExplicitTestAsync()
-        {
-            // Stage - Create filter
-            var streamFilter = await _wallet.CreateAsync(
-                blockchainName: _wallet.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                entity_type: Entity.StreamFilter,
-                entity_name: StreamFilterEntity.GetUUID(),
-                restrictions_or_open: new { },
-                customFields: JsCode.DummyStreamFilterCode);
-
-            // Act - Execute stream filter
-            var actual = await _blockchain.RunStreamFilterAsync(
-                blockchainName: _blockchain.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                filter_identifier: streamFilter.Result, null, 0);
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<RunStreamFilterResult>>(actual);
-        }
-
-        [Test]
-        public async Task RunTxFilterExplicitTestAsync()
-        {
-            // Stage - List tx filters
-            var txFilter = await _blockchain.ListTxFiltersAsync(
-                blockchainName: _blockchain.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                filter_identifiers: "*",
-                verbose: true);
-
-            // Act - Execute transaction filter
-            var actual = await _blockchain.RunTxFilterAsync(
-                blockchainName: _blockchain.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                filter_identifier: txFilter.Result.FirstOrDefault().Name, null);
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<RunTxFilterResult>>(actual);
-        }
-
-        [Test]
-        public async Task TestStreamFilterExplicitTestAsync()
-        {
-            // Act - Test stream filter
-            var actual = await _blockchain.TestStreamFilterAsync(
-                blockchainName: _blockchain.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                restrictions: new { },
-                javascript_code: JsCode.DummyStreamFilterCode, null, 0);
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<TestStreamFilterResult>>(actual);
-        }
-
-        [Test]
-        public async Task TestTxFilterExplicitTestAsync()
-        {
-            // Act - Test transaction filter
-            RpcResponse<TestTxFilterResult> actual = await _blockchain.TestTxFilterAsync(
-                blockchainName: _blockchain.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                restrictions: new { },
-                javascript_code: JsCode.DummyTxFilterCode, null);
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<TestTxFilterResult>>(actual);
-        }
-
-        [Test]
-        public async Task VerifyChainExplicitTestAsync()
-        {
-            // Act - Verify blockchain database
-            RpcResponse<bool> actual = await _blockchain.VerifyChainAsync(
-                blockchainName: _blockchain.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                check_level: 3,
-                num_blocks: 0);
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<bool>>(actual);
-        }
-
-        [Test]
-        public async Task VerifyPermissionExplicitTestAsync()
-        {
-            // Act - Verify permissions for a specific address
-            RpcResponse<bool> actual = await _blockchain.VerifyPermissionAsync(
-                blockchainName: _blockchain.RpcOptions.ChainName,
-                id: UUID.NoHyphens,
-                address: _blockchain.RpcOptions.ChainAdminAddress,
-                permission: Permission.Admin);
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<bool>>(actual);
-        }
-
-        // Inferred blockchainName tests //
-
-        [Test]
-        public async Task GetAssetInfoInferredTestAsync()
-        {
             // Stage - Issue a new asset to the blockchain node
-            RpcResponse<string> asset = await _wallet.IssueAsync(
-                toAddress: _wallet.RpcOptions.ChainAdminAddress,
-                assetParams: new AssetEntity(),
-                quantity: 1,
-                smallestUnit: 0.1, nativeCurrencyAmount: 0, null);
-
-            // Act - Try to get Asset information from the blockchain network
-            RpcResponse<GetAssetInfoResult> verbose = await _blockchain.GetAssetInfoAsync(
-                asset_identifier: asset.Result,
-                verbose: true);
-
-            // Assert
-            Assert.IsNull(verbose.Error);
-            Assert.IsNotNull(verbose.Result);
-            Assert.IsInstanceOf<RpcResponse<GetAssetInfoResult>>(verbose);
-
-            // Act - Try to get Asset information from the blockchain network
-            RpcResponse<GetAssetInfoResult> nonVerbose = await _blockchain.GetAssetInfoAsync(
-                asset_identifier: asset.Result,
-                verbose: false);
-
-            // Assert
-            Assert.IsNull(nonVerbose.Error);
-            Assert.IsNotNull(nonVerbose.Result);
-            Assert.IsInstanceOf<RpcResponse<GetAssetInfoResult>>(nonVerbose);
-        }
-
-        [Test]
-        public async Task GetBlockchainInfoInferredTestAsync()
-        {
-            // Act - Ask the network for information about the blockchain
-            RpcResponse<GetBlockchainInfoResult> actual = await _blockchain.GetBlockchainInfoAsync();
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetBlockchainInfoResult>>(actual);
-        }
-
-        [Test]
-        public async Task GetBestBlockHashInferredTestAsync()
-        {
-            // Act - Ask blockchain network for the best block hash value
-            RpcResponse<string> actual = await _blockchain.GetBestBlockHashAsync();
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(actual);
-        }
-
-        [Test]
-        public async Task GetBlockCountInferredTestAsync()
-        {
-            // Act - Ask blockchain network for block count in longest chain
-            RpcResponse<long> actual = await _blockchain.GetBlockCountAsync();
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<long>>(actual);
-        }
-
-        [Test]
-        public async Task GetBlockHashInferredTestAsync()
-        {
-            // Act - Ask blockchain network for the block hash of a specific index (block height)
-            RpcResponse<string> actual = await _blockchain.GetBlockHashAsync(index: 1);
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(actual);
-        }
-
-        [Test]
-        public async Task GetBlockInferredTestAsync()
-        {
-            // Act - Ask blockchain network for a block at the specific index in a specific format
-            var encoded = await _blockchain.GetBlockEncodedAsync(hashOrHeight: "1");
-
-            // Assert
-            Assert.IsNull(encoded.Error);
-            Assert.IsNotNull(encoded.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(encoded);
-
-            // Act - Ask blockchain network for a block at the specific index in a specific format
-            var verbose = await _blockchain.GetBlockVerboseAsync(hashOrHeight: "1");
-
-            // Assert
-            Assert.IsNull(verbose.Error);
-            Assert.IsNotNull(verbose.Result);
-            Assert.IsInstanceOf<RpcResponse<GetBlockVerboseResult>>(verbose);
-
-            // Act - Ask blockchain network for a block at the specific index in a specific format
-            var version1 = await _blockchain.GetBlockV1Async(hashOrHeight: "1");
-
-            // Assert
-            Assert.IsNull(version1.Error);
-            Assert.IsNotNull(version1.Result);
-            Assert.IsInstanceOf<RpcResponse<GetBlockV1Result>>(version1);
-
-            // Act - Ask blockchain network for a block at the specific index in a specific format
-            var version2 = await _blockchain.GetBlockV2Async(hashOrHeight: "1");
-
-            // Assert
-            Assert.IsNull(version2.Error);
-            Assert.IsNotNull(version2.Result);
-            Assert.IsInstanceOf<RpcResponse<GetBlockV2Result>>(version2);
-
-            // Act - Ask blockchain network for a block at the specific index in a specific format
-            var version3 = await _blockchain.GetBlockV3Async(hashOrHeight: "1");
-
-            // Assert
-            Assert.IsNull(version3.Error);
-            Assert.IsNotNull(version3.Result);
-            Assert.IsInstanceOf<RpcResponse<GetBlockV3Result>>(version3);
-
-            // Act - Ask blockchain network for a block at the specific index in a specific format
-            var version4 = await _blockchain.GetBlockV4Async(hashOrHeight: "1");
-
-            // Assert
-            Assert.IsNull(version4.Error);
-            Assert.IsNotNull(version4.Result);
-            Assert.IsInstanceOf<RpcResponse<GetBlockV4Result>>(version4);
-        }
-
-        [Test]
-        public async Task GetChainTipsInferredTestAsync()
-        {
-            // Act - Ask blockchain network for the tip of the longest chain
-            RpcResponse<GetChainTipsResult[]> actual = await _blockchain.GetChainTipsAsync();
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetChainTipsResult[]>>(actual);
-        }
-
-        [Test]
-        public async Task GetDifficultyInferredTestAsync()
-        {
-            // Act - Ask blockchain network for the mining difficulty rating
-            RpcResponse<double> actual = await _blockchain.GetDifficultyAsync();
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<double>>(actual);
-        }
-
-        [Test]
-        public async Task GetFilterCodeInferredTestAsync()
-        {
-            // Stage - Create filter
-            var filter = await _wallet.CreateAsync(
-                entity_type: Entity.TxFilter,
-                entity_name: StreamFilterEntity.GetUUID(),
-                restrictions_or_open: new { },
-                customFields: JsCode.DummyTxFilterCode);
-
-
-            // Act - Retrieve filtercode by name, txid, or reference
-            RpcResponse<string> actual = await _blockchain.GetFilterCodeAsync(filter_identifier: filter.Result);
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(actual);
-        }
-
-        [Test]
-        public async Task GetLastBlockInfoInferredTestAsync()
-        {
-            // Act - Ask about recent or last blocks in the network
-            RpcResponse<GetLastBlockInfoResult> actual = await _blockchain.GetLastBlockInfoAsync(skip: 10);
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetLastBlockInfoResult>>(actual);
-        }
-
-        [Test]
-        public async Task GetMemPoolInfoInferredTestAsync()
-        {
-            // Act - Ask blockchain network for mempool information
-            RpcResponse<GetMemPoolInfoResult> actual = await _blockchain.GetMemPoolInfoAsync();
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetMemPoolInfoResult>>(actual);
-        }
-
-        [Test]
-        public async Task GetRawMemPoolInferredTestAsync()
-        {
-            // Act - Ask blockchain network for raw mempool information
-            RpcResponse<GetRawMemPoolResult> actual = await _blockchain.GetRawMemPoolAsync(verbose: true);
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetRawMemPoolResult>>(actual);
-        }
-
-        [Test]
-        public async Task GetStreamInfoInferredTestAsync()
-        {
-            // Act - Fetch information about a specific blockchain stream
-            RpcResponse<GetStreamInfoResult> actual = await _blockchain.GetStreamInfoAsync(
-                stream_identifier: "root",
-                verbose: true);
-
-            // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetStreamInfoResult>>(actual);
-        }
-
-        [Test]
-        public async Task GetTxOutInferredTestAsync()
-        {
-            // Stage - Issue a new asset to the blockchain node
-            var asset = await _wallet.IssueAsync(
-                toAddress: _wallet.RpcOptions.ChainAdminAddress,
-                assetParams: new AssetEntity(),
-                quantity: 1,
-                smallestUnit: 0.1, nativeCurrencyAmount: 0, null);
+            var infAsset = await _wallet.IssueAsync(_address, new AssetEntity(), 1, 0.1, 0, null);
 
             // Stage - Load new asset Unspent
-            var unspent = await _wallet.PrepareLockUnspentAsync(
-                asset_quantities: new Dictionary<string, decimal>
-                {
-                    { asset.Result, 1 }
-                }, false);
-
+            var infUnspent = await _wallet.PrepareLockUnspentAsync(new Dictionary<string, decimal> { { infAsset.Result, 1 } }, false);
 
             // Act - Fetch details about unspent transaction output
-            RpcResponse<GetTxOutResult> actual = await _blockchain.GetTxOutAsync(
-                txid: unspent.Result.Txid,
-                n: unspent.Result.Vout,
-                include_mem_pool: true);
+            var infGet = await _blockchain.GetTxOutAsync(infUnspent.Result.Txid, infUnspent.Result.Vout, true);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetTxOutResult>>(actual);
+            Assert.IsNull(infGet.Error);
+            Assert.IsNotNull(infGet.Result);
+            Assert.IsInstanceOf<RpcResponse<GetTxOutResult>>(infGet);
         }
 
         [Test]
-        public async Task GetTxOutSetInfoInferredTestAsync()
+        public async Task GetTxOutSetInfoTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act - Statistics about the unspent transaction output set
-            RpcResponse<GetTxOutSetInfoResult> actual = await _blockchain.GetTxOutSetInfoAsync();
+            var expGet = await _blockchain.GetTxOutSetInfoAsync(_chainName, id: UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetTxOutSetInfoResult>>(actual);
+            Assert.IsNull(expGet.Error);
+            Assert.IsNotNull(expGet.Result);
+            Assert.IsInstanceOf<RpcResponse<GetTxOutSetInfoResult>>(expGet);
+
+            /*
+              Inferred blockchain name test
+           */
+
+            // Act - Statistics about the unspent transaction output set
+            var infGet = await _blockchain.GetTxOutSetInfoAsync();
+
+            // Assert
+            Assert.IsNull(infGet.Error);
+            Assert.IsNotNull(infGet.Result);
+            Assert.IsInstanceOf<RpcResponse<GetTxOutSetInfoResult>>(infGet);
         }
 
         [Test]
-        public async Task ListAssetsInferredTestAsync()
+        public async Task ListAssetsTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act - Information about a one or many assets
-            RpcResponse<ListAssetsResult[]> actual = await _blockchain.ListAssetsAsync(
-                asset_identifiers: "*",
-                verbose: true,
-                count: 10,
-                start: 0);
+            var expList = await _blockchain.ListAssetsAsync(_chainName, UUID.NoHyphens, "*", true, 10, 0);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<ListAssetsResult[]>>(actual);
+            Assert.IsNull(expList.Error);
+            Assert.IsNotNull(expList.Result);
+            Assert.IsInstanceOf<RpcResponse<ListAssetsResult[]>>(expList);
+
+            /*
+              Inferred blockchain name test
+           */
+
+            // Act - Information about a one or many assets
+            var infList = await _blockchain.ListAssetsAsync("*", true, 10, 0);
+
+            // Assert
+            Assert.IsNull(infList.Error);
+            Assert.IsNotNull(infList.Result);
+            Assert.IsInstanceOf<RpcResponse<ListAssetsResult[]>>(infList);
         }
 
         [Test]
-        public async Task ListBlocksInferredTestAsync()
+        public async Task ListBlocksTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act - Return information about one or many blocks
-            RpcResponse<ListBlocksResult[]> actual = await _blockchain.ListBlocksAsync(block_set_identifier: "1, 8", verbose: true);
+            var expList = await _blockchain.ListBlocksAsync(_chainName, UUID.NoHyphens, "1, 8", true);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<ListBlocksResult[]>>(actual);
+            Assert.IsNull(expList.Error);
+            Assert.IsNotNull(expList.Result);
+            Assert.IsInstanceOf<RpcResponse<ListBlocksResult[]>>(expList);
+
+            /*
+              Inferred blockchain name test
+           */
+
+            // Act - Return information about one or many blocks
+            var infList = await _blockchain.ListBlocksAsync("1, 8", true);
+
+            // Assert
+            Assert.IsNull(infList.Error);
+            Assert.IsNotNull(infList.Result);
+            Assert.IsInstanceOf<RpcResponse<ListBlocksResult[]>>(infList);
         }
 
         [Test]
-        public async Task ListPermissionsInferredTestAsync()
+        public async Task ListPermissionsTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act - List information about one or many permissions pertaining to one or many addresses
-            RpcResponse<ListPermissionsResult[]> actual = await _blockchain.ListPermissionsAsync(
-                permissions: $"{Permission.Send},{Permission.Receive}",
-                addresses: _blockchain.RpcOptions.ChainAdminAddress,
-                verbose: true);
+            var expList = await _blockchain.ListPermissionsAsync(_chainName, UUID.NoHyphens, $"{Permission.Send},{Permission.Receive}", _address, true);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<ListPermissionsResult[]>>(actual);
+            Assert.IsNull(expList.Error);
+            Assert.IsNotNull(expList.Result);
+            Assert.IsInstanceOf<RpcResponse<ListPermissionsResult[]>>(expList);
+
+            /*
+              Inferred blockchain name test
+           */
+
+            // Act - List information about one or many permissions pertaining to one or many addresses
+            var infList = await _blockchain.ListPermissionsAsync($"{Permission.Send},{Permission.Receive}", _address, true);
+
+            // Assert
+            Assert.IsNull(infList.Error);
+            Assert.IsNotNull(infList.Result);
+            Assert.IsInstanceOf<RpcResponse<ListPermissionsResult[]>>(infList);
         }
 
         [Test]
-        public async Task ListStreamFiltersInferredTestAsync()
+        public async Task ListStreamFiltersTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act - Ask for a list of stream filters
-            RpcResponse<ListStreamFiltersResult[]> actual = await _blockchain.ListStreamFiltersAsync(filter_identifers: "*", verbose: true);
+            var expList = await _blockchain.ListStreamFiltersAsync(_chainName, UUID.NoHyphens, "*", true);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<ListStreamFiltersResult[]>>(actual);
+            Assert.IsNull(expList.Error);
+            Assert.IsNotNull(expList.Result);
+            Assert.IsInstanceOf<RpcResponse<ListStreamFiltersResult[]>>(expList);
+
+            /*
+              Inferred blockchain name test
+           */
+
+            // Act - Ask for a list of stream filters
+            var infList = await _blockchain.ListStreamFiltersAsync("*", true);
+
+            // Assert
+            Assert.IsNull(infList.Error);
+            Assert.IsNotNull(infList.Result);
+            Assert.IsInstanceOf<RpcResponse<ListStreamFiltersResult[]>>(infList);
         }
 
         [Test]
-        public async Task ListStreamsInferredTestAsync()
+        public async Task ListStreamsTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act - Ask for a list of streams
-            RpcResponse<ListStreamsResult[]> actual = await _blockchain.ListStreamsAsync(stream_identifiers: "*", verbose: true, count: 10, start: 0);
+            var expList = await _blockchain.ListStreamsAsync(_chainName, UUID.NoHyphens, "*", true, 10, 0);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<ListStreamsResult[]>>(actual);
+            Assert.IsNull(expList.Error);
+            Assert.IsNotNull(expList.Result);
+            Assert.IsInstanceOf<RpcResponse<ListStreamsResult[]>>(expList);
+
+            /*
+              Inferred blockchain name test
+           */
+
+            // Act - Ask for a list of streams
+            var infList = await _blockchain.ListStreamsAsync("*", true, 10, 0);
+
+            // Assert
+            Assert.IsNull(infList.Error);
+            Assert.IsNotNull(infList.Result);
+            Assert.IsInstanceOf<RpcResponse<ListStreamsResult[]>>(infList);
         }
 
         [Test]
-        public async Task ListTxFiltersInferredTestAsync()
+        public async Task ListTxFiltersTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act - List of transaction filters
-            RpcResponse<ListTxFiltersResult[]> actual = await _blockchain.ListTxFiltersAsync(filter_identifiers: "*", verbose: true);
+            var expList = await _blockchain.ListTxFiltersAsync(_chainName, UUID.NoHyphens, "*", true);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<ListTxFiltersResult[]>>(actual);
+            Assert.IsNull(expList.Error);
+            Assert.IsNotNull(expList.Result);
+            Assert.IsInstanceOf<RpcResponse<ListTxFiltersResult[]>>(expList);
+
+            /*
+              Inferred blockchain name test
+           */
+
+            // Act - List of transaction filters
+            var infList = await _blockchain.ListTxFiltersAsync("*", true);
+
+            // Assert
+            Assert.IsNull(infList.Error);
+            Assert.IsNotNull(infList.Result);
+            Assert.IsInstanceOf<RpcResponse<ListTxFiltersResult[]>>(infList);
         }
 
         [Test]
-        public async Task ListUpgradesInferredTestAsync()
+        public async Task ListUpgradesTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act - List of upgrades
-            RpcResponse<ListUpgradesResult[]> actual = await _blockchain.ListUpgradesAsync(upgrade_identifier: "*");
+            var expList = await _blockchain.ListUpgradesAsync(_chainName, UUID.NoHyphens, "*");
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<ListUpgradesResult[]>>(actual);
+            Assert.IsNull(expList.Error);
+            Assert.IsNotNull(expList.Result);
+            Assert.IsInstanceOf<RpcResponse<ListUpgradesResult[]>>(expList);
+
+            /*
+              Inferred blockchain name test
+           */
+
+            // Act - List of upgrades
+            var infList = await _blockchain.ListUpgradesAsync(upgrade_identifier: "*");
+
+            // Assert
+            Assert.IsNull(infList.Error);
+            Assert.IsNotNull(infList.Result);
+            Assert.IsInstanceOf<RpcResponse<ListUpgradesResult[]>>(infList);
         }
 
         [Test]
-        public async Task RunStreamFilterInferredTestAsync()
+        public async Task RunStreamFilterTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Stage - Create filter
-            var streamFilter = await _wallet.CreateAsync(
-                entity_type: Entity.StreamFilter,
-                entity_name: StreamFilterEntity.GetUUID(),
-                restrictions_or_open: new { },
-                customFields: JsCode.DummyStreamFilterCode);
+            var expStreamFilter = await _wallet.CreateAsync(_chainName, UUID.NoHyphens, Entity.StreamFilter, StreamFilterEntity.GetUUID(), new { }, JsCode.DummyStreamFilterCode);
 
             // Act - Execute stream filter
-            RpcResponse<RunStreamFilterResult> actual = await _blockchain.RunStreamFilterAsync(filter_identifier: streamFilter.Result, tx_hex: null, vout: 0);
+            var expRun = await _blockchain.RunStreamFilterAsync(_chainName, UUID.NoHyphens, expStreamFilter.Result, null, 0);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<RunStreamFilterResult>>(actual);
+            Assert.IsNull(expRun.Error);
+            Assert.IsNotNull(expRun.Result);
+            Assert.IsInstanceOf<RpcResponse<RunStreamFilterResult>>(expRun);
+
+            /*
+              Inferred blockchain name test
+           */
+
+            // Stage - Create filter
+            var infStreamFilter = await _wallet.CreateAsync(Entity.StreamFilter, StreamFilterEntity.GetUUID(), new { }, JsCode.DummyStreamFilterCode);
+
+            // Act - Execute stream filter
+            var infRun = await _blockchain.RunStreamFilterAsync(infStreamFilter.Result, null, 0);
+
+            // Assert
+            Assert.IsNull(infRun.Error);
+            Assert.IsNotNull(infRun.Result);
+            Assert.IsInstanceOf<RpcResponse<RunStreamFilterResult>>(infRun);
         }
 
         [Test]
-        public async Task RunTxFilterInferredTestAsync()
+        public async Task RunTxFilterTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Stage - List tx filters
-            var txFilter = await _blockchain.ListTxFiltersAsync(filter_identifiers: "*", verbose: true);
+            var expList = await _blockchain.ListTxFiltersAsync(_chainName, UUID.NoHyphens, "*", true);
 
             // Act - Execute transaction filter
-            RpcResponse<RunTxFilterResult> actual = await _blockchain.RunTxFilterAsync(filter_identifier: txFilter.Result.FirstOrDefault().Name, null);
+            var expRun = await _blockchain.RunTxFilterAsync(_chainName, UUID.NoHyphens, expList.Result.FirstOrDefault().Name, null);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<RunTxFilterResult>>(actual);
+            Assert.IsNull(expRun.Error);
+            Assert.IsNotNull(expRun.Result);
+            Assert.IsInstanceOf<RpcResponse<RunTxFilterResult>>(expRun);
+
+            /*
+              Inferred blockchain name test
+           */
+
+            // Stage - List tx filters
+            var infList = await _blockchain.ListTxFiltersAsync("*", true);
+
+            // Act - Execute transaction filter
+            var infRun = await _blockchain.RunTxFilterAsync(infList.Result.FirstOrDefault().Name, null);
+
+            // Assert
+            Assert.IsNull(infRun.Error);
+            Assert.IsNotNull(infRun.Result);
+            Assert.IsInstanceOf<RpcResponse<RunTxFilterResult>>(infRun);
         }
 
         [Test]
-        public async Task TestStreamFilterInferredTestAsync()
+        public async Task TestStreamFilterTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act - Test stream filter
-            RpcResponse<TestStreamFilterResult> actual = await _blockchain.TestStreamFilterAsync(restrictions: new { }, javascript_code: JsCode.DummyStreamFilterCode, null, 0);
+            var expTest = await _blockchain.TestStreamFilterAsync(_chainName, UUID.NoHyphens, new { }, JsCode.DummyStreamFilterCode, null, 0);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<TestStreamFilterResult>>(actual);
+            Assert.IsNull(expTest.Error);
+            Assert.IsNotNull(expTest.Result);
+            Assert.IsInstanceOf<RpcResponse<TestStreamFilterResult>>(expTest);
+
+            /*
+              Inferred blockchain name test
+           */
+
+            // Act - Test stream filter
+            var infTest = await _blockchain.TestStreamFilterAsync(new { }, JsCode.DummyStreamFilterCode, null, 0);
+
+            // Assert
+            Assert.IsNull(infTest.Error);
+            Assert.IsNotNull(infTest.Result);
+            Assert.IsInstanceOf<RpcResponse<TestStreamFilterResult>>(infTest);
         }
 
         [Test]
-        public async Task TestTxFilterInferredTestAsync()
+        public async Task TestTxFilterTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act - Test transaction filter
-            RpcResponse<TestTxFilterResult> actual = await _blockchain.TestTxFilterAsync(restrictions: new { }, javascript_code: JsCode.DummyTxFilterCode, null);
+            var expTest = await _blockchain.TestTxFilterAsync(_chainName, UUID.NoHyphens, new { }, JsCode.DummyTxFilterCode, null);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<TestTxFilterResult>>(actual);
+            Assert.IsNull(expTest.Error);
+            Assert.IsNotNull(expTest.Result);
+            Assert.IsInstanceOf<RpcResponse<TestTxFilterResult>>(expTest);
+
+            /*
+              Inferred blockchain name test
+           */
+
+            // Act - Test transaction filter
+            var infTest = await _blockchain.TestTxFilterAsync(new { }, JsCode.DummyTxFilterCode, null);
+
+            // Assert
+            Assert.IsNull(infTest.Error);
+            Assert.IsNotNull(infTest.Result);
+            Assert.IsInstanceOf<RpcResponse<TestTxFilterResult>>(infTest);
         }
 
         [Test]
-        public async Task VerifyChainInferredTestAsync()
+        public async Task VerifyChainTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act - Verify blockchain database
-            RpcResponse<bool> actual = await _blockchain.VerifyChainAsync(check_level: 3, num_blocks: 0);
+            var expVerify = await _blockchain.VerifyChainAsync(_chainName, UUID.NoHyphens, 3, 0);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<bool>>(actual);
+            Assert.IsNull(expVerify.Error);
+            Assert.IsNotNull(expVerify.Result);
+            Assert.IsInstanceOf<RpcResponse<bool>>(expVerify);
+
+            /*
+              Inferred blockchain name test
+           */
+
+            // Act - Verify blockchain database
+            var infVerify = await _blockchain.VerifyChainAsync(3, 0);
+
+            // Assert
+            Assert.IsNull(infVerify.Error);
+            Assert.IsNotNull(infVerify.Result);
+            Assert.IsInstanceOf<RpcResponse<bool>>(infVerify);
         }
 
         [Test]
-        public async Task VerifyPermissionInferredTestAsync()
+        public async Task VerifyPermissionTestAsync()
         {
+            /*
+               Explicit blockchain name test
+            */
+
             // Act - Verify permissions for a specific address
-            RpcResponse<bool> actual = await _blockchain.VerifyPermissionAsync(address: _blockchain.RpcOptions.ChainAdminAddress, permission: Permission.Admin);
+            var expVerify = await _blockchain.VerifyPermissionAsync(_chainName, UUID.NoHyphens, _address, Permission.Admin);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<bool>>(actual);
+            Assert.IsNull(expVerify.Error);
+            Assert.IsNotNull(expVerify.Result);
+            Assert.IsInstanceOf<RpcResponse<bool>>(expVerify);
+
+            /*
+              Inferred blockchain name test
+           */
+
+            // Act - Verify permissions for a specific address
+            var infVerify = await _blockchain.VerifyPermissionAsync(_address, Permission.Admin);
+
+            // Assert
+            Assert.IsNull(infVerify.Error);
+            Assert.IsNotNull(infVerify.Result);
+            Assert.IsInstanceOf<RpcResponse<bool>>(infVerify);
         }
     }
 }

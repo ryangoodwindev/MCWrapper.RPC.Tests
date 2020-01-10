@@ -1433,7 +1433,7 @@ namespace MCWrapper.RPC.Tests
         public async Task LockUnspentTestAsync()
         {
             // Stage
-            var unspent = await _wallet.PrepareLockUnspentAsync(new Dictionary<string, int> { { "", 0 } }, false);
+            var unspent = await _wallet.PrepareLockUnspentAsync(new Dictionary<string, int> { { "", 0 } }, true);
 
             // Act
             RpcResponse<object> actual = await _wallet.LockUnspentAsync(false, new Transaction[] { new Transaction { Txid = unspent.Result.Txid, Vout = unspent.Result.Vout } });

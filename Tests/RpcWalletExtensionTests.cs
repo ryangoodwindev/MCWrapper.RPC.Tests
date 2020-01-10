@@ -1220,7 +1220,7 @@ namespace MCWrapper.RPC.Tests
             });
 
             // Asert - Attempt to Publish multiple items to the blockchain stream
-            var publish = await _wallet.PublishMultiStreamItemsFrom(_wallet.RpcOptions.ChainName, nameof(PublishMultiStreamItemsExplicitTest), _wallet.RpcOptions.ChainAdminAddress, multi);
+            var publish = await _wallet.PublishMultiStreamItemsFrom(_wallet.RpcOptions.ChainName, UUID.NoHyphens, _wallet.RpcOptions.ChainAdminAddress, multi);
 
             // Assert
             Assert.IsNull(publish.Error);
