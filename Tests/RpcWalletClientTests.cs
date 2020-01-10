@@ -17,6 +17,24 @@ namespace MCWrapper.RPC.Tests
     [TestFixture]
     public class RpcWalletClientTests
     {
+        /*
+         
+            Please note: 
+
+            There are two types of methods demonstrated below for each test.
+
+            Explicit method => Requires that the target blockchain's name must be passed as an argument to the
+                               associated method.
+
+            Inferred method => The target blockchain's name is not required to be passed as an agrument directly,
+                               however, these methods do require that the RpcOptions have been configured properly
+                               during application startup.
+            
+            All variables beginning with the 'exp' prefix are the result of an explicit method.
+            All variables beginning with the 'inf' prefix are the result of an inferred method.
+             
+        */
+
         // Inject services
         private readonly IMultiChainRpcGeneral _blockchain;
         private readonly IMultiChainRpcUtility _utility;

@@ -17,67 +17,85 @@ namespace MCWrapper.RPC.Tests
     [TestFixture]
     public class RpcRawClientTests
     {
+        /*
+         
+            Please note: 
+
+            There are two types of methods demonstrated below for each test.
+
+            Explicit method => Requires that the target blockchain's name must be passed as an argument to the
+                               associated method.
+
+            Inferred method => The target blockchain's name is not required to be passed as an agrument directly,
+                               however, these methods do require that the RpcOptions have been configured properly
+                               during application startup.
+            
+            All variables beginning with the 'exp' prefix are the result of an explicit method.
+            All variables beginning with the 'inf' prefix are the result of an inferred method.
+             
+        */
+
         // Inject services
         private readonly IMultiChainRpcWallet _wallet;
         private readonly IMultiChainRpcRaw _raw;
-        private readonly string ChainName;
-        private readonly string Address;
+        private readonly string _chainName;
+        private readonly string _address;
+
+        // Use mock startup service container
+        private readonly ExplicitStartup _services = new ExplicitStartup();
 
         // Create a new RpcRawClientTests instance
         public RpcRawClientTests()
         {
-            // instantiate mock service container
-            var services = new ParameterlessStartup();
-
-            // fetch services from service container
-            _wallet = services.GetRequiredService<IMultiChainRpcWallet>();
-            _raw = services.GetRequiredService<IMultiChainRpcRaw>();
-
-            Address = _wallet.RpcOptions.ChainAdminAddress;
-            ChainName = _wallet.RpcOptions.ChainName;
+            _wallet = _services.GetRequiredService<IMultiChainRpcWallet>();
+            _raw = _services.GetRequiredService<IMultiChainRpcRaw>();
+            _address = _wallet.RpcOptions.ChainAdminAddress;
+            _chainName = _wallet.RpcOptions.ChainName;
         }
 
         [Test]
         public async Task RawTransactionTest()
         {
-            // Explicit blockchain name tests
+            /*
+               Explicit blockchain name test
+            */
 
             var infAssetModel_0 = new AssetEntity();
             var infAssetModel_1 = new AssetEntity();
 
-            var infAsset_0 = await _wallet.IssueAsync(ChainName, UUID.NoHyphens, Address, infAssetModel_0, 100, 1, 0, new Dictionary<string, string> { { "text", "Some text in Hex".ToHex() } });
+            var infAsset_0 = await _wallet.IssueAsync(_chainName, UUID.NoHyphens, _address, infAssetModel_0, 100, 1, 0, new Dictionary<string, string> { { "text", "Some text in Hex".ToHex() } });
 
             Assert.IsNull(infAsset_0.Error);
             Assert.IsNotEmpty(infAsset_0.Result);
             Assert.IsInstanceOf<RpcResponse<string>>(infAsset_0);
 
-            var infAsset_1 = await _wallet.IssueAsync(ChainName, UUID.NoHyphens, Address, infAssetModel_1, 100, 1, 0, new Dictionary<string, string> { { "text", "Some text in Hex".ToHex() } });
+            var infAsset_1 = await _wallet.IssueAsync(_chainName, UUID.NoHyphens, _address, infAssetModel_1, 100, 1, 0, new Dictionary<string, string> { { "text", "Some text in Hex".ToHex() } });
 
             Assert.IsNull(infAsset_1.Error);
             Assert.IsNotEmpty(infAsset_1.Result);
             Assert.IsInstanceOf<RpcResponse<string>>(infAsset_1);
 
 
-            var infNewAddress_0 = await _wallet.GetNewAddressAsync(ChainName, UUID.NoHyphens);
+            var infNewAddress_0 = await _wallet.GetNewAddressAsync(_chainName, UUID.NoHyphens);
 
             Assert.IsNull(infNewAddress_0.Error);
             Assert.IsNotEmpty(infNewAddress_0.Result);
             Assert.IsInstanceOf<RpcResponse<string>>(infNewAddress_0);
 
-            var infNewAddress_1 = await _wallet.GetNewAddressAsync(ChainName, UUID.NoHyphens);
+            var infNewAddress_1 = await _wallet.GetNewAddressAsync(_chainName, UUID.NoHyphens);
 
             Assert.IsNull(infNewAddress_1.Error);
             Assert.IsNotEmpty(infNewAddress_1.Result);
             Assert.IsInstanceOf<RpcResponse<string>>(infNewAddress_1);
 
 
-            var infGrant = await _wallet.GrantFromAsync(ChainName, UUID.NoHyphens, Address, $"{infNewAddress_0.Result},{infNewAddress_1.Result}", $"{Permission.Receive},{Permission.Send}", 0, 1, 20000, "Comment", "CommentTo");
+            var infGrant = await _wallet.GrantFromAsync(_chainName, UUID.NoHyphens, _address, $"{infNewAddress_0.Result},{infNewAddress_1.Result}", $"{Permission.Receive},{Permission.Send}", 0, 1, 20000, "Comment", "CommentTo");
 
             Assert.IsNull(infGrant.Error);
             Assert.IsNotNull(infGrant.Result);
             Assert.IsInstanceOf<RpcResponse<string>>(infGrant);
 
-            var infListUnspent = await _wallet.ListUnspentAsync(ChainName, UUID.NoHyphens, 0, 9999, new[] { Address });
+            var infListUnspent = await _wallet.ListUnspentAsync(_chainName, UUID.NoHyphens, 0, 9999, new[] { _address });
 
             Assert.IsNull(infListUnspent.Error);
             Assert.IsNotNull(infListUnspent.Result);
@@ -86,7 +104,7 @@ namespace MCWrapper.RPC.Tests
             var unspentAsset_0 = infListUnspent.Result.SingleOrDefault(s => s.Assets.Any(a => a.Name == infAssetModel_0.Name));
             var unspentAsset_1 = infListUnspent.Result.SingleOrDefault(s => s.Assets.Any(a => a.Name == infAssetModel_1.Name));
 
-            var infCreateRaw = await _raw.CreateRawTransactionAsync(ChainName, UUID.NoHyphens, new object[]
+            var infCreateRaw = await _raw.CreateRawTransactionAsync(_chainName, UUID.NoHyphens, new object[]
             {
                 new Dictionary<string, object>
                 {
@@ -121,49 +139,50 @@ namespace MCWrapper.RPC.Tests
             Assert.IsNotNull(infCreateRaw.Result);
             Assert.IsInstanceOf<RpcResponse<object>>(infCreateRaw);
 
-            var infDecode = await _raw.DecodeRawTransactionAsync(ChainName, UUID.NoHyphens, $"{infCreateRaw.Result}");
+            var infDecode = await _raw.DecodeRawTransactionAsync(_chainName, UUID.NoHyphens, $"{infCreateRaw.Result}");
 
             Assert.IsNull(infDecode.Error);
             Assert.IsNotNull(infDecode.Result);
             Assert.IsInstanceOf<RpcResponse<DecodeRawTransactionResult>>(infDecode);
 
-            var infRawChange = await _raw.AppendRawChangeAsync(ChainName, UUID.NoHyphens, $"{infCreateRaw.Result}", Address, 0);
+            var infRawChange = await _raw.AppendRawChangeAsync(_chainName, UUID.NoHyphens, $"{infCreateRaw.Result}", _address, 0);
 
             Assert.IsNull(infRawChange.Error);
             Assert.IsNotNull(infRawChange.Result);
             Assert.IsInstanceOf<RpcResponse<string>>(infRawChange);
 
-            var infRawData = await _raw.AppendRawDataAsync(ChainName, UUID.NoHyphens, $"{infRawChange.Result}", "Some metadta".ToHex());
+            var infRawData = await _raw.AppendRawDataAsync(_chainName, UUID.NoHyphens, $"{infRawChange.Result}", "Some metadta".ToHex());
 
             Assert.IsNull(infRawData.Error);
             Assert.IsNotNull(infRawData.Result);
             Assert.IsInstanceOf<RpcResponse<string>>(infRawData);
 
-            var infSignRaw = await _raw.SignRawTransactionAsync(ChainName, UUID.NoHyphens, $"{infRawData.Result}");
+            var infSignRaw = await _raw.SignRawTransactionAsync(_chainName, UUID.NoHyphens, $"{infRawData.Result}");
 
             Assert.IsNull(infSignRaw.Error);
             Assert.IsNotNull(infSignRaw.Result);
             Assert.IsInstanceOf<RpcResponse<SignRawTransactionResult>>(infSignRaw);
 
-            var infSendRaw = await _raw.SendRawTransactionAsync(ChainName, UUID.NoHyphens, infSignRaw.Result.Hex, false);
+            var infSendRaw = await _raw.SendRawTransactionAsync(_chainName, UUID.NoHyphens, infSignRaw.Result.Hex, false);
 
             Assert.IsNull(infSendRaw.Error);
             Assert.IsNotNull(infSendRaw.Result);
             Assert.IsInstanceOf<RpcResponse<string>>(infSendRaw);
 
-
-            // Inferred blockchain name tests
+            /*
+               Inferred blockchain name test
+            */
 
             var expAssetModel_0 = new AssetEntity();
             var expAssetModel_1 = new AssetEntity();
 
-            var expAsset_0 = await _wallet.IssueAsync(Address, expAssetModel_0, 100, 1, 0, new Dictionary<string, string> { { "text", "Some text in Hex".ToHex() } });
+            var expAsset_0 = await _wallet.IssueAsync(_address, expAssetModel_0, 100, 1, 0, new Dictionary<string, string> { { "text", "Some text in Hex".ToHex() } });
 
             Assert.IsNull(expAsset_0.Error);
             Assert.IsNotEmpty(expAsset_0.Result);
             Assert.IsInstanceOf<RpcResponse<string>>(expAsset_0);
 
-            var expAsset_1 = await _wallet.IssueAsync(Address, expAssetModel_1, 100, 1, 0, new Dictionary<string, string> { { "text", "Some text in Hex".ToHex() } });
+            var expAsset_1 = await _wallet.IssueAsync(_address, expAssetModel_1, 100, 1, 0, new Dictionary<string, string> { { "text", "Some text in Hex".ToHex() } });
 
             Assert.IsNull(expAsset_1.Error);
             Assert.IsNotEmpty(expAsset_1.Result);
@@ -182,13 +201,13 @@ namespace MCWrapper.RPC.Tests
             Assert.IsInstanceOf<RpcResponse<string>>(expNewAddress_1);
 
 
-            var expGrant = await _wallet.GrantFromAsync(Address, $"{expNewAddress_0.Result},{expNewAddress_1.Result}", $"{Permission.Receive},{Permission.Send}", 0, 1, Permission.MaxEndblock, "Comment", "CommentTo");
+            var expGrant = await _wallet.GrantFromAsync(_address, $"{expNewAddress_0.Result},{expNewAddress_1.Result}", $"{Permission.Receive},{Permission.Send}", 0, 1, Permission.MaxEndblock, "Comment", "CommentTo");
 
             Assert.IsNull(expGrant.Error);
             Assert.IsNotNull(expGrant.Result);
             Assert.IsInstanceOf<RpcResponse<string>>(expGrant);
 
-            var expListUnspent = await _wallet.ListUnspentAsync(0, 9999, new[] { Address });
+            var expListUnspent = await _wallet.ListUnspentAsync(0, 9999, new[] { _address });
 
             Assert.IsNull(expListUnspent.Error);
             Assert.IsNotNull(expListUnspent.Result);
@@ -238,7 +257,7 @@ namespace MCWrapper.RPC.Tests
             Assert.IsNotNull(expDecode.Result);
             Assert.IsInstanceOf<RpcResponse<DecodeRawTransactionResult>>(expDecode);
 
-            var expRawChange = await _raw.AppendRawChangeAsync($"{expCreateRaw.Result}", Address, 0);
+            var expRawChange = await _raw.AppendRawChangeAsync($"{expCreateRaw.Result}", _address, 0);
 
             Assert.IsNull(expRawChange.Error);
             Assert.IsNotNull(expRawChange.Result);
