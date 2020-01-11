@@ -229,40 +229,39 @@ namespace MCWrapper.RPC.Tests
            */
 
             // Stage - create Stream Filter entity
-            var filter = new StreamFilterEntity
+            var expFilter = new StreamFilterEntity
             {
                 Name = StreamFilterEntity.GetUUID(),
                 JavaScriptCode = JsCode.DummyStreamFilterCode
             };
 
             // Act - attempt to create a new Stream Filter using the explicit blockchain name
-            var createFilter = await _wallet.CreateStreamFilter(_wallet.RpcOptions.ChainName, UUID.NoHyphens, filter);
+            var expCreateFilter = await _wallet.CreateStreamFilter(_chainName, UUID.NoHyphens, expFilter);
 
             // Assert
-            Assert.IsNull(createFilter.Error);
-            Assert.IsNotNull(createFilter.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(createFilter);
+            Assert.IsNull(expCreateFilter.Error);
+            Assert.IsNotNull(expCreateFilter.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expCreateFilter);
 
             /*
                Inferred blockchain name test
             */
 
             // Stage - create Stream Filter entity
-            var filter = new StreamFilterEntity
+            var infFilter = new StreamFilterEntity
             {
                 Name = StreamFilterEntity.GetUUID(),
                 JavaScriptCode = JsCode.DummyStreamFilterCode
             };
 
             // Act - attempt to create a new Stream Filter using the inferred blockchain name
-            var createFilter = await _wallet.CreateStreamFilter(filter);
+            var infCreateFilter = await _wallet.CreateStreamFilter(infFilter);
 
             // Assert
-            Assert.IsNull(createFilter.Error);
-            Assert.IsNotNull(createFilter.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(createFilter);
+            Assert.IsNull(infCreateFilter.Error);
+            Assert.IsNotNull(infCreateFilter.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infCreateFilter);
         }
-
 
         [Test]
         public async Task CreateStreamFilterFromTest()
@@ -272,38 +271,38 @@ namespace MCWrapper.RPC.Tests
            */
 
             // Stage - create Stream Filter entity
-            var filter = new StreamFilterEntity
+            var expFilter = new StreamFilterEntity
             {
                 Name = StreamFilterEntity.GetUUID(),
                 JavaScriptCode = JsCode.DummyStreamFilterCode
             };
 
             // Act - attempt to create a new Stream Filter from an address using the explicit blockchain name
-            var createFilterFrom = await _wallet.CreateStreamFilterFrom(_wallet.RpcOptions.ChainName, UUID.NoHyphens, _wallet.RpcOptions.ChainAdminAddress, filter);
+            var expCreateFilterFrom = await _wallet.CreateStreamFilterFrom(_chainName, UUID.NoHyphens, _address, expFilter);
 
             // Assert
-            Assert.IsNull(createFilterFrom.Error);
-            Assert.IsNotNull(createFilterFrom.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(createFilterFrom);
+            Assert.IsNull(expCreateFilterFrom.Error);
+            Assert.IsNotNull(expCreateFilterFrom.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expCreateFilterFrom);
 
             /*
                Inferred blockchain name test
             */
 
             // Stage - create Stream Filter entity
-            var filter = new StreamFilterEntity
+            var infFilter = new StreamFilterEntity
             {
                 Name = StreamFilterEntity.GetUUID(),
                 JavaScriptCode = JsCode.DummyStreamFilterCode
             };
 
             // Act - attempt to create a new Stream Filter from an address using the inferred blockchain name
-            var createFilterFrom = await _wallet.CreateStreamFilterFrom(_wallet.RpcOptions.ChainAdminAddress, filter);
+            var infCreateFilterFrom = await _wallet.CreateStreamFilterFrom(_address, infFilter);
 
             // Assert
-            Assert.IsNull(createFilterFrom.Error);
-            Assert.IsNotNull(createFilterFrom.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(createFilterFrom);
+            Assert.IsNull(infCreateFilterFrom.Error);
+            Assert.IsNotNull(infCreateFilterFrom.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infCreateFilterFrom);
         }
 
         [Test]
@@ -314,34 +313,34 @@ namespace MCWrapper.RPC.Tests
            */
 
             // Stage - create Tx Filter entity
-            var filter = new TxFilterEntity();
-            filter.Restrictions._For = "root";
-            filter.JavaScriptCode = JsCode.DummyTxFilterCode;
+            var expFilter = new TxFilterEntity();
+            expFilter.Restrictions._For = "root";
+            expFilter.JavaScriptCode = JsCode.DummyTxFilterCode;
 
             // Act - attempt to create a new Tx Filter using the explicit blockchain name
-            var createFilter = await _wallet.CreateTxFilter(_wallet.RpcOptions.ChainName, UUID.NoHyphens, filter);
+            var expCreateFilter = await _wallet.CreateTxFilter(_chainName, UUID.NoHyphens, expFilter);
 
             // Assert
-            Assert.IsNull(createFilter.Error);
-            Assert.IsNotNull(createFilter.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(createFilter);
+            Assert.IsNull(expCreateFilter.Error);
+            Assert.IsNotNull(expCreateFilter.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expCreateFilter);
 
             /*
                Inferred blockchain name test
             */
 
             // Stage - create Tx Filter entity
-            var filter = new TxFilterEntity();
-            filter.Restrictions._For = "root";
-            filter.JavaScriptCode = JsCode.DummyTxFilterCode;
+            var infFilter = new TxFilterEntity();
+            infFilter.Restrictions._For = "root";
+            infFilter.JavaScriptCode = JsCode.DummyTxFilterCode;
 
             // Act - attempt to create a new Tx Filter using the inferred blockchain name
-            var createFilter = await _wallet.CreateTxFilter(filter);
+            var infCreateFilter = await _wallet.CreateTxFilter(infFilter);
 
             // Assert
-            Assert.IsNull(createFilter.Error);
-            Assert.IsNotNull(createFilter.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(createFilter);
+            Assert.IsNull(infCreateFilter.Error);
+            Assert.IsNotNull(infCreateFilter.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infCreateFilter);
         }
 
         [Test]
@@ -352,34 +351,34 @@ namespace MCWrapper.RPC.Tests
            */
 
             // Stage - create Tx Filter entity
-            var filter = new TxFilterEntity();
-            filter.Restrictions._For = "root";
-            filter.JavaScriptCode = JsCode.DummyTxFilterCode;
+            var expFilter = new TxFilterEntity();
+            expFilter.Restrictions._For = "root";
+            expFilter.JavaScriptCode = JsCode.DummyTxFilterCode;
 
             // Act - attempt to create a new Tx Filter from an address using the explicit blockchain name
-            var createFilterFrom = await _wallet.CreateTxFilterFrom(_wallet.RpcOptions.ChainName, UUID.NoHyphens, _wallet.RpcOptions.ChainAdminAddress, filter);
+            var expCreateFilterFrom = await _wallet.CreateTxFilterFrom(_chainName, UUID.NoHyphens, _address, expFilter);
 
             // Assert
-            Assert.IsNull(createFilterFrom.Error);
-            Assert.IsNotNull(createFilterFrom.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(createFilterFrom);
+            Assert.IsNull(expCreateFilterFrom.Error);
+            Assert.IsNotNull(expCreateFilterFrom.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expCreateFilterFrom);
 
             /*
                Inferred blockchain name test
             */
 
             // Stage - create Tx Filter entity
-            var filter = new TxFilterEntity();
-            filter.Restrictions._For = "root";
-            filter.JavaScriptCode = JsCode.DummyTxFilterCode;
+            var infFilter = new TxFilterEntity();
+            infFilter.Restrictions._For = "root";
+            infFilter.JavaScriptCode = JsCode.DummyTxFilterCode;
 
             // Act - attempt to create a new Tx Filter from an address using the inferred blockchain name
-            var createFilterFrom = await _wallet.CreateTxFilterFrom(_wallet.RpcOptions.ChainAdminAddress, filter);
+            var infCreateFilterFrom = await _wallet.CreateTxFilterFrom(_address, infFilter);
 
             // Assert
-            Assert.IsNull(createFilterFrom.Error);
-            Assert.IsNotNull(createFilterFrom.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(createFilterFrom);
+            Assert.IsNull(infCreateFilterFrom.Error);
+            Assert.IsNotNull(infCreateFilterFrom.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infCreateFilterFrom);
         }
 
         [Test]
@@ -390,52 +389,52 @@ namespace MCWrapper.RPC.Tests
            */
 
             // Stage - create a new PublishEntity instance
-            var streamItem = new PublishEntity("root", PublishEntity.GetUUID(), "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
+            var expStreamItem = new PublishEntity("root", PublishEntity.GetUUID(), "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await _wallet.PublishStreamItemKey(_wallet.RpcOptions.ChainName, UUID.NoHyphens, streamItem);
+            var expPublish = await _wallet.PublishStreamItemKey(_chainName, UUID.NoHyphens, expStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(expPublish.Error);
+            Assert.IsNotNull(expPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             // Stage - create a new PublishEntity instance
-            streamItem = new PublishEntity("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
+            expStreamItem = new PublishEntity("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await _wallet.PublishStreamItemKeys(_wallet.RpcOptions.ChainName, UUID.NoHyphens, streamItem);
+            expPublish = await _wallet.PublishStreamItemKeys(_chainName, UUID.NoHyphens, expStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(expPublish.Error);
+            Assert.IsNotNull(expPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             /*
                Inferred blockchain name test
             */
 
             // Stage - create a new PublishEntity instance
-            var streamItem = new PublishEntity("root", PublishEntity.GetUUID(), "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
+            var infStreamItem = new PublishEntity("root", PublishEntity.GetUUID(), "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await _wallet.PublishStreamItemKey(streamItem);
+            var infPublish = await _wallet.PublishStreamItemKey(infStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(infPublish.Error);
+            Assert.IsNotNull(infPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
 
             // Stage - create a new PublishEntity instance
-            streamItem = new PublishEntity("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
+            infStreamItem = new PublishEntity("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await _wallet.PublishStreamItemKeys(streamItem);
+            infPublish = await _wallet.PublishStreamItemKeys(infStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(infPublish.Error);
+            Assert.IsNotNull(infPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
         }
 
         [Test]
@@ -446,60 +445,60 @@ namespace MCWrapper.RPC.Tests
            */
 
             // Stage - Create a new BinaryCache and then create a new PublishEntity instance
-            var binaryCache = await _utility.CreateBinaryCacheAsync();
-            var cachedData = new DataCached(binaryCache.Result);
-            var streamItem = new PublishEntity<DataCached>("root", PublishEntity.GetUUID(), cachedData, StreamRestrictTypes.OffChain);
+            var expBinaryCache = await _utility.CreateBinaryCacheAsync();
+            var expCachedData = new DataCached(expBinaryCache.Result);
+            var expStreamItem = new PublishEntity<DataCached>("root", PublishEntity.GetUUID(), expCachedData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await _wallet.PublishStreamItemKey(_wallet.RpcOptions.ChainName, UUID.NoHyphens, streamItem);
+            var expPublish = await _wallet.PublishStreamItemKey(_chainName, UUID.NoHyphens, expStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(expPublish.Error);
+            Assert.IsNotNull(expPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             // Stage - Create a new BinaryCache and then create a new PublishEntity instance
-            binaryCache = await _utility.CreateBinaryCacheAsync();
-            cachedData = new DataCached(binaryCache.Result);
-            streamItem = new PublishEntity<DataCached>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, cachedData, StreamRestrictTypes.OffChain);
+            expBinaryCache = await _utility.CreateBinaryCacheAsync();
+            expCachedData = new DataCached(expBinaryCache.Result);
+            expStreamItem = new PublishEntity<DataCached>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, expCachedData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await _wallet.PublishStreamItemKeys(_wallet.RpcOptions.ChainName, UUID.NoHyphens, streamItem);
+            expPublish = await _wallet.PublishStreamItemKeys(_chainName, UUID.NoHyphens, expStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(expPublish.Error);
+            Assert.IsNotNull(expPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             /*
                Inferred blockchain name test
             */
 
             // Stage - Create a new BinaryCache and then create a new PublishEntity instance
-            var binaryCache = await _utility.CreateBinaryCacheAsync();
-            var cachedData = new DataCached(binaryCache.Result);
-            var streamItem = new PublishEntity<DataCached>("root", PublishEntity.GetUUID(), cachedData, StreamRestrictTypes.OffChain);
+            var infBinaryCache = await _utility.CreateBinaryCacheAsync();
+            var infCachedData = new DataCached(infBinaryCache.Result);
+            var infStreamItem = new PublishEntity<DataCached>("root", PublishEntity.GetUUID(), infCachedData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await _wallet.PublishStreamItemKey(streamItem);
+            var infPublish = await _wallet.PublishStreamItemKey(infStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(infPublish.Error);
+            Assert.IsNotNull(infPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
 
             // Stage - Create a new BinaryCache and then create a new PublishEntity instance
-            binaryCache = await _utility.CreateBinaryCacheAsync();
-            cachedData = new DataCached(binaryCache.Result);
-            streamItem = new PublishEntity<DataCached>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, cachedData, StreamRestrictTypes.OffChain);
+            infBinaryCache = await _utility.CreateBinaryCacheAsync();
+            infCachedData = new DataCached(infBinaryCache.Result);
+            infStreamItem = new PublishEntity<DataCached>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, infCachedData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await _wallet.PublishStreamItemKeys(streamItem);
+            infPublish = await _wallet.PublishStreamItemKeys(infStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(infPublish.Error);
+            Assert.IsNotNull(infPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
         }
 
         [Test]
@@ -510,56 +509,56 @@ namespace MCWrapper.RPC.Tests
            */
 
             // Stage - create a new PublishEntity instance
-            var jsonData = new DataJson(new { description = "Some Text Stuff".ToHex() });
-            var streamItem = new PublishEntity<DataJson>("root", PublishEntity.GetUUID(), jsonData, StreamRestrictTypes.OffChain);
+            var expJsonData = new DataJson(new { description = "Some Text Stuff".ToHex() });
+            var expStreamItem = new PublishEntity<DataJson>("root", PublishEntity.GetUUID(), expJsonData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await _wallet.PublishStreamItemKey(_wallet.RpcOptions.ChainName, UUID.NoHyphens, streamItem);
+            var expPublish = await _wallet.PublishStreamItemKey(_chainName, UUID.NoHyphens, expStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(expPublish.Error);
+            Assert.IsNotNull(expPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             // Stage - create a new PublishEntity instance
-            jsonData = new DataJson(new { description = "Some Text Stuff".ToHex() });
-            streamItem = new PublishEntity<DataJson>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, jsonData, StreamRestrictTypes.OffChain);
+            expJsonData = new DataJson(new { description = "Some Text Stuff".ToHex() });
+            expStreamItem = new PublishEntity<DataJson>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, expJsonData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await _wallet.PublishStreamItemKeys(_wallet.RpcOptions.ChainName, UUID.NoHyphens, streamItem);
+            expPublish = await _wallet.PublishStreamItemKeys(_chainName, UUID.NoHyphens, expStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(expPublish.Error);
+            Assert.IsNotNull(expPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             /*
                Inferred blockchain name test
             */
 
             // Stage - create a new PublishEntity instance
-            var jsonData = new DataJson(new { description = "Some Text Stuff".ToHex() });
-            var streamItem = new PublishEntity<DataJson>("root", PublishEntity.GetUUID(), jsonData, StreamRestrictTypes.OffChain);
+            var infJsonData = new DataJson(new { description = "Some Text Stuff".ToHex() });
+            var infStreamItem = new PublishEntity<DataJson>("root", PublishEntity.GetUUID(), infJsonData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await _wallet.PublishStreamItemKey(streamItem);
+            var infPublish = await _wallet.PublishStreamItemKey(infStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(infPublish.Error);
+            Assert.IsNotNull(infPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
 
             // Stage - create a new PublishEntity instance
-            jsonData = new DataJson(new { description = "Some Text Stuff".ToHex() });
-            streamItem = new PublishEntity<DataJson>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, jsonData, StreamRestrictTypes.OffChain);
+            infJsonData = new DataJson(new { description = "Some Text Stuff".ToHex() });
+            infStreamItem = new PublishEntity<DataJson>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, infJsonData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await _wallet.PublishStreamItemKeys(streamItem);
+            infPublish = await _wallet.PublishStreamItemKeys(infStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(infPublish.Error);
+            Assert.IsNotNull(infPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
         }
 
         [Test]
@@ -570,56 +569,56 @@ namespace MCWrapper.RPC.Tests
            */
 
             // Stage - create a new PublishEntity instance
-            var textData = new DataText("Some Data Text for the stream item.");
-            var streamItem = new PublishEntity<DataText>("root", PublishEntity.GetUUID(), textData, StreamRestrictTypes.OffChain);
+            var expTextData = new DataText("Some Data Text for the stream item.");
+            var expStreamItem = new PublishEntity<DataText>("root", PublishEntity.GetUUID(), expTextData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await _wallet.PublishStreamItemKey(_wallet.RpcOptions.ChainName, UUID.NoHyphens, streamItem);
+            var expPublish = await _wallet.PublishStreamItemKey(_chainName, UUID.NoHyphens, expStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(expPublish.Error);
+            Assert.IsNotNull(expPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             // Stage - create a new PublishEntity instance
-            textData = new DataText("Some Data Text for the stream item.");
-            streamItem = new PublishEntity<DataText>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, textData, StreamRestrictTypes.OffChain);
+            expTextData = new DataText("Some Data Text for the stream item.");
+            expStreamItem = new PublishEntity<DataText>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, expTextData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await _wallet.PublishStreamItemKeys(_wallet.RpcOptions.ChainName, UUID.NoHyphens, streamItem);
+            expPublish = await _wallet.PublishStreamItemKeys(_chainName, UUID.NoHyphens, expStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(expPublish.Error);
+            Assert.IsNotNull(expPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             /*
                Inferred blockchain name test
             */
 
             // Stage - create a new PublishEntity instance
-            var textData = new DataText("Some Data Text for the stream item.");
-            var streamItem = new PublishEntity<DataText>("root", PublishEntity.GetUUID(), textData, StreamRestrictTypes.OffChain);
+            var infTextData = new DataText("Some Data Text for the stream item.");
+            var infStreamItem = new PublishEntity<DataText>("root", PublishEntity.GetUUID(), infTextData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await _wallet.PublishStreamItemKey(streamItem);
+            var infPublish = await _wallet.PublishStreamItemKey(infStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(infPublish.Error);
+            Assert.IsNotNull(infPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
 
             // Stage - create a new PublishEntity instance
-            textData = new DataText("Some Data Text for the stream item.");
-            streamItem = new PublishEntity<DataText>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, textData, StreamRestrictTypes.OffChain);
+            infTextData = new DataText("Some Data Text for the stream item.");
+            infStreamItem = new PublishEntity<DataText>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, infTextData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await _wallet.PublishStreamItemKeys(streamItem);
+            infPublish = await _wallet.PublishStreamItemKeys(infStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(infPublish.Error);
+            Assert.IsNotNull(infPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
         }
 
         [Test]
@@ -630,52 +629,52 @@ namespace MCWrapper.RPC.Tests
            */
 
             // Stage - create a new PublishEntity instance
-            var streamItem = new PublishEntity("root", PublishEntity.GetUUID(), "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
+            var expStreamItem = new PublishEntity("root", PublishEntity.GetUUID(), "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await _wallet.PublishStreamItemKeyFrom(_wallet.RpcOptions.ChainName, UUID.NoHyphens, _wallet.RpcOptions.ChainAdminAddress, streamItem);
+            var expPublish = await _wallet.PublishStreamItemKeyFrom(_chainName, UUID.NoHyphens, _address, expStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(expPublish.Error);
+            Assert.IsNotNull(expPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             // Stage - create a new PublishEntity instance
-            streamItem = new PublishEntity("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
+            expStreamItem = new PublishEntity("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await _wallet.PublishStreamItemKeysFrom(_wallet.RpcOptions.ChainName, UUID.NoHyphens, _wallet.RpcOptions.ChainAdminAddress, streamItem);
+            expPublish = await _wallet.PublishStreamItemKeysFrom(_chainName, UUID.NoHyphens, _address, expStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(expPublish.Error);
+            Assert.IsNotNull(expPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             /*
                Inferred blockchain name test
             */
 
             // Stage - create a new PublishEntity instance
-            var streamItem = new PublishEntity("root", PublishEntity.GetUUID(), "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
+            var infStreamItem = new PublishEntity("root", PublishEntity.GetUUID(), "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await _wallet.PublishStreamItemKeyFrom(_wallet.RpcOptions.ChainAdminAddress, streamItem);
+            var infPublish = await _wallet.PublishStreamItemKeyFrom(_wallet.RpcOptions.ChainAdminAddress, infStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(infPublish.Error);
+            Assert.IsNotNull(infPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
 
             // Stage - create a new PublishEntity instance
-            streamItem = new PublishEntity("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
+            infStreamItem = new PublishEntity("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await _wallet.PublishStreamItemKeysFrom(_wallet.RpcOptions.ChainAdminAddress, streamItem);
+            infPublish = await _wallet.PublishStreamItemKeysFrom(_wallet.RpcOptions.ChainAdminAddress, infStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(infPublish.Error);
+            Assert.IsNotNull(infPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
         }
 
         [Test]
@@ -686,60 +685,60 @@ namespace MCWrapper.RPC.Tests
            */
 
             // Stage - Create a new BinaryCache and then create a new PublishEntity instance
-            var binaryCache = await _utility.CreateBinaryCacheAsync();
-            var cachedData = new DataCached(binaryCache.Result);
-            var streamItem = new PublishEntity<DataCached>("root", PublishEntity.GetUUID(), cachedData, StreamRestrictTypes.OffChain);
+            var expBinaryCache = await _utility.CreateBinaryCacheAsync();
+            var expCachedData = new DataCached(expBinaryCache.Result);
+            var expStreamItem = new PublishEntity<DataCached>("root", PublishEntity.GetUUID(), expCachedData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await _wallet.PublishStreamItemKeyFrom(_wallet.RpcOptions.ChainName, UUID.NoHyphens, _wallet.RpcOptions.ChainAdminAddress, streamItem);
+            var expPublish = await _wallet.PublishStreamItemKeyFrom(_chainName, UUID.NoHyphens, _address, expStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(expPublish.Error);
+            Assert.IsNotNull(expPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             // Stage - Create a new BinaryCache and then create a new PublishEntity instance
-            binaryCache = await _utility.CreateBinaryCacheAsync();
-            cachedData = new DataCached(binaryCache.Result);
-            streamItem = new PublishEntity<DataCached>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, cachedData, StreamRestrictTypes.OffChain);
+            expBinaryCache = await _utility.CreateBinaryCacheAsync();
+            expCachedData = new DataCached(expBinaryCache.Result);
+            expStreamItem = new PublishEntity<DataCached>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, expCachedData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await _wallet.PublishStreamItemKeysFrom(_wallet.RpcOptions.ChainName, UUID.NoHyphens, _wallet.RpcOptions.ChainAdminAddress, streamItem);
+            expPublish = await _wallet.PublishStreamItemKeysFrom(_chainName, UUID.NoHyphens, _address, expStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(expPublish.Error);
+            Assert.IsNotNull(expPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             /*
                Inferred blockchain name test
             */
 
             // Stage - Create a new BinaryCache and then create a new PublishEntity instance
-            var binaryCache = await _utility.CreateBinaryCacheAsync();
-            var cachedData = new DataCached(binaryCache.Result);
-            var streamItem = new PublishEntity<DataCached>("root", PublishEntity.GetUUID(), cachedData, StreamRestrictTypes.OffChain);
+            var infBinaryCache = await _utility.CreateBinaryCacheAsync();
+            var infCachedData = new DataCached(infBinaryCache.Result);
+            var infStreamItem = new PublishEntity<DataCached>("root", PublishEntity.GetUUID(), infCachedData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await _wallet.PublishStreamItemKeyFrom(_wallet.RpcOptions.ChainAdminAddress, streamItem);
+            var infPublish = await _wallet.PublishStreamItemKeyFrom(_address, infStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(infPublish.Error);
+            Assert.IsNotNull(infPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
 
             // Stage - Create a new BinaryCache and then create a new PublishEntity instance
-            binaryCache = await _utility.CreateBinaryCacheAsync();
-            cachedData = new DataCached(binaryCache.Result);
-            streamItem = new PublishEntity<DataCached>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, cachedData, StreamRestrictTypes.OffChain);
+            infBinaryCache = await _utility.CreateBinaryCacheAsync();
+            infCachedData = new DataCached(infBinaryCache.Result);
+            infStreamItem = new PublishEntity<DataCached>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, infCachedData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await _wallet.PublishStreamItemKeysFrom(_wallet.RpcOptions.ChainAdminAddress, streamItem);
+            infPublish = await _wallet.PublishStreamItemKeysFrom(_address, infStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(infPublish.Error);
+            Assert.IsNotNull(infPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
         }
 
         [Test]
@@ -750,56 +749,56 @@ namespace MCWrapper.RPC.Tests
            */
 
             // Stage - create a new PublishEntity instance
-            var jsonData = new DataJson(new { description = "Some Text Stuff".ToHex() });
-            var streamItem = new PublishEntity<DataJson>("root", PublishEntity.GetUUID(), jsonData, StreamRestrictTypes.OffChain);
+            var expJsonData = new DataJson(new { description = "Some Text Stuff".ToHex() });
+            var expStreamItem = new PublishEntity<DataJson>("root", PublishEntity.GetUUID(), expJsonData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await _wallet.PublishStreamItemKeyFrom(_wallet.RpcOptions.ChainName, UUID.NoHyphens, _wallet.RpcOptions.ChainAdminAddress, streamItem);
+            var expPublish = await _wallet.PublishStreamItemKeyFrom(_chainName, UUID.NoHyphens, _address, expStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(expPublish.Error);
+            Assert.IsNotNull(expPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             // Stage - create a new PublishEntity instance
-            jsonData = new DataJson(new { description = "Some Text Stuff".ToHex() });
-            streamItem = new PublishEntity<DataJson>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, jsonData, StreamRestrictTypes.OffChain);
+            expJsonData = new DataJson(new { description = "Some Text Stuff".ToHex() });
+            expStreamItem = new PublishEntity<DataJson>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, expJsonData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await _wallet.PublishStreamItemKeysFrom(_wallet.RpcOptions.ChainName, UUID.NoHyphens, _wallet.RpcOptions.ChainAdminAddress, streamItem);
+            expPublish = await _wallet.PublishStreamItemKeysFrom(_chainName, UUID.NoHyphens, _address, expStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(expPublish.Error);
+            Assert.IsNotNull(expPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             /*
                Inferred blockchain name test
             */
 
             // Stage - create a new PublishEntity instance
-            var jsonData = new DataJson(new { description = "Some Text Stuff".ToHex() });
-            var streamItem = new PublishEntity<DataJson>("root", PublishEntity.GetUUID(), jsonData, StreamRestrictTypes.OffChain);
+            var infJsonData = new DataJson(new { description = "Some Text Stuff".ToHex() });
+            var infStreamItem = new PublishEntity<DataJson>("root", PublishEntity.GetUUID(), infJsonData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await _wallet.PublishStreamItemKeyFrom(_wallet.RpcOptions.ChainAdminAddress, streamItem);
+            var infPublish = await _wallet.PublishStreamItemKeyFrom(_address, infStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(infPublish.Error);
+            Assert.IsNotNull(infPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
 
             // Stage - create a new PublishEntity instance
-            jsonData = new DataJson(new { description = "Some Text Stuff".ToHex() });
-            streamItem = new PublishEntity<DataJson>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, jsonData, StreamRestrictTypes.OffChain);
+            infJsonData = new DataJson(new { description = "Some Text Stuff".ToHex() });
+            infStreamItem = new PublishEntity<DataJson>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, infJsonData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await _wallet.PublishStreamItemKeysFrom(_wallet.RpcOptions.ChainAdminAddress, streamItem);
+            infPublish = await _wallet.PublishStreamItemKeysFrom(_address, infStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(infPublish.Error);
+            Assert.IsNotNull(infPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
         }
 
         [Test]
@@ -810,58 +809,57 @@ namespace MCWrapper.RPC.Tests
            */
 
             // Stage - create a new PublishEntity instance
-            var textData = new DataText("Some Data Text for the stream item.");
-            var streamItem = new PublishEntity<DataText>("root", PublishEntity.GetUUID(), textData, StreamRestrictTypes.OffChain);
+            var expTextData = new DataText("Some Data Text for the stream item.");
+            var expStreamItem = new PublishEntity<DataText>("root", PublishEntity.GetUUID(), expTextData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await _wallet.PublishStreamItemKeyFrom(_wallet.RpcOptions.ChainName, UUID.NoHyphens, _wallet.RpcOptions.ChainAdminAddress, streamItem);
+            var expPublish = await _wallet.PublishStreamItemKeyFrom(_chainName, UUID.NoHyphens, _address, expStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(expPublish.Error);
+            Assert.IsNotNull(expPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             // Stage - create a new PublishEntity instance
-            textData = new DataText("Some Data Text for the stream item.");
-            streamItem = new PublishEntity<DataText>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, textData, StreamRestrictTypes.OffChain);
+            expTextData = new DataText("Some Data Text for the stream item.");
+            expStreamItem = new PublishEntity<DataText>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, expTextData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await _wallet.PublishStreamItemKeysFrom(_wallet.RpcOptions.ChainName, UUID.NoHyphens, _wallet.RpcOptions.ChainAdminAddress, streamItem);
+            expPublish = await _wallet.PublishStreamItemKeysFrom(_chainName, UUID.NoHyphens, _address, expStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(expPublish.Error);
+            Assert.IsNotNull(expPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             /*
                Inferred blockchain name test
             */
 
             // Stage - create a new PublishEntity instance
-            var textData = new DataText("Some Data Text for the stream item.");
-            var streamItem = new PublishEntity<DataText>("root", PublishEntity.GetUUID(), textData, StreamRestrictTypes.OffChain);
+            var infTextData = new DataText("Some Data Text for the stream item.");
+            var infStreamItem = new PublishEntity<DataText>("root", PublishEntity.GetUUID(), infTextData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            var publish = await _wallet.PublishStreamItemKeyFrom(_wallet.RpcOptions.ChainAdminAddress, streamItem);
+            var infPublish = await _wallet.PublishStreamItemKeyFrom(_address, infStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(infPublish.Error);
+            Assert.IsNotNull(infPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
 
             // Stage - create a new PublishEntity instance
-            textData = new DataText("Some Data Text for the stream item.");
-            streamItem = new PublishEntity<DataText>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, textData, StreamRestrictTypes.OffChain);
+            infTextData = new DataText("Some Data Text for the stream item.");
+            infStreamItem = new PublishEntity<DataText>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, infTextData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
-            publish = await _wallet.PublishStreamItemKeysFrom(_wallet.RpcOptions.ChainAdminAddress, streamItem);
+            infPublish = await _wallet.PublishStreamItemKeysFrom(_wallet.RpcOptions.ChainAdminAddress, infStreamItem);
 
             // Assert
-            Assert.IsNull(publish.Error);
-            Assert.IsNotNull(publish.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(publish);
+            Assert.IsNull(infPublish.Error);
+            Assert.IsNotNull(infPublish.Result);
+            Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
         }
-
 
         [Test]
         public async Task PublishMultiStreamItemsTest()
