@@ -1,4 +1,4 @@
-﻿namespace MCWrapper.RPC.Tests.FilterHelpers
+﻿namespace MCWrapper.RPC.Test.FilterHelpers
 {
     /// <summary>
     /// Please note that you CANNOT have any whitespace trailing the closing semi-colon prior to the "}" bracket else multichain-cli.exe will return a javascript parsing error

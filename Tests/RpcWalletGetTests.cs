@@ -3,12 +3,12 @@ using MCWrapper.Ledger.Entities;
 using MCWrapper.Ledger.Entities.Extensions;
 using MCWrapper.RPC.Connection;
 using MCWrapper.RPC.Ledger.Clients;
-using MCWrapper.RPC.Tests.ServicesPipeline;
+using MCWrapper.RPC.Test.ServicesPipeline;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MCWrapper.RPC.Tests
+namespace MCWrapper.RPC.Test.Gets
 {
     [TestFixture]
     public class RpcWalletGetTests

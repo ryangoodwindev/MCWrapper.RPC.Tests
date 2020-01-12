@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MCWrapper.RPC.Tests.ServicesPipeline
+namespace MCWrapper.RPC.Test.ServicesPipeline
 {
     public class ExplicitStartup : MockStartup
     {
