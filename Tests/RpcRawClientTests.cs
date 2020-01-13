@@ -64,46 +64,17 @@ namespace MCWrapper.RPC.Test.Raw
             var infAssetModel_1 = new AssetEntity();
 
             var infAsset_0 = await _wallet.IssueAsync(_chainName, UUID.NoHyphens, _address, infAssetModel_0, 100, 1, 0, new Dictionary<string, string> { { "text", "Some text in Hex".ToHex() } });
-
-            Assert.IsNull(infAsset_0.Error);
-            Assert.IsNotEmpty(infAsset_0.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(infAsset_0);
-
             var infAsset_1 = await _wallet.IssueAsync(_chainName, UUID.NoHyphens, _address, infAssetModel_1, 100, 1, 0, new Dictionary<string, string> { { "text", "Some text in Hex".ToHex() } });
 
-            Assert.IsNull(infAsset_1.Error);
-            Assert.IsNotEmpty(infAsset_1.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(infAsset_1);
-
-
             var infNewAddress_0 = await _wallet.GetNewAddressAsync(_chainName, UUID.NoHyphens);
-
-            Assert.IsNull(infNewAddress_0.Error);
-            Assert.IsNotEmpty(infNewAddress_0.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(infNewAddress_0);
-
             var infNewAddress_1 = await _wallet.GetNewAddressAsync(_chainName, UUID.NoHyphens);
-
-            Assert.IsNull(infNewAddress_1.Error);
-            Assert.IsNotEmpty(infNewAddress_1.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(infNewAddress_1);
-
 
             var infGrant = await _wallet.GrantFromAsync(_chainName, UUID.NoHyphens, _address, $"{infNewAddress_0.Result},{infNewAddress_1.Result}", $"{Permission.Receive},{Permission.Send}", 0, 1, 20000, "Comment", "CommentTo");
 
-            Assert.IsNull(infGrant.Error);
-            Assert.IsNotNull(infGrant.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(infGrant);
-
             var infListUnspent = await _wallet.ListUnspentAsync(_chainName, UUID.NoHyphens, 0, 9999, new[] { _address });
-
-            Assert.IsNull(infListUnspent.Error);
-            Assert.IsNotNull(infListUnspent.Result);
-            Assert.IsInstanceOf<RpcResponse<ListUnspentResult[]>>(infListUnspent);
 
             var unspentAsset_0 = infListUnspent.Result.SingleOrDefault(s => s.Assets.Any(a => a.Name == infAssetModel_0.Name));
             var unspentAsset_1 = infListUnspent.Result.SingleOrDefault(s => s.Assets.Any(a => a.Name == infAssetModel_1.Name));
-
             var infCreateRaw = await _raw.CreateRawTransactionAsync(_chainName, UUID.NoHyphens, new object[]
             {
                 new Dictionary<string, object>
@@ -177,41 +148,14 @@ namespace MCWrapper.RPC.Test.Raw
             var expAssetModel_1 = new AssetEntity();
 
             var expAsset_0 = await _wallet.IssueAsync(_address, expAssetModel_0, 100, 1, 0, new Dictionary<string, string> { { "text", "Some text in Hex".ToHex() } });
-
-            Assert.IsNull(expAsset_0.Error);
-            Assert.IsNotEmpty(expAsset_0.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(expAsset_0);
-
             var expAsset_1 = await _wallet.IssueAsync(_address, expAssetModel_1, 100, 1, 0, new Dictionary<string, string> { { "text", "Some text in Hex".ToHex() } });
 
-            Assert.IsNull(expAsset_1.Error);
-            Assert.IsNotEmpty(expAsset_1.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(expAsset_1);
-
             var expNewAddress_0 = await _wallet.GetNewAddressAsync();
-
-            Assert.IsNull(expNewAddress_0.Error);
-            Assert.IsNotEmpty(expNewAddress_0.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(expNewAddress_0);
-
             var expNewAddress_1 = await _wallet.GetNewAddressAsync();
-
-            Assert.IsNull(expNewAddress_1.Error);
-            Assert.IsNotEmpty(expNewAddress_1.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(expNewAddress_1);
-
 
             var expGrant = await _wallet.GrantFromAsync(_address, $"{expNewAddress_0.Result},{expNewAddress_1.Result}", $"{Permission.Receive},{Permission.Send}", 0, 1, Permission.MaxEndblock, "Comment", "CommentTo");
 
-            Assert.IsNull(expGrant.Error);
-            Assert.IsNotNull(expGrant.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(expGrant);
-
             var expListUnspent = await _wallet.ListUnspentAsync(0, 9999, new[] { _address });
-
-            Assert.IsNull(expListUnspent.Error);
-            Assert.IsNotNull(expListUnspent.Result);
-            Assert.IsInstanceOf<RpcResponse<ListUnspentResult[]>>(expListUnspent);
 
             var expUnspentAsset_0 = expListUnspent.Result.SingleOrDefault(s => s.Assets.Any(a => a.Name == expAssetModel_0.Name));
             var expUnspentAsset_1 = expListUnspent.Result.SingleOrDefault(s => s.Assets.Any(a => a.Name == expAssetModel_1.Name));
