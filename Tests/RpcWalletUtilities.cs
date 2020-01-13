@@ -1,11 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using MCWrapper.Ledger.Entities.Extensions;
+using MCWrapper.RPC.Connection;
+using MCWrapper.RPC.Ledger.Clients;
+using MCWrapper.RPC.Test.ServicesPipeline;
+using NUnit.Framework;
+using System.Threading.Tasks;
 
 namespace MCWrapper.RPC.Tests.Tests
 {
-    class RpcWalletUtilities
+    [TestFixture]
+    public class RpcWalletUtilities
     {
+        /*
+         
+            Please note: 
+
+            There are two types of methods demonstrated below for each test.
+
+            Explicit method => Requires that the target blockchain's name must be passed as an argument to the
+                               associated method.
+
+            Inferred method => The target blockchain's name is not required to be passed as an agrument directly,
+                               however, these methods do require that the RpcOptions have been configured properly
+                               during application startup.
+            
+            All variables beginning with the 'exp' prefix are the result of an explicit method.
+            All variables beginning with the 'inf' prefix are the result of an inferred method.
+             
+        */
+
+        private readonly IMultiChainRpcWallet _wallet;
+        private readonly string _chainName;
+        private readonly string _address;
+
+        private readonly ExplicitStartup _services = new ExplicitStartup();
+
+        public RpcWalletUtilities()
+        {
+            _wallet = _services.GetRequiredService<IMultiChainRpcWallet>();
+            _address = _wallet.RpcOptions.ChainAdminAddress;
+            _chainName = _wallet.RpcOptions.ChainName;
+        }
+
         [Test, Ignore("BackupWallet test ignored since it halts the blockchain network")]
         public async Task BackupWalletTestAsync()
         {
@@ -120,8 +155,6 @@ namespace MCWrapper.RPC.Tests.Tests
             Assert.IsInstanceOf<RpcResponse<object>>(inf);
         }
 
-
-
         [Test, Ignore("I don't want to import any addresses during unit testing")]
         public async Task ImportAddressTestAsync()
         {
@@ -130,24 +163,24 @@ namespace MCWrapper.RPC.Tests.Tests
             */
 
             // Act
-            RpcResponse<object> actual = await _wallet.ImportAddressAsync("some_external_address", "some_label", false);
+            var exp = await _wallet.ImportAddressAsync(_chainName, UUID.NoHyphens, "some_external_address", "some_label", false);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsNull(exp.Error);
+            Assert.IsNotNull(exp.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(exp);
 
             /*
                Inferred blockchain name test
             */
 
             // Act
-            RpcResponse<object> actual = await _wallet.ImportAddressAsync("some_external_address", "some_label", false);
+            var inf = await _wallet.ImportAddressAsync("some_external_address", "some_label", false);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsNull(inf.Error);
+            Assert.IsNotNull(inf.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(inf);
         }
 
         [Test, Ignore("I don't want to import any private keys during unit testing")]
@@ -158,24 +191,24 @@ namespace MCWrapper.RPC.Tests.Tests
             */
 
             // Act
-            RpcResponse<object> actual = await _wallet.ImportPrivKeyAsync("some_external_private_key", "some_label", false);
+            var exp = await _wallet.ImportPrivKeyAsync(_chainName, UUID.NoHyphens, "some_external_private_key", "some_label", false);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsNull(exp.Error);
+            Assert.IsNotNull(exp.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(exp);
 
             /*
                Inferred blockchain name test
             */
 
             // Act
-            RpcResponse<object> actual = await _wallet.ImportPrivKeyAsync("some_external_private_key", "some_label", false);
+            var inf = await _wallet.ImportPrivKeyAsync("some_external_private_key", "some_label", false);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsNull(inf.Error);
+            Assert.IsNotNull(inf.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(inf);
         }
 
         [Test, Ignore("Tests impacting the current wallet are ignore while general tests are running")]
@@ -186,24 +219,24 @@ namespace MCWrapper.RPC.Tests.Tests
             */
 
             // Act
-            RpcResponse<object> actual = await _wallet.ImportWalletAsync("test", false);
+            var exp = await _wallet.ImportWalletAsync(_chainName, UUID.NoHyphens, "test", false);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsNull(exp.Error);
+            Assert.IsNotNull(exp.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(exp);
 
             /*
                Inferred blockchain name test
             */
 
             // Act
-            RpcResponse<object> actual = await _wallet.ImportWalletAsync("test", false);
+            var inf = await _wallet.ImportWalletAsync("test", false);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsNull(inf.Error);
+            Assert.IsNotNull(inf.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(inf);
         }
 
         [Test, Ignore("Wallet related tests are ignored while general tests are running")]

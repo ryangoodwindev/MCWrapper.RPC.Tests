@@ -1,11 +1,52 @@
-﻿using System;
+﻿using MCWrapper.Data.Models.Wallet;
+using MCWrapper.Ledger.Entities;
+using MCWrapper.Ledger.Entities.Constants;
+using MCWrapper.Ledger.Entities.Extensions;
+using MCWrapper.RPC.Connection;
+using MCWrapper.RPC.Ledger.Clients;
+using MCWrapper.RPC.Test.ServicesPipeline;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace MCWrapper.RPC.Tests.Tests
 {
-    class RpcWalletCreateTests
+    [TestFixture]
+    public class RpcWalletCreateTests
     {
+        /*
+         
+            Please note: 
+
+            There are two types of methods demonstrated below for each test.
+
+            Explicit method => Requires that the target blockchain's name must be passed as an argument to the
+                               associated method.
+
+            Inferred method => The target blockchain's name is not required to be passed as an agrument directly,
+                               however, these methods do require that the RpcOptions have been configured properly
+                               during application startup.
+            
+            All variables beginning with the 'exp' prefix are the result of an explicit method.
+            All variables beginning with the 'inf' prefix are the result of an inferred method.
+             
+        */
+
+        // Inject services
+        private readonly IMultiChainRpcWallet _wallet;
+        private readonly string _chainName;
+        private readonly string _address;
+
+        // Use mock startup service container
+        private readonly ExplicitStartup _services = new ExplicitStartup();
+
+        public RpcWalletCreateTests()
+        {
+            _wallet = _services.GetRequiredService<IMultiChainRpcWallet>();
+            _address = _wallet.RpcOptions.ChainAdminAddress;
+            _chainName = _wallet.RpcOptions.ChainName;
+        }
 
         [Test]
         public async Task CreateFromTestAsync()

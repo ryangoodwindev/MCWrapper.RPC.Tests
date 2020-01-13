@@ -8,7 +8,6 @@ using MCWrapper.RPC.Ledger.Clients;
 using MCWrapper.RPC.Test.FilterHelpers;
 using MCWrapper.RPC.Test.ServicesPipeline;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -198,7 +197,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var expPrepareLockUnspent = await _wallet.PrepareLockUnspentAsync(_chainName, UUID.NoHyphens, new Dictionary<string, int> { { "", 0 } }, true);
             var expRawExchange = await _wallet.CreateRawExchangeAsync(_chainName, UUID.NoHyphens, expPrepareLockUnspent.Result.Txid, expPrepareLockUnspent.Result.Vout, new Dictionary<string, int> { { "", 0 } });
             var expAppendRaw = await _wallet.AppendRawExchangeAsync(_chainName, UUID.NoHyphens, expRawExchange.Result, expPrepareLockUnspent.Result.Txid, expPrepareLockUnspent.Result.Vout, new Dictionary<string, int> { { "", 0 } });
-            
+
             // Act
             var expComplete = await _wallet.CompleteRawExchangeAsync(_chainName, UUID.NoHyphens, expAppendRaw.Result.Hex, expPrepareLockUnspent.Result.Txid, expPrepareLockUnspent.Result.Vout, new Dictionary<string, int> { { "", 0 } }, "test".ToHex());
 
@@ -237,12 +236,12 @@ namespace MCWrapper.RPC.Test.Wallet
             var rawExchange = await _wallet.CreateRawExchangeAsync(_chainName, UUID.NoHyphens, prepareLockUnspent.Result.Txid, prepareLockUnspent.Result.Vout, new Dictionary<string, int> { { "", 0 } });
 
             // Act
-            var decode = await _wallet.DecodeRawExchangeAsync(_chainName, UUID.NoHyphens, rawExchange.Result, true);
+            var expDecode = await _wallet.DecodeRawExchangeAsync(_chainName, UUID.NoHyphens, rawExchange.Result, true);
 
             // Assert
-            Assert.IsNull(decode.Error);
-            Assert.IsNotNull(decode.Result);
-            Assert.IsInstanceOf<RpcResponse<DecodeRawExchangeResult>>(decode);
+            Assert.IsNull(expDecode.Error);
+            Assert.IsNotNull(expDecode.Result);
+            Assert.IsInstanceOf<RpcResponse<DecodeRawExchangeResult>>(expDecode);
 
             // Clean-up
             await _wallet.DisableRawTransactionAsync(_chainName, UUID.NoHyphens, rawExchange.Result);
@@ -311,24 +310,24 @@ namespace MCWrapper.RPC.Test.Wallet
            */
 
             // Act
-            RpcResponse<object> actual = await _wallet.KeyPoolRefillAsync(200);
+            var exp = await _wallet.KeyPoolRefillAsync(_chainName, UUID.NoHyphens, 200);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsNull(exp.Error);
+            Assert.IsNull(exp.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(exp);
 
             /*
                Inferred blockchain name test
             */
 
             // Act
-            RpcResponse<object> actual = await _wallet.KeyPoolRefillAsync(200);
+            var inf = await _wallet.KeyPoolRefillAsync(200);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsNull(inf.Error);
+            Assert.IsNull(inf.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(inf);
         }
 
         [Test]
@@ -339,30 +338,30 @@ namespace MCWrapper.RPC.Test.Wallet
            */
 
             // Stage
-            var unspent = await _wallet.PrepareLockUnspentAsync(new Dictionary<string, int> { { "", 0 } }, true);
+            var expUnspent = await _wallet.PrepareLockUnspentAsync(_chainName, UUID.NoHyphens, new Dictionary<string, int> { { "", 0 } }, true);
 
             // Act
-            RpcResponse<object> actual = await _wallet.LockUnspentAsync(false, new Transaction[] { new Transaction { Txid = unspent.Result.Txid, Vout = unspent.Result.Vout } });
+            var exp = await _wallet.LockUnspentAsync(_chainName, UUID.NoHyphens, false, new Transaction[] { new Transaction { Txid = expUnspent.Result.Txid, Vout = expUnspent.Result.Vout } });
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsNull(exp.Error);
+            Assert.IsNotNull(exp.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(exp);
 
             /*
                Inferred blockchain name test
             */
 
             // Stage
-            var unspent = await _wallet.PrepareLockUnspentAsync(new Dictionary<string, int> { { "", 0 } }, true);
+            var infUnspent = await _wallet.PrepareLockUnspentAsync(new Dictionary<string, int> { { "", 0 } }, true);
 
             // Act
-            RpcResponse<object> actual = await _wallet.LockUnspentAsync(false, new Transaction[] { new Transaction { Txid = unspent.Result.Txid, Vout = unspent.Result.Vout } });
+            var inf = await _wallet.LockUnspentAsync(false, new Transaction[] { new Transaction { Txid = infUnspent.Result.Txid, Vout = infUnspent.Result.Vout } });
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsNull(inf.Error);
+            Assert.IsNotNull(inf.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(inf);
         }
 
         [Test, Ignore("Accounts are not supported with scalable wallet - if you need move, run multichaind -walletdbversion=1 -rescan, but the wallet will perform worse")]
@@ -373,24 +372,24 @@ namespace MCWrapper.RPC.Test.Wallet
            */
 
             // Act
-            RpcResponse<object> actual = await _wallet.MoveAsync("from_account", "to_account", 0.01, 6, "Testing the Move function");
+            var exp = await _wallet.MoveAsync(_chainName, UUID.NoHyphens, "from_account", "to_account", 0.01, 6, "Testing the Move function");
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsNull(exp.Error);
+            Assert.IsNotNull(exp.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(exp);
 
             /*
                Inferred blockchain name test
             */
 
             // Act
-            RpcResponse<object> actual = await _wallet.MoveAsync("from_account", "to_account", 0.01, 6, "Testing the Move function");
+            var inf = await _wallet.MoveAsync("from_account", "to_account", 0.01, 6, "Testing the Move function");
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsNull(inf.Error);
+            Assert.IsNotNull(inf.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(inf);
         }
 
         [Test]
@@ -401,24 +400,24 @@ namespace MCWrapper.RPC.Test.Wallet
            */
 
             // Act
-            RpcResponse<PrepareLockUnspentResult> actual = await _wallet.PrepareLockUnspentAsync(new Dictionary<string, double> { { "", 0 } }, false);
+            var exp = await _wallet.PrepareLockUnspentAsync(_chainName, UUID.NoHyphens, new Dictionary<string, double> { { "", 0 } }, false);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<PrepareLockUnspentResult>>(actual);
+            Assert.IsNull(exp.Error);
+            Assert.IsNotNull(exp.Result);
+            Assert.IsInstanceOf<RpcResponse<PrepareLockUnspentResult>>(exp);
 
             /*
                Inferred blockchain name test
             */
 
             // Act
-            RpcResponse<PrepareLockUnspentResult> actual = await _wallet.PrepareLockUnspentAsync(new Dictionary<string, double> { { "", 0 } }, false);
+            var inf = await _wallet.PrepareLockUnspentAsync(new Dictionary<string, double> { { "", 0 } }, false);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<PrepareLockUnspentResult>>(actual);
+            Assert.IsNull(inf.Error);
+            Assert.IsNotNull(inf.Result);
+            Assert.IsInstanceOf<RpcResponse<PrepareLockUnspentResult>>(inf);
         }
 
         [Test]
@@ -429,24 +428,24 @@ namespace MCWrapper.RPC.Test.Wallet
            */
 
             // Act
-            RpcResponse<PrepareLockUnspentFromResult> actual = await _wallet.PrepareLockUnspentFromAsync(_address, new Dictionary<string, double> { { "", 0 } }, false);
+            var exp = await _wallet.PrepareLockUnspentFromAsync(_chainName, UUID.NoHyphens, _address, new Dictionary<string, double> { { "", 0 } }, false);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<PrepareLockUnspentFromResult>>(actual);
+            Assert.IsNull(exp.Error);
+            Assert.IsNotNull(exp.Result);
+            Assert.IsInstanceOf<RpcResponse<PrepareLockUnspentFromResult>>(exp);
 
             /*
                Inferred blockchain name test
             */
 
             // Act
-            RpcResponse<PrepareLockUnspentFromResult> actual = await _wallet.PrepareLockUnspentFromAsync(_address, new Dictionary<string, double> { { "", 0 } }, false);
+            var inf = await _wallet.PrepareLockUnspentFromAsync(_address, new Dictionary<string, double> { { "", 0 } }, false);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<PrepareLockUnspentFromResult>>(actual);
+            Assert.IsNull(inf.Error);
+            Assert.IsNotNull(inf.Result);
+            Assert.IsInstanceOf<RpcResponse<PrepareLockUnspentFromResult>>(inf);
         }
 
         [Test, Ignore("ResendWalletTransaction test is deffered from normal unit testing")]
@@ -457,24 +456,24 @@ namespace MCWrapper.RPC.Test.Wallet
            */
 
             // Act - ttempt to resend the current wallet's transaction
-            RpcResponse<object> actual = await _wallet.ResendWalletTransactionsAsync();
+            var exp = await _wallet.ResendWalletTransactionsAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsNull(exp.Error);
+            Assert.IsNotNull(exp.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(exp);
 
             /*
                Inferred blockchain name test
             */
 
             // Act - ttempt to resend the current wallet's transaction
-            RpcResponse<object> actual = await _wallet.ResendWalletTransactionsAsync();
+            var inf = await _wallet.ResendWalletTransactionsAsync();
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsNull(inf.Error);
+            Assert.IsNotNull(inf.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(inf);
         }
 
         [Test]
@@ -485,36 +484,36 @@ namespace MCWrapper.RPC.Test.Wallet
            */
 
             // Stage - Ask the blockchain network for a new address
-            var newAddress = await _wallet.GetNewAddressAsync();
+            var expNewAddress = await _wallet.GetNewAddressAsync(_chainName, UUID.NoHyphens);
 
             // Stage - Grant new address receive permissions
-            await _wallet.GrantAsync(newAddress.Result, $"{Permission.Receive},{Permission.Send}", 0, 0, 10000, "", "");
+            await _wallet.GrantAsync(_chainName, UUID.NoHyphens, expNewAddress.Result, $"{Permission.Receive},{Permission.Send}", 0, 0, 10000, "", "");
 
             // Act - Revoke send permission
-            RpcResponse<object> actual = await _wallet.RevokeAsync(newAddress.Result, "send", 0, "Permissions", "Permissions set");
+            var exp = await _wallet.RevokeAsync(_chainName, UUID.NoHyphens, expNewAddress.Result, "send", 0, "Permissions", "Permissions set");
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsNull(exp.Error);
+            Assert.IsNotNull(exp.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(exp);
 
             /*
                Inferred blockchain name test
             */
 
             // Stage - Ask the blockchain network for a new address
-            var newAddress = await _wallet.GetNewAddressAsync();
+            var infNewAddress = await _wallet.GetNewAddressAsync();
 
             // Stage - Grant new address receive permissions
-            await _wallet.GrantAsync(newAddress.Result, $"{Permission.Receive},{Permission.Send}", 0, 0, 10000, "", "");
+            await _wallet.GrantAsync(infNewAddress.Result, $"{Permission.Receive},{Permission.Send}", 0, 0, 10000, "", "");
 
             // Act - Revoke send permission
-            RpcResponse<object> actual = await _wallet.RevokeAsync(newAddress.Result, "send", 0, "Permissions", "Permissions set");
+            var inf = await _wallet.RevokeAsync(infNewAddress.Result, "send", 0, "Permissions", "Permissions set");
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsNull(inf.Error);
+            Assert.IsNotNull(inf.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(inf);
         }
 
         [Test]
@@ -525,36 +524,36 @@ namespace MCWrapper.RPC.Test.Wallet
            */
 
             // Stage - Ask the blockchain network for a new address
-            var newAddress = await _wallet.GetNewAddressAsync();
+            var expNewAddress = await _wallet.GetNewAddressAsync(_chainName, UUID.NoHyphens);
 
             // Stage - Grant new address receive permissions
-            await _wallet.GrantAsync(newAddress.Result, $"{Permission.Receive},{Permission.Send}", 0, 0, 10000, "", "");
+            await _wallet.GrantAsync(_chainName, UUID.NoHyphens, expNewAddress.Result, $"{Permission.Receive},{Permission.Send}", 0, 0, 10000, "", "");
 
             // Act - Revoke send permission
-            RpcResponse<object> actual = await _wallet.RevokeFromAsync(_address, newAddress.Result, "send", 0, "", "");
+            var exp = await _wallet.RevokeFromAsync(_chainName, UUID.NoHyphens, _address, expNewAddress.Result, "send", 0, "", "");
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsNull(exp.Error);
+            Assert.IsNotNull(exp.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(exp);
 
             /*
                Inferred blockchain name test
             */
 
             // Stage - Ask the blockchain network for a new address
-            var newAddress = await _wallet.GetNewAddressAsync();
+            var infNewAddress = await _wallet.GetNewAddressAsync();
 
             // Stage - Grant new address receive permissions
-            await _wallet.GrantAsync(newAddress.Result, $"{Permission.Receive},{Permission.Send}", 0, 0, 10000, "", "");
+            await _wallet.GrantAsync(infNewAddress.Result, $"{Permission.Receive},{Permission.Send}", 0, 0, 10000, "", "");
 
             // Act - Revoke send permission
-            RpcResponse<object> actual = await _wallet.RevokeFromAsync(_address, newAddress.Result, "send", 0, "", "");
+            var inf = await _wallet.RevokeFromAsync(_address, infNewAddress.Result, "send", 0, "", "");
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(actual);
+            Assert.IsNull(inf.Error);
+            Assert.IsNotNull(inf.Result);
+            Assert.IsInstanceOf<RpcResponse<object>>(inf);
         }
 
         [Test, Ignore("Accounts are not supported with scalable wallet - if you need move, run multichaind -walletdbversion=1 -rescan, but the wallet will perform worse")]
@@ -724,7 +723,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var exp = await _wallet.UnsubscribeAsync(_chainName, UUID.NoHyphens, "root", false);
 
             // Act
-            await _wallet.SubscribeAsync("root", false, "");
+            await _wallet.SubscribeAsync(_chainName, UUID.NoHyphens, "root", false, "");
 
             // Assert
             Assert.IsNull(exp.Error);

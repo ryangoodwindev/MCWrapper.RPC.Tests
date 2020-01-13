@@ -65,6 +65,33 @@ namespace MCWrapper.RPC.Test.ServicesPipeline
         }
     }
 
+    public class SecretsManagerStartup : MockStartup
+    {
+        /// <summary>
+        /// 
+        /// IConfigurationMockServices adds MultiChain RPC services to the test bank's
+        /// service container using the IConfiguration pipeline
+        /// .AddMultiChainCoreRpcServices(IConfiguration configuration, bool useSecrets = false) 
+        /// extension method available from the MCWrapper.RPC.Extensions namespace.
+        /// 
+        /// <para>
+        ///     The IConfiguration extension method will cause MCWrapper.RPC to load 
+        ///     the RpcOptions configuration values from an external json setttings file.
+        ///     Usually appsettings.json.
+        /// </para>
+        /// <para>Support for Secret Manager is attempted but not tested yet.</para>
+        /// </summary>
+        public SecretsManagerStartup()
+        {
+            var builder = new ConfigurationBuilder()
+                .AddUserSecrets("Enter your local secret manager id here or configure otherwise.");
+
+            IConfiguration configuration = builder.Build();
+
+            Services.AddMultiChainCoreRpcServices(configuration, useSecrets: true);
+        }
+    }
+
     public class ParameterlessStartup : MockStartup
     {
         /// <summary>
@@ -107,7 +134,7 @@ namespace MCWrapper.RPC.Test.ServicesPipeline
         /// <summary>
         /// Locate and return service type
         /// </summary>
-        /// <typeparam name="TRpc"></typeparam>
+        /// <typeparam name="TRpc">Type of IMultiChainRpc client to GET</typeparam>
         /// <returns></returns>
         public TRpc GetRequiredService<TRpc>()
         {
