@@ -8,7 +8,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MCWrapper.RPC.Tests.Tests
+namespace MCWrapper.RPC.Test.Send
 {
     [TestFixture]
     public class RpcWalletSendTests
@@ -55,8 +55,7 @@ namespace MCWrapper.RPC.Tests.Tests
             var exp = await _wallet.SendAsync(_chainName, UUID.NoHyphens, _address, 0, "Comment text", "Comment_To text");
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
+            Assert.IsTrue(exp.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(exp);
 
             /*
@@ -67,8 +66,7 @@ namespace MCWrapper.RPC.Tests.Tests
             var inf = await _wallet.SendAsync(_address, 0, "Comment text", "Comment_To text");
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNotNull(inf.Result);
+            Assert.IsTrue(inf.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(inf);
         }
 
@@ -86,9 +84,8 @@ namespace MCWrapper.RPC.Tests.Tests
             var exp = await _wallet.SendAssetAsync(_chainName, UUID.NoHyphens, _address, asset.Result, 1, 0, "Comment text", "Comment_To text");
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(exp);
+            Assert.IsTrue(exp.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<string>>(exp);
 
             /*
                Inferred blockchain name test
@@ -98,9 +95,8 @@ namespace MCWrapper.RPC.Tests.Tests
             var inf = await _wallet.SendAssetAsync(_address, asset.Result, 1, 0, "Comment text", "Comment_To text");
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNotNull(inf.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(inf);
+            Assert.IsTrue(inf.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<string>>(inf);
         }
 
         [Test]
@@ -120,9 +116,8 @@ namespace MCWrapper.RPC.Tests.Tests
             var exp = await _wallet.SendAssetFromAsync(_chainName, UUID.NoHyphens, _address, newAddress.Result, asset.Result, 1, 0, "Comment text", "Comment_To text");
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(exp);
+            Assert.IsTrue(exp.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<string>>(exp);
 
             /*
                Inferred blockchain name test
@@ -132,9 +127,8 @@ namespace MCWrapper.RPC.Tests.Tests
             var inf = await _wallet.SendAssetFromAsync(_address, newAddress.Result, asset.Result, 1, 0, "Comment text", "Comment_To text");
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNotNull(inf.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(inf);
+            Assert.IsTrue(inf.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<string>>(inf);
         }
 
         [Test]
@@ -152,9 +146,8 @@ namespace MCWrapper.RPC.Tests.Tests
             var exp = await _wallet.SendFromAsync(_chainName, UUID.NoHyphens, _address, newAddress.Result, 0, "Comment text", "Comment_To text");
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(exp);
+            Assert.IsTrue(exp.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<string>>(exp);
 
             /*
                Inferred blockchain name test
@@ -164,9 +157,8 @@ namespace MCWrapper.RPC.Tests.Tests
             var inf = await _wallet.SendFromAsync(_address, newAddress.Result, 0, "Comment text", "Comment_To text");
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNotNull(inf.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(inf);
+            Assert.IsTrue(inf.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<string>>(inf);
         }
 
         [Test, Ignore("Accounts are not supported with scalable wallet - if you need sendfrom, run multichaind -walletdbversion=1 -rescan, but the wallet will perform worse")]
@@ -180,9 +172,8 @@ namespace MCWrapper.RPC.Tests.Tests
             var exp = await _wallet.SendFromAccountAsync(_chainName, UUID.NoHyphens, _address, _address, .001, 2, "Comment Text", "Comment_To text");
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(exp);
+            Assert.IsTrue(exp.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<string>>(exp);
 
             /*
                Inferred blockchain name test
@@ -192,9 +183,8 @@ namespace MCWrapper.RPC.Tests.Tests
             var inf = await _wallet.SendFromAccountAsync(_address, _address, .001, 2, "Comment Text", "Comment_To text");
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNotNull(inf.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(inf);
+            Assert.IsTrue(inf.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<string>>(inf);
         }
 
         [Test, Ignore("Accounts are not supported with scalable wallet - if you need sendmany, run multichaind -walletdbversion=1 -rescan, but the wallet will perform worse")]
@@ -208,9 +198,8 @@ namespace MCWrapper.RPC.Tests.Tests
             var exp = await _wallet.SendManyAsync(_chainName, UUID.NoHyphens, "", new object[] { new Dictionary<string, double> { { _address, 1 } } }, 2, "Comment text");
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(exp);
+            Assert.IsTrue(exp.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<string>>(exp);
 
             /*
                Inferred blockchain name test
@@ -220,9 +209,8 @@ namespace MCWrapper.RPC.Tests.Tests
             var inf = await _wallet.SendManyAsync("", new object[] { new Dictionary<string, double> { { _address, 1 } } }, 2, "Comment text");
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNotNull(inf.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(inf);
+            Assert.IsTrue(inf.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<string>>(inf);
         }
 
         [Test]
@@ -236,9 +224,8 @@ namespace MCWrapper.RPC.Tests.Tests
             var exp = await _wallet.SendWithDataAsync(_chainName, UUID.NoHyphens, _address, 0, "some data".ToHex());
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(exp);
+            Assert.IsTrue(exp.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<string>>(exp);
 
             /*
                Inferred blockchain name test
@@ -248,9 +235,8 @@ namespace MCWrapper.RPC.Tests.Tests
             var inf = await _wallet.SendWithDataAsync(_address, 0, "some data".ToHex());
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNotNull(inf.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(inf);
+            Assert.IsTrue(inf.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<string>>(inf);
         }
 
         [Test]
@@ -264,9 +250,8 @@ namespace MCWrapper.RPC.Tests.Tests
             var exp = await _wallet.SendWithDataFromAsync(_chainName, UUID.NoHyphens, _address, _address, 0, "some data".ToHex());
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(exp);
+            Assert.IsTrue(exp.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<string>>(exp);
 
             /*
                Inferred blockchain name test
@@ -276,9 +261,8 @@ namespace MCWrapper.RPC.Tests.Tests
             var inf = await _wallet.SendWithDataFromAsync(_address, _address, 0, "some data".ToHex());
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNotNull(inf.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(inf);
+            Assert.IsTrue(inf.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<string>>(inf);
         }
     }
 }

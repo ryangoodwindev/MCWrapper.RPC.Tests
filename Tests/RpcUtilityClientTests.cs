@@ -4,6 +4,7 @@ using MCWrapper.RPC.Connection;
 using MCWrapper.RPC.Ledger.Clients;
 using MCWrapper.RPC.Test.ServicesPipeline;
 using NUnit.Framework;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MCWrapper.RPC.Test.Utility
@@ -58,8 +59,7 @@ namespace MCWrapper.RPC.Test.Utility
             var expCache = await _utility.CreateBinaryCacheAsync(_chainName, id: UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(expCache.Error);
-            Assert.IsNotNull(expCache.Result);
+            Assert.IsTrue(expCache.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expCache);
 
             // Act - Append to binary cache
@@ -67,16 +67,14 @@ namespace MCWrapper.RPC.Test.Utility
                 "Some string data we can use to generate dat hex content. An then a bit more at the end".ToHex());
 
             // Assert
-            Assert.IsNull(expAppend.Error);
-            Assert.IsNotNull(expAppend.Result);
+            Assert.IsTrue(expAppend.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<int>>(expAppend);
 
             // Act - Delete binary cache
             var expDelete = await _utility.DeleteBinaryCacheAsync(_chainName, UUID.NoHyphens, expCache.Result);
 
             // Assert
-            Assert.IsNull(expDelete.Error);
-            Assert.IsNull(expDelete.Result);
+            Assert.IsTrue(expDelete.IsSuccess());
             Assert.IsInstanceOf<RpcResponse>(expDelete);
 
             /*
@@ -87,8 +85,7 @@ namespace MCWrapper.RPC.Test.Utility
             var infCache = await _utility.CreateBinaryCacheAsync();
 
             // Assert
-            Assert.IsNull(infCache.Error);
-            Assert.IsNotNull(infCache.Result);
+            Assert.IsTrue(infCache.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infCache);
 
             // Act - Append to binary cache
@@ -96,16 +93,14 @@ namespace MCWrapper.RPC.Test.Utility
                 "Some string data we can use to generate dat hex content. An then a bit more at the end".ToHex());
 
             // Assert
-            Assert.IsNull(infAppend.Error);
-            Assert.IsNotNull(infAppend.Result);
+            Assert.IsTrue(infAppend.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<int>>(infAppend);
 
             // Act - Delete binary cache
             var infDelete = await _utility.DeleteBinaryCacheAsync(infCache.Result);
 
             // Assert
-            Assert.IsNull(infDelete.Error);
-            Assert.IsNull(infDelete.Result);
+            Assert.IsTrue(infDelete.IsSuccess());
             Assert.IsInstanceOf<RpcResponse>(infDelete);
         }
 
@@ -120,9 +115,8 @@ namespace MCWrapper.RPC.Test.Utility
             var expCreate = await _utility.CreateKeyPairsAsync(_chainName, UUID.NoHyphens, 3);
 
             // Assert
-            Assert.IsNull(expCreate.Error);
-            Assert.IsNotNull(expCreate.Result);
-            Assert.IsInstanceOf<RpcResponse<CreateKeyPairsResult[]>>(expCreate);
+            Assert.IsTrue(expCreate.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<IList<CreateKeyPairsResult>>>(expCreate);
 
             /*
                Inferred blockchain name test
@@ -132,9 +126,8 @@ namespace MCWrapper.RPC.Test.Utility
             var infCreate = await _utility.CreateKeyPairsAsync(3);
 
             // Assert
-            Assert.IsNull(infCreate.Error);
-            Assert.IsNotNull(infCreate.Result);
-            Assert.IsInstanceOf<RpcResponse<CreateKeyPairsResult[]>>(infCreate);
+            Assert.IsTrue(infCreate.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<IList<CreateKeyPairsResult>>>(infCreate);
         }
 
         [Test]
@@ -151,8 +144,7 @@ namespace MCWrapper.RPC.Test.Utility
             });
 
             // Assert
-            Assert.IsNull(expCreate.Error);
-            Assert.IsNotNull(expCreate.Result);
+            Assert.IsTrue(expCreate.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<CreateMultiSigResult>>(expCreate);
 
             /*
@@ -166,8 +158,7 @@ namespace MCWrapper.RPC.Test.Utility
             });
 
             // Assert
-            Assert.IsNull(infCreate.Error);
-            Assert.IsNotNull(infCreate.Result);
+            Assert.IsTrue(infCreate.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<CreateMultiSigResult>>(infCreate);
         }
 
@@ -182,8 +173,7 @@ namespace MCWrapper.RPC.Test.Utility
             var expFee = await _utility.EstimateFeeAsync(_chainName, UUID.NoHyphens, 78);
 
             // Assert
-            Assert.IsNull(expFee.Error);
-            Assert.IsNotNull(expFee.Result);
+            Assert.IsTrue(expFee.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<long>>(expFee);
 
             /*
@@ -194,8 +184,7 @@ namespace MCWrapper.RPC.Test.Utility
             var infFee = await _utility.EstimateFeeAsync(78);
 
             // Assert
-            Assert.IsNull(infFee.Error);
-            Assert.IsNotNull(infFee.Result);
+            Assert.IsTrue(infFee.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<long>>(infFee);
         }
 
@@ -210,8 +199,7 @@ namespace MCWrapper.RPC.Test.Utility
             var expPriority = await _utility.EstimatePriorityAsync(_chainName, UUID.NoHyphens, 78);
 
             // Assert
-            Assert.IsNull(expPriority.Error);
-            Assert.IsNotNull(expPriority.Result);
+            Assert.IsTrue(expPriority.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<float>>(expPriority);
 
             /*
@@ -222,8 +210,7 @@ namespace MCWrapper.RPC.Test.Utility
             var infPriority = await _utility.EstimatePriorityAsync(78);
 
             // Assert
-            Assert.IsNull(infPriority.Error);
-            Assert.IsNotNull(infPriority.Result);
+            Assert.IsTrue(infPriority.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<float>>(infPriority);
         }
 
@@ -238,8 +225,7 @@ namespace MCWrapper.RPC.Test.Utility
             var expValidate = await _utility.ValidateAddressAsync(_chainName, UUID.NoHyphens, _address);
 
             // Assert
-            Assert.IsNull(expValidate.Error);
-            Assert.IsNotNull(expValidate.Result);
+            Assert.IsTrue(expValidate.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<ValidateAddressResult>>(expValidate);
 
             /*
@@ -250,8 +236,7 @@ namespace MCWrapper.RPC.Test.Utility
             var infValidate = await _utility.ValidateAddressAsync(_address);
 
             // Assert
-            Assert.IsNull(infValidate.Error);
-            Assert.IsNotNull(infValidate.Result);
+            Assert.IsTrue(infValidate.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<ValidateAddressResult>>(infValidate);
         }
 
@@ -269,16 +254,14 @@ namespace MCWrapper.RPC.Test.Utility
             var expSignature = await _wallet.SignMessageAsync(_chainName, UUID.NoHyphens, _address, defaultMessage);
 
             // Assert
-            Assert.IsNull(expSignature.Error);
-            Assert.IsNotNull(expSignature.Result);
+            Assert.IsTrue(expSignature.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expSignature);
 
             // Act - Verify signed message
             var expVerify = await _utility.VerifyMessageAsync(_chainName, UUID.NoHyphens, _address, expSignature.Result, defaultMessage);
 
             // Assert
-            Assert.IsNull(expVerify.Error);
-            Assert.IsNotNull(expVerify.Result);
+            Assert.IsTrue(expVerify.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<bool>>(expVerify);
 
             /*
@@ -289,16 +272,14 @@ namespace MCWrapper.RPC.Test.Utility
             var infSignature = await _wallet.SignMessageAsync(_address, defaultMessage);
 
             // Assert
-            Assert.IsNull(infSignature.Error);
-            Assert.IsNotNull(infSignature.Result);
+            Assert.IsTrue(infSignature.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infSignature);
 
             // Act - Verify signed message
             var infActual = await _utility.VerifyMessageAsync(_address, infSignature.Result, defaultMessage);
 
             // Assert
-            Assert.IsNull(infActual.Error);
-            Assert.IsNotNull(infActual.Result);
+            Assert.IsTrue(infActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<bool>>(infActual);
         }
     }

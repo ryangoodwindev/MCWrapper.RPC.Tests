@@ -6,7 +6,7 @@ using MCWrapper.RPC.Test.ServicesPipeline;
 using NUnit.Framework;
 using System.Threading.Tasks;
 
-namespace MCWrapper.RPC.Tests.Tests
+namespace MCWrapper.RPC.Test.Grant
 {
     [TestFixture]
     public class RpcWalletGrantTests
@@ -58,8 +58,7 @@ namespace MCWrapper.RPC.Tests.Tests
             var exp = await _wallet.GrantFromAsync(_chainName, UUID.NoHyphens, _address, expNewAddress.Result, Permission.Receive, 0, 1, 1000, "", "");
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
+            Assert.IsTrue(exp.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(exp);
 
             /*
@@ -70,12 +69,11 @@ namespace MCWrapper.RPC.Tests.Tests
             var newAddress = await _wallet.GetNewAddressAsync();
 
             // Act
-            var actual = await _wallet.GrantFromAsync(_address, newAddress.Result, Permission.Receive, 0, 1, 1000, "", "");
+            var inf = await _wallet.GrantFromAsync(_address, newAddress.Result, Permission.Receive, 0, 1, 1000, "", "");
 
             // Assert
-            Assert.IsNull(actual.Error);
-            Assert.IsNotNull(actual.Result);
-            Assert.IsInstanceOf<RpcResponse<string>>(actual);
+            Assert.IsTrue(inf.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<string>>(inf);
         }
 
         [Test]
@@ -92,8 +90,7 @@ namespace MCWrapper.RPC.Tests.Tests
             var exp = await _wallet.GrantAsync(_chainName, UUID.NoHyphens, expNewAddress.Result, Permission.Receive, 0, 1, 1000, "", "");
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
+            Assert.IsTrue(exp.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(exp);
 
             /*
@@ -107,8 +104,7 @@ namespace MCWrapper.RPC.Tests.Tests
             var inf = await _wallet.GrantAsync(infNewAddress.Result, Permission.Receive, 0, 1, 1000, "", "");
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNotNull(inf.Result);
+            Assert.IsTrue(inf.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(inf);
         }
 
@@ -126,8 +122,7 @@ namespace MCWrapper.RPC.Tests.Tests
             var exp = await _wallet.GrantWithDataFromAsync(_chainName, UUID.NoHyphens, _address, expNewAddress.Result, Permission.Receive, "some_data".ToHex(), 0, 1, 1000);
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
+            Assert.IsTrue(exp.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(exp);
 
             /*
@@ -141,8 +136,7 @@ namespace MCWrapper.RPC.Tests.Tests
             var inf = await _wallet.GrantWithDataFromAsync(_address, infNewAddress.Result, Permission.Receive, "some_data".ToHex(), 0, 1, 1000);
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNotNull(inf.Result);
+            Assert.IsTrue(inf.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(inf);
         }
 
@@ -160,8 +154,7 @@ namespace MCWrapper.RPC.Tests.Tests
             var exp = await _wallet.GrantWithDataAsync(_chainName, UUID.NoHyphens, expNewAddress.Result, Permission.Receive, "some_data".ToHex(), 0, 1, 1000);
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
+            Assert.IsTrue(exp.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(exp);
 
             /*
@@ -175,8 +168,7 @@ namespace MCWrapper.RPC.Tests.Tests
             var inf = await _wallet.GrantWithDataAsync(infNewAddress.Result, Permission.Receive, "some_data".ToHex(), 0, 1, 1000);
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNotNull(inf.Result);
+            Assert.IsTrue(inf.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(inf);
         }
     }

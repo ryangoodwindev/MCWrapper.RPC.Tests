@@ -5,6 +5,7 @@ using MCWrapper.RPC.Connection;
 using MCWrapper.RPC.Ledger.Clients;
 using MCWrapper.RPC.Test.ServicesPipeline;
 using NUnit.Framework;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MCWrapper.RPC.Test.Network
@@ -55,8 +56,7 @@ namespace MCWrapper.RPC.Test.Network
             var expAdd = await _network.AddNodeAsync(_chainName, UUID.NoHyphens, "192.168.0.90:3333", PeerConnection.Add);
 
             // Assert
-            Assert.IsNull(expAdd.Error);
-            Assert.IsNotNull(expAdd.Result);
+            Assert.IsTrue(expAdd.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(expAdd);
 
             /*
@@ -67,8 +67,7 @@ namespace MCWrapper.RPC.Test.Network
             var infAdd = await _network.AddNodeAsync("192.168.0.90:3333", PeerConnection.Add);
 
             // Assert
-            Assert.IsNull(infAdd.Error);
-            Assert.IsNotNull(infAdd.Result);
+            Assert.IsTrue(infAdd.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(infAdd);
         }
 
@@ -83,9 +82,8 @@ namespace MCWrapper.RPC.Test.Network
             var expNodeInfo = await _network.GetAddedNodeInfoAsync(_chainName, UUID.NoHyphens, true, "192.168.0.90:3333");
 
             // Assert
-            Assert.IsNull(expNodeInfo.Error);
-            Assert.IsNotNull(expNodeInfo.Result);
-            Assert.IsInstanceOf<RpcResponse<GetAddNodeInfoResult[]>>(expNodeInfo);
+            Assert.IsTrue(expNodeInfo.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<List<GetAddNodeInfoResult>>>(expNodeInfo);
 
             /*
                Inferred blockchain name test
@@ -95,9 +93,8 @@ namespace MCWrapper.RPC.Test.Network
             var infNodeInfo = await _network.GetAddedNodeInfoAsync(true, "192.168.0.90:3333");
 
             // Assert
-            Assert.IsNull(infNodeInfo.Error);
-            Assert.IsNotNull(infNodeInfo.Result);
-            Assert.IsInstanceOf<RpcResponse<GetAddNodeInfoResult[]>>(infNodeInfo);
+            Assert.IsTrue(infNodeInfo.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<List<GetAddNodeInfoResult>>>(infNodeInfo);
         }
 
         [Test]
@@ -111,8 +108,7 @@ namespace MCWrapper.RPC.Test.Network
             var expChunkQueue = await _network.GetChunkQueueInfoAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(expChunkQueue.Error);
-            Assert.IsNotNull(expChunkQueue.Result);
+            Assert.IsTrue(expChunkQueue.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetChunkQueueInfoResult>>(expChunkQueue);
 
             /*
@@ -123,8 +119,7 @@ namespace MCWrapper.RPC.Test.Network
             var infChunkQueue = await _network.GetChunkQueueInfoAsync();
 
             // Assert
-            Assert.IsNull(infChunkQueue.Error);
-            Assert.IsNotNull(infChunkQueue.Result);
+            Assert.IsTrue(infChunkQueue.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetChunkQueueInfoResult>>(infChunkQueue);
         }
 
@@ -139,8 +134,7 @@ namespace MCWrapper.RPC.Test.Network
             var expChunkQueue = await _network.GetChunkQueueTotalsAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(expChunkQueue.Error);
-            Assert.IsNotNull(expChunkQueue.Result);
+            Assert.IsTrue(expChunkQueue.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetChunkQueueInfoTotalsResult>>(expChunkQueue);
 
             /*
@@ -151,8 +145,7 @@ namespace MCWrapper.RPC.Test.Network
             var infChunkQueue = await _network.GetChunkQueueTotalsAsync();
 
             // Assert
-            Assert.IsNull(infChunkQueue.Error);
-            Assert.IsNotNull(infChunkQueue.Result);
+            Assert.IsTrue(infChunkQueue.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetChunkQueueInfoTotalsResult>>(infChunkQueue);
         }
 
@@ -167,8 +160,7 @@ namespace MCWrapper.RPC.Test.Network
             var expConn = await _network.GetConnectionCountAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(expConn.Error);
-            Assert.IsNotNull(expConn.Result);
+            Assert.IsTrue(expConn.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<int>>(expConn);
 
             /*
@@ -179,8 +171,7 @@ namespace MCWrapper.RPC.Test.Network
             var infConn = await _network.GetConnectionCountAsync();
 
             // Assert
-            Assert.IsNull(infConn.Error);
-            Assert.IsNotNull(infConn.Result);
+            Assert.IsTrue(infConn.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<int>>(infConn);
         }
 
@@ -195,8 +186,7 @@ namespace MCWrapper.RPC.Test.Network
             var expNetTotals = await _network.GetNetTotalsAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(expNetTotals.Error);
-            Assert.IsNotNull(expNetTotals.Result);
+            Assert.IsTrue(expNetTotals.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetNetTotalsResult>>(expNetTotals);
 
             /*
@@ -207,8 +197,7 @@ namespace MCWrapper.RPC.Test.Network
             var infNetTotals = await _network.GetNetTotalsAsync();
 
             // Assert
-            Assert.IsNull(infNetTotals.Error);
-            Assert.IsNotNull(infNetTotals.Result);
+            Assert.IsTrue(infNetTotals.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetNetTotalsResult>>(infNetTotals);
         }
 
@@ -223,8 +212,7 @@ namespace MCWrapper.RPC.Test.Network
             var expInfo = await _network.GetNetworkInfoAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(expInfo.Error);
-            Assert.IsNotNull(expInfo.Result);
+            Assert.IsTrue(expInfo.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetNetworkInfoResult>>(expInfo);
 
             /*
@@ -235,8 +223,7 @@ namespace MCWrapper.RPC.Test.Network
             var infInfo = await _network.GetNetworkInfoAsync();
 
             // Assert
-            Assert.IsNull(infInfo.Error);
-            Assert.IsNotNull(infInfo.Result);
+            Assert.IsTrue(infInfo.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetNetworkInfoResult>>(infInfo);
         }
 
@@ -251,9 +238,8 @@ namespace MCWrapper.RPC.Test.Network
             var expPeer = await _network.GetPeerInfoAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(expPeer.Error);
-            Assert.IsNotNull(expPeer.Result);
-            Assert.IsInstanceOf<RpcResponse<GetPeerInfoResult[]>>(expPeer);
+            Assert.IsTrue(expPeer.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<IList<GetPeerInfoResult>>>(expPeer);
 
             /*
                Inferred blockchain name test
@@ -263,9 +249,8 @@ namespace MCWrapper.RPC.Test.Network
             var infPeer = await _network.GetPeerInfoAsync();
 
             // Assert
-            Assert.IsNull(infPeer.Error);
-            Assert.IsNotNull(infPeer.Result);
-            Assert.IsInstanceOf<RpcResponse<GetPeerInfoResult[]>>(infPeer);
+            Assert.IsTrue(infPeer.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<IList<GetPeerInfoResult>>>(infPeer);
         }
 
         [Test]
@@ -279,8 +264,7 @@ namespace MCWrapper.RPC.Test.Network
             var expPing = await _network.PingAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(expPing.Error);
-            Assert.IsNull(expPing.Result);
+            Assert.IsTrue(expPing.IsSuccess());
             Assert.IsInstanceOf<RpcResponse>(expPing);
 
             /*
@@ -291,8 +275,7 @@ namespace MCWrapper.RPC.Test.Network
             var infPing = await _network.PingAsync();
 
             // Assert
-            Assert.IsNull(infPing.Error);
-            Assert.IsNull(infPing.Result);
+            Assert.IsTrue(infPing.IsSuccess());
             Assert.IsInstanceOf<RpcResponse>(infPing);
         }
     }

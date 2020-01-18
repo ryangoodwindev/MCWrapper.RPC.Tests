@@ -57,8 +57,7 @@ namespace MCWrapper.RPC.Test.Gets
             var expActual = await _wallet.GetAccountAddressAsync(_chainName, UUID.NoHyphens, "some_account_name");
 
             // Assert
-            Assert.IsNull(expActual.Error);
-            Assert.IsNotNull(expActual.Result);
+            Assert.IsTrue(expActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(expActual);
 
             /*
@@ -69,8 +68,7 @@ namespace MCWrapper.RPC.Test.Gets
             var infActual = await _wallet.GetAccountAddressAsync("some_account_name");
 
             // Assert
-            Assert.IsNull(infActual.Error);
-            Assert.IsNotNull(infActual.Result);
+            Assert.IsTrue(infActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(infActual);
         }
 
@@ -85,8 +83,7 @@ namespace MCWrapper.RPC.Test.Gets
             var expActual = await _wallet.GetAccountAsync(_chainName, UUID.NoHyphens, _address);
 
             // Assert
-            Assert.IsNull(expActual.Error);
-            Assert.IsNotNull(expActual.Result);
+            Assert.IsTrue(expActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(expActual);
 
             /*
@@ -97,8 +94,7 @@ namespace MCWrapper.RPC.Test.Gets
             var infActual = await _wallet.GetAccountAsync(_address);
 
             // Assert
-            Assert.IsNull(infActual.Error);
-            Assert.IsNotNull(infActual.Result);
+            Assert.IsTrue(infActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(infActual);
         }
 
@@ -113,9 +109,8 @@ namespace MCWrapper.RPC.Test.Gets
             var expActual = await _wallet.GetAddressBalancesAsync(_chainName, UUID.NoHyphens, _address, 1, false);
 
             // Assert
-            Assert.IsNull(expActual.Error);
-            Assert.IsNotNull(expActual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetAddressBalancesResult[]>>(expActual);
+            Assert.IsTrue(expActual.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<IList<GetAddressBalancesResult>>>(expActual);
 
             /*
               Inferred blockchain name test
@@ -125,9 +120,8 @@ namespace MCWrapper.RPC.Test.Gets
             var infActual = await _wallet.GetAddressBalancesAsync(_address, 1, false);
 
             // Assert
-            Assert.IsNull(infActual.Error);
-            Assert.IsNotNull(infActual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetAddressBalancesResult[]>>(infActual);
+            Assert.IsTrue(infActual.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<IList<GetAddressBalancesResult>>>(infActual);
         }
 
         [Test, Ignore("Accounts are not supported with scalable wallet - if you need accounts, run multichaind -walletdbversion=1 -rescan, but the wallet will perform worse")]
@@ -141,8 +135,7 @@ namespace MCWrapper.RPC.Test.Gets
             var expActual = await _wallet.GetAddressesByAccountAsync(_chainName, UUID.NoHyphens, "some_account_name");
 
             // Assert
-            Assert.IsNull(expActual.Error);
-            Assert.IsNotNull(expActual.Result);
+            Assert.IsTrue(expActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(expActual);
 
             /*
@@ -153,8 +146,7 @@ namespace MCWrapper.RPC.Test.Gets
             var infActual = await _wallet.GetAddressesByAccountAsync("some_account_name");
 
             // Assert
-            Assert.IsNull(infActual.Error);
-            Assert.IsNotNull(infActual.Result);
+            Assert.IsTrue(infActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(infActual);
         }
 
@@ -169,9 +161,8 @@ namespace MCWrapper.RPC.Test.Gets
             var expActual = await _wallet.GetAddressesAsync(_chainName, UUID.NoHyphens, true);
 
             // Assert
-            Assert.IsNull(expActual.Error);
-            Assert.IsNotNull(expActual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetAddressesResult[]>>(expActual);
+            Assert.IsTrue(expActual.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<IList<GetAddressesResult>>>(expActual);
 
             /*
               Inferred blockchain name test
@@ -181,9 +172,8 @@ namespace MCWrapper.RPC.Test.Gets
             var infActual = await _wallet.GetAddressesAsync(true);
 
             // Assert
-            Assert.IsNull(infActual.Error);
-            Assert.IsNotNull(infActual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetAddressesResult[]>>(infActual);
+            Assert.IsTrue(infActual.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<IList<GetAddressesResult>>>(infActual);
         }
 
         [Test]
@@ -200,8 +190,7 @@ namespace MCWrapper.RPC.Test.Gets
             var expActual = await _wallet.GetAddressTransactionAsync(_chainName, UUID.NoHyphens, _address, transaction.Result, true);
 
             // Assert
-            Assert.IsNull(expActual.Error);
-            Assert.IsNotNull(expActual.Result);
+            Assert.IsTrue(expActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetAddressTransactionResult>>(expActual);
 
             /*
@@ -212,8 +201,7 @@ namespace MCWrapper.RPC.Test.Gets
             var infActual = await _wallet.GetAddressTransactionAsync(_address, transaction.Result, true);
 
             // Assert
-            Assert.IsNull(infActual.Error);
-            Assert.IsNotNull(infActual.Result);
+            Assert.IsTrue(infActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetAddressTransactionResult>>(infActual);
         }
 
@@ -228,8 +216,7 @@ namespace MCWrapper.RPC.Test.Gets
             var expActual = await _wallet.GetAssetBalancesAsync(_chainName, UUID.NoHyphens, "some_account_name", 2, true, true);
 
             // Assert
-            Assert.IsNull(expActual.Error);
-            Assert.IsNotNull(expActual.Result);
+            Assert.IsTrue(expActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(expActual);
 
             /*
@@ -240,8 +227,7 @@ namespace MCWrapper.RPC.Test.Gets
             var infActual = await _wallet.GetAssetBalancesAsync("some_account_name", 2, true, true);
 
             // Assert
-            Assert.IsNull(infActual.Error);
-            Assert.IsNotNull(infActual.Result);
+            Assert.IsTrue(infActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(infActual);
         }
 
@@ -260,8 +246,7 @@ namespace MCWrapper.RPC.Test.Gets
             var expActual = await _wallet.GetAssetTransactionAsync(_chainName, UUID.NoHyphens, asset.Result, asset.Result, true);
 
             // Assert
-            Assert.IsNull(expActual.Error);
-            Assert.IsNotNull(expActual.Result);
+            Assert.IsTrue(expActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetAssetTransactionResult>>(expActual);
 
             /*
@@ -272,8 +257,7 @@ namespace MCWrapper.RPC.Test.Gets
             var infActual = await _wallet.GetAssetTransactionAsync(asset.Result, asset.Result, true);
 
             // Assert
-            Assert.IsNull(infActual.Error);
-            Assert.IsNotNull(infActual.Result);
+            Assert.IsTrue(infActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetAssetTransactionResult>>(infActual);
         }
 
@@ -288,8 +272,7 @@ namespace MCWrapper.RPC.Test.Gets
             var expActual = await _wallet.GetBalanceAsync(_chainName, UUID.NoHyphens, "", 1, false);
 
             // Assert
-            Assert.IsNull(expActual.Error);
-            Assert.IsNotNull(expActual.Result);
+            Assert.IsTrue(expActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(expActual);
 
             /*
@@ -300,8 +283,7 @@ namespace MCWrapper.RPC.Test.Gets
             var infActual = await _wallet.GetBalanceAsync("", 1, false);
 
             // Assert
-            Assert.IsNull(infActual.Error);
-            Assert.IsNotNull(infActual.Result);
+            Assert.IsTrue(infActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(infActual);
         }
 
@@ -316,8 +298,7 @@ namespace MCWrapper.RPC.Test.Gets
             var expActual = await _wallet.GetMultiBalancesAsync(_chainName, UUID.NoHyphens, _address, null, 1, true, true);
 
             // Assert
-            Assert.IsNull(expActual.Error);
-            Assert.IsNotNull(expActual.Result);
+            Assert.IsTrue(expActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(expActual);
 
             /*
@@ -328,8 +309,7 @@ namespace MCWrapper.RPC.Test.Gets
             var infActual = await _wallet.GetMultiBalancesAsync(_address, null, 1, true, true);
 
             // Assert
-            Assert.IsNull(infActual.Error);
-            Assert.IsNotNull(infActual.Result);
+            Assert.IsTrue(infActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(infActual);
         }
 
@@ -344,8 +324,7 @@ namespace MCWrapper.RPC.Test.Gets
             var expActual = await _wallet.GetNewAddressAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(expActual.Error);
-            Assert.IsNotNull(expActual.Result);
+            Assert.IsTrue(expActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expActual);
 
             /*
@@ -356,8 +335,7 @@ namespace MCWrapper.RPC.Test.Gets
             var infActual = await _wallet.GetNewAddressAsync();
 
             // Assert
-            Assert.IsNull(infActual.Error);
-            Assert.IsNotNull(infActual.Result);
+            Assert.IsTrue(infActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infActual);
         }
 
@@ -372,8 +350,7 @@ namespace MCWrapper.RPC.Test.Gets
             var expActual = await _wallet.GetRawChangeAddressAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(expActual.Error);
-            Assert.IsNotNull(expActual.Result);
+            Assert.IsTrue(expActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(expActual);
 
             /*
@@ -384,8 +361,7 @@ namespace MCWrapper.RPC.Test.Gets
             var infActual = await _wallet.GetRawChangeAddressAsync();
 
             // Assert
-            Assert.IsNull(infActual.Error);
-            Assert.IsNotNull(infActual.Result);
+            Assert.IsTrue(infActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(infActual);
         }
 
@@ -400,8 +376,7 @@ namespace MCWrapper.RPC.Test.Gets
             var expActual = await _wallet.GetReceivedByAccountAsync(_chainName, UUID.NoHyphens, "some_account_name", 2);
 
             // Assert
-            Assert.IsNull(expActual.Error);
-            Assert.IsNotNull(expActual.Result);
+            Assert.IsTrue(expActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(expActual);
 
             /*
@@ -412,8 +387,7 @@ namespace MCWrapper.RPC.Test.Gets
             var infActual = await _wallet.GetReceivedByAccountAsync("some_account_name", 2);
 
             // Assert
-            Assert.IsNull(infActual.Error);
-            Assert.IsNotNull(infActual.Result);
+            Assert.IsTrue(infActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(infActual);
         }
 
@@ -428,8 +402,7 @@ namespace MCWrapper.RPC.Test.Gets
             var expActual = await _wallet.GetReceivedByAddressAsync(_chainName, UUID.NoHyphens, _address, 2);
 
             // Assert
-            Assert.IsNull(expActual.Error);
-            Assert.IsNotNull(expActual.Result);
+            Assert.IsTrue(expActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(expActual);
 
             /*
@@ -440,8 +413,7 @@ namespace MCWrapper.RPC.Test.Gets
             var infActual = await _wallet.GetReceivedByAddressAsync(_address, 2);
 
             // Assert
-            Assert.IsNull(infActual.Error);
-            Assert.IsNotNull(infActual.Result);
+            Assert.IsTrue(infActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(infActual);
         }
 
@@ -459,8 +431,7 @@ namespace MCWrapper.RPC.Test.Gets
             var expActual = await _wallet.GetStreamItemAsync(_chainName, UUID.NoHyphens, "root", publish.Result, true);
 
             // Assert
-            Assert.IsNull(expActual.Error);
-            Assert.IsNotNull(expActual.Result);
+            Assert.IsTrue(expActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetStreamItemResult>>(expActual);
 
             /*
@@ -471,8 +442,7 @@ namespace MCWrapper.RPC.Test.Gets
             var infActual = await _wallet.GetStreamItemAsync("root", publish.Result, true);
 
             // Assert
-            Assert.IsNull(infActual.Error);
-            Assert.IsNotNull(infActual.Result);
+            Assert.IsTrue(infActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetStreamItemResult>>(infActual);
         }
 
@@ -491,8 +461,7 @@ namespace MCWrapper.RPC.Test.Gets
             var expActual = await _wallet.GetStreamKeySummaryAsync(_chainName, UUID.NoHyphens, "root", streamKey, "jsonobjectmerge,ignore,recursive");
 
             // Assert
-            Assert.IsNull(expActual.Error);
-            Assert.IsNotNull(expActual.Result);
+            Assert.IsTrue(expActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(expActual);
 
             /*
@@ -503,8 +472,7 @@ namespace MCWrapper.RPC.Test.Gets
             var infActual = await _wallet.GetStreamKeySummaryAsync("root", streamKey, "jsonobjectmerge,ignore,recursive");
 
             // Assert
-            Assert.IsNull(infActual.Error);
-            Assert.IsNotNull(infActual.Result);
+            Assert.IsTrue(infActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(infActual);
         }
 
@@ -519,8 +487,7 @@ namespace MCWrapper.RPC.Test.Gets
             var expActual = await _wallet.GetStreamPublisherSummaryAsync(_chainName, UUID.NoHyphens, "root", _address, "jsonobjectmerge,ignore,recursive");
 
             // Assert
-            Assert.IsNull(expActual.Error);
-            Assert.IsNotNull(expActual.Result);
+            Assert.IsTrue(expActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(expActual);
 
             /*
@@ -531,8 +498,7 @@ namespace MCWrapper.RPC.Test.Gets
             var infActual = await _wallet.GetStreamPublisherSummaryAsync("root", _address, "jsonobjectmerge,ignore,recursive");
 
             // Assert
-            Assert.IsNull(infActual.Error);
-            Assert.IsNotNull(infActual.Result);
+            Assert.IsTrue(infActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(infActual);
         }
 
@@ -547,9 +513,8 @@ namespace MCWrapper.RPC.Test.Gets
             var expActual = await _wallet.GetTotalBalancesAsync(_chainName, UUID.NoHyphens, 1, true, false);
 
             // Assert
-            Assert.IsNull(expActual.Error);
-            Assert.IsNotNull(expActual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetTotalBalancesResult[]>>(expActual);
+            Assert.IsTrue(expActual.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<IList<GetTotalBalancesResult>>>(expActual);
 
             /*
               Inferred blockchain name test
@@ -559,9 +524,8 @@ namespace MCWrapper.RPC.Test.Gets
             var infActual = await _wallet.GetTotalBalancesAsync(1, true, false);
 
             // Assert
-            Assert.IsNull(infActual.Error);
-            Assert.IsNotNull(infActual.Result);
-            Assert.IsInstanceOf<RpcResponse<GetTotalBalancesResult[]>>(infActual);
+            Assert.IsTrue(infActual.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<IList<GetTotalBalancesResult>>>(infActual);
         }
 
         [Test]
@@ -579,8 +543,7 @@ namespace MCWrapper.RPC.Test.Gets
             var expActual = await _wallet.GetTransactionAsync(_chainName, UUID.NoHyphens, txid.Result, true);
 
             // Assert
-            Assert.IsNull(expActual.Error);
-            Assert.IsNotNull(expActual.Result);
+            Assert.IsTrue(expActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetTransactionResult>>(expActual);
 
             /*
@@ -591,8 +554,7 @@ namespace MCWrapper.RPC.Test.Gets
             var infActual = await _wallet.GetTransactionAsync(txid.Result, true);
 
             // Assert
-            Assert.IsNull(infActual.Error);
-            Assert.IsNotNull(infActual.Result);
+            Assert.IsTrue(infActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetTransactionResult>>(infActual);
         }
 
@@ -611,8 +573,7 @@ namespace MCWrapper.RPC.Test.Gets
             var expActual = await _wallet.GetTxOutDataAsync(_chainName, UUID.NoHyphens, transaction.Result.Txid, 0, 10, 0);
 
             // Assert
-            Assert.IsNull(expActual.Error);
-            Assert.IsNotNull(expActual.Result);
+            Assert.IsTrue(expActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(expActual);
 
             /*
@@ -623,8 +584,7 @@ namespace MCWrapper.RPC.Test.Gets
             var infActual = await _wallet.GetTxOutDataAsync(transaction.Result.Txid, 0, 10, 0);
 
             // Assert
-            Assert.IsNull(infActual.Error);
-            Assert.IsNotNull(infActual.Result);
+            Assert.IsTrue(infActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(infActual);
         }
 
@@ -639,8 +599,7 @@ namespace MCWrapper.RPC.Test.Gets
             var expActual = await _wallet.GetUnconfirmedBalanceAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(expActual.Error);
-            Assert.IsNotNull(expActual.Result);
+            Assert.IsTrue(expActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(expActual);
 
             /*
@@ -651,8 +610,7 @@ namespace MCWrapper.RPC.Test.Gets
             var infActual = await _wallet.GetUnconfirmedBalanceAsync();
 
             // Assert
-            Assert.IsNull(infActual.Error);
-            Assert.IsNotNull(infActual.Result);
+            Assert.IsTrue(infActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(infActual);
         }
 
@@ -667,8 +625,7 @@ namespace MCWrapper.RPC.Test.Gets
             var expActual = await _wallet.GetWalletInfoAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(expActual.Error);
-            Assert.IsNotNull(expActual.Result);
+            Assert.IsTrue(expActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetWalletInfoResult>>(expActual);
 
             /*
@@ -679,8 +636,7 @@ namespace MCWrapper.RPC.Test.Gets
             var infActual = await _wallet.GetWalletInfoAsync();
 
             // Assert
-            Assert.IsNull(infActual.Error);
-            Assert.IsNotNull(infActual.Result);
+            Assert.IsTrue(infActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetWalletInfoResult>>(infActual);
         }
 
@@ -698,8 +654,7 @@ namespace MCWrapper.RPC.Test.Gets
             var expActual = await _wallet.GetWalletTransactionAsync(_chainName, UUID.NoHyphens, publish.Result, true, true);
 
             // Assert
-            Assert.IsNull(expActual.Error);
-            Assert.IsNotNull(expActual.Result);
+            Assert.IsTrue(expActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetWalletTransactionResult>>(expActual);
 
             /*
@@ -710,8 +665,7 @@ namespace MCWrapper.RPC.Test.Gets
             var infActual = await _wallet.GetWalletTransactionAsync(publish.Result, true, true);
 
             // Assert
-            Assert.IsNull(infActual.Error);
-            Assert.IsNotNull(infActual.Result);
+            Assert.IsTrue(infActual.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetWalletTransactionResult>>(infActual);
         }
     }

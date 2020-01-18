@@ -57,8 +57,7 @@ namespace MCWrapper.RPC.Test.Issue
                 new Dictionary<string, string> { { "text", "Some test data text".ToHex() } });
 
             // Assert
-            Assert.IsNull(expAct_1.Error);
-            Assert.IsNotNull(expAct_1.Result);
+            Assert.IsTrue(expAct_1.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expAct_1);
 
             // Act
@@ -66,8 +65,7 @@ namespace MCWrapper.RPC.Test.Issue
                 new { text = "Some test data text".ToHex() });
 
             // Assert
-            Assert.IsNull(expAct_2.Error);
-            Assert.IsNotNull(expAct_2.Result);
+            Assert.IsTrue(expAct_2.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expAct_2);
 
             /*
@@ -79,8 +77,7 @@ namespace MCWrapper.RPC.Test.Issue
                 new Dictionary<string, string> { { "text", "Some test data text".ToHex() } });
 
             // Assert
-            Assert.IsNull(infAct_1.Error);
-            Assert.IsNotNull(infAct_1.Result);
+            Assert.IsTrue(infAct_1.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infAct_1);
 
             // Act
@@ -88,8 +85,7 @@ namespace MCWrapper.RPC.Test.Issue
                 new { text = "Some test data text".ToHex() });
 
             // Assert
-            Assert.IsNull(infAct_2.Error);
-            Assert.IsNotNull(infAct_2.Result);
+            Assert.IsTrue(infAct_2.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infAct_2);
         }
 
@@ -104,8 +100,7 @@ namespace MCWrapper.RPC.Test.Issue
                 new Dictionary<string, string> { { "text", "Some test data text".ToHex() } });
 
             // Assert
-            Assert.IsNull(expAct_1.Error);
-            Assert.IsNotNull(expAct_1.Result);
+            Assert.IsTrue(expAct_1.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expAct_1);
 
             // Act
@@ -113,8 +108,7 @@ namespace MCWrapper.RPC.Test.Issue
                 new { text = "Some test data text".ToHex() });
 
             // Assert
-            Assert.IsNull(expAct_2.Error);
-            Assert.IsNotNull(expAct_2.Result);
+            Assert.IsTrue(expAct_2.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expAct_2);
 
             /*
@@ -126,8 +120,7 @@ namespace MCWrapper.RPC.Test.Issue
                 new Dictionary<string, string> { { "text", "Some test data text".ToHex() } });
 
             // Assert
-            Assert.IsNull(infAct_1.Error);
-            Assert.IsNotNull(infAct_1.Result);
+            Assert.IsTrue(infAct_1.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infAct_1);
 
             // Act
@@ -135,8 +128,7 @@ namespace MCWrapper.RPC.Test.Issue
                 new { text = "Some test data text".ToHex() });
 
             // Assert
-            Assert.IsNull(infAct_2.Error);
-            Assert.IsNotNull(infAct_2.Result);
+            Assert.IsTrue(infAct_2.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infAct_2);
         }
 
@@ -151,8 +143,7 @@ namespace MCWrapper.RPC.Test.Issue
                 new Dictionary<string, string> { { "text", "Some test data text".ToHex() } });
 
             // Assert
-            Assert.IsNull(expAct_1.Error);
-            Assert.IsNotNull(expAct_1.Result);
+            Assert.IsTrue(expAct_1.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expAct_1);
 
             // Act
@@ -160,8 +151,7 @@ namespace MCWrapper.RPC.Test.Issue
                 new { text = "Some test data text".ToHex() });
 
             // Assert
-            Assert.IsNull(expAct_2.Error);
-            Assert.IsNotNull(expAct_2.Result);
+            Assert.IsTrue(expAct_2.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expAct_2);
 
             /*
@@ -173,8 +163,7 @@ namespace MCWrapper.RPC.Test.Issue
                 new Dictionary<string, string> { { "text", "Some test data text".ToHex() } });
 
             // Assert
-            Assert.IsNull(infAct_1.Error);
-            Assert.IsNotNull(infAct_1.Result);
+            Assert.IsTrue(infAct_1.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infAct_1);
 
             // Act
@@ -182,8 +171,7 @@ namespace MCWrapper.RPC.Test.Issue
                 new { text = "Some test data text".ToHex() });
 
             // Assert
-            Assert.IsNull(infAct_2.Error);
-            Assert.IsNotNull(infAct_2.Result);
+            Assert.IsTrue(infAct_2.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infAct_2);
         }
 
@@ -191,7 +179,8 @@ namespace MCWrapper.RPC.Test.Issue
         public async Task IssueMoreFromTestAsync()
         {
             // Stage
-            var issue = await _wallet.IssueFromAsync(_address, _address, new AssetEntity(), 100, 1, 0, default);
+            var issue = await _wallet.IssueFromAsync(_chainName, UUID.NoHyphens, _address, _address, new AssetEntity(), 100, 1, 0, 
+                new Dictionary<string, string> { { "text", "Some test data text".ToHex() } });
 
             /*
               Explicit blockchain name test
@@ -202,8 +191,7 @@ namespace MCWrapper.RPC.Test.Issue
                 new Dictionary<string, string> { { "text", "Some test data text".ToHex() } });
 
             // Assert
-            Assert.IsNull(expAct_1.Error);
-            Assert.IsNotNull(expAct_1.Result);
+            Assert.IsTrue(expAct_1.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(expAct_1);
 
 
@@ -212,8 +200,7 @@ namespace MCWrapper.RPC.Test.Issue
                 new { text = "Some test data text".ToHex() });
 
             // Assert
-            Assert.IsNull(expAct_2.Error);
-            Assert.IsNotNull(expAct_2.Result);
+            Assert.IsTrue(expAct_2.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(expAct_2);
 
             /*
@@ -225,8 +212,7 @@ namespace MCWrapper.RPC.Test.Issue
                 new Dictionary<string, string> { { "text", "Some test data text".ToHex() } });
 
             // Assert
-            Assert.IsNull(infAct_1.Error);
-            Assert.IsNotNull(infAct_1.Result);
+            Assert.IsTrue(infAct_1.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(infAct_1);
 
 
@@ -235,8 +221,7 @@ namespace MCWrapper.RPC.Test.Issue
                 new { text = "Some test data text".ToHex() });
 
             // Assert
-            Assert.IsNull(infAct_2.Error);
-            Assert.IsNotNull(infAct_2.Result);
+            Assert.IsTrue(infAct_2.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(infAct_2);
         }
 
@@ -255,8 +240,7 @@ namespace MCWrapper.RPC.Test.Issue
                 new Dictionary<string, string> { { "text", "Some test data text".ToHex() } });
 
             // Assert
-            Assert.IsNull(expAct_1.Error);
-            Assert.IsNotNull(expAct_1.Result);
+            Assert.IsTrue(expAct_1.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(expAct_1);
 
             // Act
@@ -264,8 +248,7 @@ namespace MCWrapper.RPC.Test.Issue
                 new { text = "Some test data text".ToHex() });
 
             // Assert
-            Assert.IsNull(expAct_2.Error);
-            Assert.IsNotNull(expAct_2.Result);
+            Assert.IsTrue(expAct_2.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(expAct_2);
 
             /*
@@ -277,8 +260,7 @@ namespace MCWrapper.RPC.Test.Issue
                 new Dictionary<string, string> { { "text", "Some test data text".ToHex() } });
 
             // Assert
-            Assert.IsNull(infAct_1.Error);
-            Assert.IsNotNull(infAct_1.Result);
+            Assert.IsTrue(infAct_1.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(infAct_1);
 
             // Act
@@ -286,8 +268,7 @@ namespace MCWrapper.RPC.Test.Issue
                 new { text = "Some test data text".ToHex() });
 
             // Assert
-            Assert.IsNull(infAct_2.Error);
-            Assert.IsNotNull(infAct_2.Result);
+            Assert.IsTrue(infAct_2.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(infAct_2);
         }
 
@@ -303,7 +284,7 @@ namespace MCWrapper.RPC.Test.Issue
            */
 
             // Act - issue a new asset using a AssetEntity class object
-            var expAct_1 = await _wallet.IssueAsync(_chainName, UUID.NoHyphens, newAddress.Result, new AssetEntity(name: UUID.NoHyphens, isOpen: true, restrictions: "send,receive"), 100, 1, 0,
+            var expAct_1 = await _wallet.IssueAsync(_chainName, UUID.NoHyphens, newAddress.Result, new AssetEntity(name: UUID.NoHyphens, open: true, restrict: "send,receive"), 100, 1, 0,
                 new Dictionary<string, string>()
                 {
                     { "text", "Dictionary test".ToHex() },
@@ -311,20 +292,16 @@ namespace MCWrapper.RPC.Test.Issue
                 });
 
             // Assert - proof issue response
-            Assert.IsNull(expAct_1.Error);
-            Assert.IsNotNull(expAct_1.Result);
-            Assert.IsInstanceOf<string>(expAct_1.Result);
+            Assert.IsTrue(expAct_1.IsSuccess());
             Assert.GreaterOrEqual(expAct_1.Result.Length, 64);
 
 
             // Act - issue a new asset using a generic object
-            var expAct_2 = await _wallet.IssueAsync(_chainName, UUID.NoHyphens, newAddress.Result, new AssetEntity(name: UUID.NoHyphens, isOpen: true, restrictions: "send,receive"), 100, 1, 0,
+            var expAct_2 = await _wallet.IssueAsync(_chainName, UUID.NoHyphens, newAddress.Result, new AssetEntity(name: UUID.NoHyphens, open: true, restrict: "send,receive"), 100, 1, 0,
                 new { text = "Dictionary test".ToHex(), description = "Even more text data".ToHex() });
 
             // Assert - proof issue response
-            Assert.IsNull(expAct_2.Error);
-            Assert.IsNotNull(expAct_2.Result);
-            Assert.IsInstanceOf<string>(expAct_2.Result);
+            Assert.IsTrue(expAct_2.IsSuccess());
             Assert.GreaterOrEqual(expAct_2.Result.Length, 64);
 
             /*
@@ -332,7 +309,7 @@ namespace MCWrapper.RPC.Test.Issue
            */
 
             // Act - issue a new asset using a AssetEntity class object
-            var infAct_1 = await _wallet.IssueAsync(newAddress.Result, new AssetEntity(name: UUID.NoHyphens, isOpen: true, restrictions: "send,receive"), 100, 1, 0,
+            var infAct_1 = await _wallet.IssueAsync(newAddress.Result, new AssetEntity(name: UUID.NoHyphens, open: true, restrict: "send,receive"), 100, 1, 0,
                 new Dictionary<string, string>()
                 {
                     { "text", "Dictionary test".ToHex() },
@@ -340,20 +317,16 @@ namespace MCWrapper.RPC.Test.Issue
                 });
 
             // Assert - proof issue response
-            Assert.IsNull(infAct_1.Error);
-            Assert.IsNotNull(infAct_1.Result);
-            Assert.IsInstanceOf<string>(infAct_1.Result);
+            Assert.IsTrue(infAct_1.IsSuccess());
             Assert.GreaterOrEqual(infAct_1.Result.Length, 64);
 
 
             // Act - issue a new asset using a generic object
-            var infAct_2 = await _wallet.IssueAsync(newAddress.Result, new AssetEntity(name: UUID.NoHyphens, isOpen: true, restrictions: "send,receive"), 100, 1, 0,
+            var infAct_2 = await _wallet.IssueAsync(newAddress.Result, new AssetEntity(name: UUID.NoHyphens, open: true, restrict: "send,receive"), 100, 1, 0,
                 new { text = "Dictionary test".ToHex(), description = "Even more text data".ToHex() });
 
             // Assert - proof issue response
-            Assert.IsNull(infAct_2.Error);
-            Assert.IsNotNull(infAct_2.Result);
-            Assert.IsInstanceOf<string>(infAct_2.Result);
+            Assert.IsTrue(infAct_2.IsSuccess());
             Assert.GreaterOrEqual(infAct_2.Result.Length, 64);
         }
 
@@ -377,9 +350,7 @@ namespace MCWrapper.RPC.Test.Issue
                 });
 
             // Assert - proof issue response
-            Assert.IsNull(expAct_1.Error);
-            Assert.IsNotNull(expAct_1.Result);
-            Assert.IsInstanceOf<string>(expAct_1.Result);
+            Assert.IsTrue(expAct_1.IsSuccess());
             Assert.GreaterOrEqual(expAct_1.Result.Length, 64);
 
 
@@ -388,9 +359,7 @@ namespace MCWrapper.RPC.Test.Issue
                 new { text = "Dictionary test".ToHex(), description = "Even more text data".ToHex() });
 
             // Assert - proof issue response
-            Assert.IsNull(expAct_2.Error);
-            Assert.IsNotNull(expAct_2.Result);
-            Assert.IsInstanceOf<string>(expAct_2.Result);
+            Assert.IsTrue(expAct_2.IsSuccess());
             Assert.GreaterOrEqual(expAct_2.Result.Length, 64);
 
             /*
@@ -406,9 +375,7 @@ namespace MCWrapper.RPC.Test.Issue
                 });
 
             // Assert - proof issue response
-            Assert.IsNull(infAct_1.Error);
-            Assert.IsNotNull(infAct_1.Result);
-            Assert.IsInstanceOf<string>(infAct_1.Result);
+            Assert.IsTrue(infAct_1.IsSuccess());
             Assert.GreaterOrEqual(infAct_1.Result.Length, 64);
 
 
@@ -417,9 +384,7 @@ namespace MCWrapper.RPC.Test.Issue
                 new { text = "Dictionary test".ToHex(), description = "Even more text data".ToHex() });
 
             // Assert - proof issue response
-            Assert.IsNull(infAct_2.Error);
-            Assert.IsNotNull(infAct_2.Result);
-            Assert.IsInstanceOf<string>(infAct_2.Result);
+            Assert.IsTrue(infAct_2.IsSuccess());
             Assert.GreaterOrEqual(infAct_2.Result.Length, 64);
         }
 
@@ -443,9 +408,7 @@ namespace MCWrapper.RPC.Test.Issue
                 });
 
             // Assert - proof issue response
-            Assert.IsNull(expAct_1.Error);
-            Assert.IsNotNull(expAct_1.Result);
-            Assert.IsInstanceOf<string>(expAct_1.Result);
+            Assert.IsTrue(expAct_1.IsSuccess());
             Assert.GreaterOrEqual(expAct_1.Result.Length, 64);
 
 
@@ -454,9 +417,7 @@ namespace MCWrapper.RPC.Test.Issue
                 new { text = "Dictionary test".ToHex(), description = "Even more text data".ToHex() });
 
             // Assert - proof issue response
-            Assert.IsNull(expAct_2.Error);
-            Assert.IsNotNull(expAct_2.Result);
-            Assert.IsInstanceOf<string>(expAct_2.Result);
+            Assert.IsTrue(expAct_2.IsSuccess());
             Assert.GreaterOrEqual(expAct_2.Result.Length, 64);
 
             /*
@@ -472,9 +433,7 @@ namespace MCWrapper.RPC.Test.Issue
                 });
 
             // Assert - proof issue response
-            Assert.IsNull(infAct_1.Error);
-            Assert.IsNotNull(infAct_1.Result);
-            Assert.IsInstanceOf<string>(infAct_1.Result);
+            Assert.IsTrue(infAct_1.IsSuccess());
             Assert.GreaterOrEqual(infAct_1.Result.Length, 64);
 
 
@@ -483,9 +442,7 @@ namespace MCWrapper.RPC.Test.Issue
                 new { text = "Dictionary test".ToHex(), description = "Even more text data".ToHex() });
 
             // Assert - proof issue response
-            Assert.IsNull(infAct_2.Error);
-            Assert.IsNotNull(infAct_2.Result);
-            Assert.IsInstanceOf<string>(infAct_2.Result);
+            Assert.IsTrue(infAct_2.IsSuccess());
             Assert.GreaterOrEqual(infAct_2.Result.Length, 64);
         }
     }

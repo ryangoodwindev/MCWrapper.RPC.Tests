@@ -54,8 +54,7 @@ namespace MCWrapper.RPC.Test.Mining
             var expGet = await _mining.GetBlockTemplateAsync(_chainName, UUID.NoHyphens, "");
 
             // Assert
-            Assert.IsNull(expGet.Result);
-            Assert.IsNotNull(expGet.Error);
+            Assert.IsTrue(expGet.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(expGet);
 
             /*
@@ -66,8 +65,7 @@ namespace MCWrapper.RPC.Test.Mining
             var infGet = await _mining.GetBlockTemplateAsync("");
 
             // Assert
-            Assert.IsNull(infGet.Result);
-            Assert.IsNotNull(infGet.Error);
+            Assert.IsTrue(infGet.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(infGet);
         }
 
@@ -82,8 +80,7 @@ namespace MCWrapper.RPC.Test.Mining
             var expGet = await _mining.GetMiningInfoAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(expGet.Error);
-            Assert.IsNotNull(expGet.Result);
+            Assert.IsTrue(expGet.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetMiningInfoResult>>(expGet);
 
             /*
@@ -94,8 +91,7 @@ namespace MCWrapper.RPC.Test.Mining
             var infGet = await _mining.GetMiningInfoAsync();
 
             // Assert
-            Assert.IsNull(infGet.Error);
-            Assert.IsNotNull(infGet.Result);
+            Assert.IsTrue(infGet.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetMiningInfoResult>>(infGet);
         }
 
@@ -110,8 +106,7 @@ namespace MCWrapper.RPC.Test.Mining
             var expGet = await _mining.GetNetworkHashPsAsync(_chainName, UUID.NoHyphens, 10, 10);
 
             // Assert
-            Assert.IsNull(expGet.Error);
-            Assert.IsNotNull(expGet.Result);
+            Assert.IsTrue(expGet.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<int>>(expGet);
 
             /*
@@ -122,8 +117,7 @@ namespace MCWrapper.RPC.Test.Mining
             var infGet = await _mining.GetNetworkHashPsAsync(10, 10);
 
             // Assert
-            Assert.IsNull(infGet.Error);
-            Assert.IsNotNull(infGet.Result);
+            Assert.IsTrue(infGet.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<int>>(infGet);
         }
 
@@ -138,8 +132,7 @@ namespace MCWrapper.RPC.Test.Mining
             var expPrioritise = await _mining.PrioritiseTransactionAsync(_chainName, UUID.NoHyphens, "some_txid_when_this_feature_is_supported", 0.0, 1000);
 
             // Assert
-            Assert.IsNull(expPrioritise.Result);
-            Assert.IsNotNull(expPrioritise.Error);
+            Assert.IsTrue(expPrioritise.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(expPrioritise);
 
             /*
@@ -150,8 +143,7 @@ namespace MCWrapper.RPC.Test.Mining
             var infPrioritise = await _mining.PrioritiseTransactionAsync("some_txid_when_this_feature_is_supported", 0.0, 1000);
 
             // Assert
-            Assert.IsNull(infPrioritise.Result);
-            Assert.IsNotNull(infPrioritise.Error);
+            Assert.IsTrue(infPrioritise.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(infPrioritise);
         }
 
@@ -166,8 +158,7 @@ namespace MCWrapper.RPC.Test.Mining
             var expSubmit = await _mining.SubmitBlockAsync(_chainName, UUID.NoHyphens, string.Empty);
 
             // Assert
-            Assert.IsNull(expSubmit.Result);
-            Assert.IsNotNull(expSubmit.Error);
+            Assert.IsTrue(expSubmit.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(expSubmit);
 
             /*
@@ -178,8 +169,7 @@ namespace MCWrapper.RPC.Test.Mining
             var infSubmit = await _mining.SubmitBlockAsync(string.Empty, "");
 
             // Assert
-            Assert.IsNull(infSubmit.Result);
-            Assert.IsNotNull(infSubmit.Error);
+            Assert.IsTrue(infSubmit.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(infSubmit);
         }
     }

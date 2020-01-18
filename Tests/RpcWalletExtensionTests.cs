@@ -6,6 +6,7 @@ using MCWrapper.RPC.Test.FilterHelpers;
 using MCWrapper.RPC.Test.ServicesPipeline;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MCWrapper.RPC.Test.Wallet.Extensions
@@ -65,8 +66,7 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var expCreateStream = await _wallet.CreateStream(_chainName, UUID.NoHyphens, expStream);
 
             // Assert
-            Assert.IsNull(expCreateStream.Error);
-            Assert.IsNotNull(expCreateStream.Result);
+            Assert.IsTrue(expCreateStream.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expCreateStream);
 
             /*
@@ -82,8 +82,7 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var infCreateStream = await _wallet.CreateStream(infStream);
 
             // Assert
-            Assert.IsNull(infCreateStream.Error);
-            Assert.IsNotNull(infCreateStream.Result);
+            Assert.IsTrue(infCreateStream.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infCreateStream);
         }
 
@@ -103,8 +102,7 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var expCreateStreamFrom = await _wallet.CreateStreamFrom(_wallet.RpcOptions.ChainName, UUID.NoHyphens, _address, expStream);
 
             // Assert
-            Assert.IsNull(expCreateStreamFrom.Error);
-            Assert.IsNotNull(expCreateStreamFrom.Result);
+            Assert.IsTrue(expCreateStreamFrom.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expCreateStreamFrom);
 
             /*
@@ -120,8 +118,7 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var infCreateStreamFrom = await _wallet.CreateStreamFrom(_wallet.RpcOptions.ChainAdminAddress, infStream);
 
             // Assert
-            Assert.IsNull(infCreateStreamFrom.Error);
-            Assert.IsNotNull(infCreateStreamFrom.Result);
+            Assert.IsTrue(infCreateStreamFrom.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infCreateStreamFrom);
         }
 
@@ -146,8 +143,7 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var expCreateUpgrade = await _wallet.CreateUpgrade(_chainName, UUID.NoHyphens, expUpgrade);
 
             // Assert
-            Assert.IsNull(expCreateUpgrade.Error);
-            Assert.IsNotNull(expCreateUpgrade.Result);
+            Assert.IsTrue(expCreateUpgrade.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expCreateUpgrade);
 
             /*
@@ -168,8 +164,7 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var infCreateUpgrade = await _wallet.CreateUpgrade(infUpgrade);
 
             // Assert
-            Assert.IsNull(infCreateUpgrade.Error);
-            Assert.IsNotNull(infCreateUpgrade.Result);
+            Assert.IsTrue(infCreateUpgrade.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infCreateUpgrade);
         }
 
@@ -194,8 +189,7 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var expCreateUpgrade = await _wallet.CreateUpgradeFrom(_chainName, UUID.NoHyphens, _address, expUpgrade);
 
             // Assert
-            Assert.IsNull(expCreateUpgrade.Error);
-            Assert.IsNotNull(expCreateUpgrade.Result);
+            Assert.IsTrue(expCreateUpgrade.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expCreateUpgrade);
 
             /*
@@ -216,8 +210,7 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var infCreateUpgrade = await _wallet.CreateUpgradeFrom(_address, infUpgrade);
 
             // Assert
-            Assert.IsNull(infCreateUpgrade.Error);
-            Assert.IsNotNull(infCreateUpgrade.Result);
+            Assert.IsTrue(infCreateUpgrade.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infCreateUpgrade);
         }
 
@@ -239,8 +232,7 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var expCreateFilter = await _wallet.CreateStreamFilter(_chainName, UUID.NoHyphens, expFilter);
 
             // Assert
-            Assert.IsNull(expCreateFilter.Error);
-            Assert.IsNotNull(expCreateFilter.Result);
+            Assert.IsTrue(expCreateFilter.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expCreateFilter);
 
             /*
@@ -258,8 +250,7 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var infCreateFilter = await _wallet.CreateStreamFilter(infFilter);
 
             // Assert
-            Assert.IsNull(infCreateFilter.Error);
-            Assert.IsNotNull(infCreateFilter.Result);
+            Assert.IsTrue(infCreateFilter.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infCreateFilter);
         }
 
@@ -281,8 +272,7 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var expCreateFilterFrom = await _wallet.CreateStreamFilterFrom(_chainName, UUID.NoHyphens, _address, expFilter);
 
             // Assert
-            Assert.IsNull(expCreateFilterFrom.Error);
-            Assert.IsNotNull(expCreateFilterFrom.Result);
+            Assert.IsTrue(expCreateFilterFrom.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expCreateFilterFrom);
 
             /*
@@ -300,8 +290,7 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var infCreateFilterFrom = await _wallet.CreateStreamFilterFrom(_address, infFilter);
 
             // Assert
-            Assert.IsNull(infCreateFilterFrom.Error);
-            Assert.IsNotNull(infCreateFilterFrom.Result);
+            Assert.IsTrue(infCreateFilterFrom.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infCreateFilterFrom);
         }
 
@@ -314,15 +303,14 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
 
             // Stage - create Tx Filter entity
             var expFilter = new TxFilterEntity();
-            expFilter.Restrictions._For = "root";
+            expFilter.Restrictions.@for = "root";
             expFilter.JavaScriptCode = JsCode.DummyTxFilterCode;
 
             // Act - attempt to create a new Tx Filter using the explicit blockchain name
             var expCreateFilter = await _wallet.CreateTxFilter(_chainName, UUID.NoHyphens, expFilter);
 
             // Assert
-            Assert.IsNull(expCreateFilter.Error);
-            Assert.IsNotNull(expCreateFilter.Result);
+            Assert.IsTrue(expCreateFilter.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expCreateFilter);
 
             /*
@@ -331,15 +319,14 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
 
             // Stage - create Tx Filter entity
             var infFilter = new TxFilterEntity();
-            infFilter.Restrictions._For = "root";
+            infFilter.Restrictions.@for = "root";
             infFilter.JavaScriptCode = JsCode.DummyTxFilterCode;
 
             // Act - attempt to create a new Tx Filter using the inferred blockchain name
             var infCreateFilter = await _wallet.CreateTxFilter(infFilter);
 
             // Assert
-            Assert.IsNull(infCreateFilter.Error);
-            Assert.IsNotNull(infCreateFilter.Result);
+            Assert.IsTrue(infCreateFilter.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infCreateFilter);
         }
 
@@ -352,15 +339,14 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
 
             // Stage - create Tx Filter entity
             var expFilter = new TxFilterEntity();
-            expFilter.Restrictions._For = "root";
+            expFilter.Restrictions.@for = "root";
             expFilter.JavaScriptCode = JsCode.DummyTxFilterCode;
 
             // Act - attempt to create a new Tx Filter from an address using the explicit blockchain name
             var expCreateFilterFrom = await _wallet.CreateTxFilterFrom(_chainName, UUID.NoHyphens, _address, expFilter);
 
             // Assert
-            Assert.IsNull(expCreateFilterFrom.Error);
-            Assert.IsNotNull(expCreateFilterFrom.Result);
+            Assert.IsTrue(expCreateFilterFrom.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expCreateFilterFrom);
 
             /*
@@ -369,15 +355,14 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
 
             // Stage - create Tx Filter entity
             var infFilter = new TxFilterEntity();
-            infFilter.Restrictions._For = "root";
+            infFilter.Restrictions.@for = "root";
             infFilter.JavaScriptCode = JsCode.DummyTxFilterCode;
 
             // Act - attempt to create a new Tx Filter from an address using the inferred blockchain name
             var infCreateFilterFrom = await _wallet.CreateTxFilterFrom(_address, infFilter);
 
             // Assert
-            Assert.IsNull(infCreateFilterFrom.Error);
-            Assert.IsNotNull(infCreateFilterFrom.Result);
+            Assert.IsTrue(infCreateFilterFrom.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infCreateFilterFrom);
         }
 
@@ -395,19 +380,17 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var expPublish = await _wallet.PublishStreamItemKey(_chainName, UUID.NoHyphens, expStreamItem);
 
             // Assert
-            Assert.IsNull(expPublish.Error);
-            Assert.IsNotNull(expPublish.Result);
+            Assert.IsTrue(expPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             // Stage - create a new PublishEntity instance
-            expStreamItem = new PublishEntity("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
+            expStreamItem = new PublishEntity("root", new List<string> { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
             expPublish = await _wallet.PublishStreamItemKeys(_chainName, UUID.NoHyphens, expStreamItem);
 
             // Assert
-            Assert.IsNull(expPublish.Error);
-            Assert.IsNotNull(expPublish.Result);
+            Assert.IsTrue(expPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             /*
@@ -421,19 +404,17 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var infPublish = await _wallet.PublishStreamItemKey(infStreamItem);
 
             // Assert
-            Assert.IsNull(infPublish.Error);
-            Assert.IsNotNull(infPublish.Result);
+            Assert.IsTrue(infPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
 
             // Stage - create a new PublishEntity instance
-            infStreamItem = new PublishEntity("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
+            infStreamItem = new PublishEntity("root", new List<string> { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
             infPublish = await _wallet.PublishStreamItemKeys(infStreamItem);
 
             // Assert
-            Assert.IsNull(infPublish.Error);
-            Assert.IsNotNull(infPublish.Result);
+            Assert.IsTrue(infPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
         }
 
@@ -453,21 +434,19 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var expPublish = await _wallet.PublishStreamItemKey(_chainName, UUID.NoHyphens, expStreamItem);
 
             // Assert
-            Assert.IsNull(expPublish.Error);
-            Assert.IsNotNull(expPublish.Result);
+            Assert.IsTrue(expPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             // Stage - Create a new BinaryCache and then create a new PublishEntity instance
             expBinaryCache = await _utility.CreateBinaryCacheAsync();
             expCachedData = new DataCached(expBinaryCache.Result);
-            expStreamItem = new PublishEntity<DataCached>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, expCachedData, StreamRestrictTypes.OffChain);
+            expStreamItem = new PublishEntity<DataCached>("root", new List<string> { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, expCachedData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
             expPublish = await _wallet.PublishStreamItemKeys(_chainName, UUID.NoHyphens, expStreamItem);
 
             // Assert
-            Assert.IsNull(expPublish.Error);
-            Assert.IsNotNull(expPublish.Result);
+            Assert.IsTrue(expPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             /*
@@ -483,21 +462,19 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var infPublish = await _wallet.PublishStreamItemKey(infStreamItem);
 
             // Assert
-            Assert.IsNull(infPublish.Error);
-            Assert.IsNotNull(infPublish.Result);
+            Assert.IsTrue(infPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
 
             // Stage - Create a new BinaryCache and then create a new PublishEntity instance
             infBinaryCache = await _utility.CreateBinaryCacheAsync();
             infCachedData = new DataCached(infBinaryCache.Result);
-            infStreamItem = new PublishEntity<DataCached>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, infCachedData, StreamRestrictTypes.OffChain);
+            infStreamItem = new PublishEntity<DataCached>("root", new List<string> { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, infCachedData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
             infPublish = await _wallet.PublishStreamItemKeys(infStreamItem);
 
             // Assert
-            Assert.IsNull(infPublish.Error);
-            Assert.IsNotNull(infPublish.Result);
+            Assert.IsTrue(infPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
         }
 
@@ -515,21 +492,18 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             // Act - attempt to Publish a new stream item using the inferred blockchain name
             var expPublish = await _wallet.PublishStreamItemKey(_chainName, UUID.NoHyphens, expStreamItem);
 
-            // Assert
-            Assert.IsNull(expPublish.Error);
-            Assert.IsNotNull(expPublish.Result);
+            Assert.IsTrue(expPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             // Stage - create a new PublishEntity instance
             expJsonData = new DataJson(new { description = "Some Text Stuff".ToHex() });
-            expStreamItem = new PublishEntity<DataJson>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, expJsonData, StreamRestrictTypes.OffChain);
+            expStreamItem = new PublishEntity<DataJson>("root", new List<string> { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, expJsonData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
             expPublish = await _wallet.PublishStreamItemKeys(_chainName, UUID.NoHyphens, expStreamItem);
 
             // Assert
-            Assert.IsNull(expPublish.Error);
-            Assert.IsNotNull(expPublish.Result);
+            Assert.IsTrue(expPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             /*
@@ -544,20 +518,18 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var infPublish = await _wallet.PublishStreamItemKey(infStreamItem);
 
             // Assert
-            Assert.IsNull(infPublish.Error);
-            Assert.IsNotNull(infPublish.Result);
+            Assert.IsTrue(infPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
 
             // Stage - create a new PublishEntity instance
             infJsonData = new DataJson(new { description = "Some Text Stuff".ToHex() });
-            infStreamItem = new PublishEntity<DataJson>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, infJsonData, StreamRestrictTypes.OffChain);
+            infStreamItem = new PublishEntity<DataJson>("root", new List<string> { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, infJsonData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
             infPublish = await _wallet.PublishStreamItemKeys(infStreamItem);
 
             // Assert
-            Assert.IsNull(infPublish.Error);
-            Assert.IsNotNull(infPublish.Result);
+            Assert.IsTrue(infPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
         }
 
@@ -576,20 +548,18 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var expPublish = await _wallet.PublishStreamItemKey(_chainName, UUID.NoHyphens, expStreamItem);
 
             // Assert
-            Assert.IsNull(expPublish.Error);
-            Assert.IsNotNull(expPublish.Result);
+            Assert.IsTrue(expPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             // Stage - create a new PublishEntity instance
             expTextData = new DataText("Some Data Text for the stream item.");
-            expStreamItem = new PublishEntity<DataText>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, expTextData, StreamRestrictTypes.OffChain);
+            expStreamItem = new PublishEntity<DataText>("root", new List<string> { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, expTextData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
             expPublish = await _wallet.PublishStreamItemKeys(_chainName, UUID.NoHyphens, expStreamItem);
 
             // Assert
-            Assert.IsNull(expPublish.Error);
-            Assert.IsNotNull(expPublish.Result);
+            Assert.IsTrue(expPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             /*
@@ -604,20 +574,18 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var infPublish = await _wallet.PublishStreamItemKey(infStreamItem);
 
             // Assert
-            Assert.IsNull(infPublish.Error);
-            Assert.IsNotNull(infPublish.Result);
+            Assert.IsTrue(infPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
 
             // Stage - create a new PublishEntity instance
             infTextData = new DataText("Some Data Text for the stream item.");
-            infStreamItem = new PublishEntity<DataText>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, infTextData, StreamRestrictTypes.OffChain);
+            infStreamItem = new PublishEntity<DataText>("root", new List<string> { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, infTextData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
             infPublish = await _wallet.PublishStreamItemKeys(infStreamItem);
 
             // Assert
-            Assert.IsNull(infPublish.Error);
-            Assert.IsNotNull(infPublish.Result);
+            Assert.IsTrue(infPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
         }
 
@@ -635,19 +603,17 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var expPublish = await _wallet.PublishStreamItemKeyFrom(_chainName, UUID.NoHyphens, _address, expStreamItem);
 
             // Assert
-            Assert.IsNull(expPublish.Error);
-            Assert.IsNotNull(expPublish.Result);
+            Assert.IsTrue(expPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             // Stage - create a new PublishEntity instance
-            expStreamItem = new PublishEntity("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
+            expStreamItem = new PublishEntity("root", new List<string> { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
             expPublish = await _wallet.PublishStreamItemKeysFrom(_chainName, UUID.NoHyphens, _address, expStreamItem);
 
             // Assert
-            Assert.IsNull(expPublish.Error);
-            Assert.IsNotNull(expPublish.Result);
+            Assert.IsTrue(expPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             /*
@@ -661,19 +627,17 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var infPublish = await _wallet.PublishStreamItemKeyFrom(_wallet.RpcOptions.ChainAdminAddress, infStreamItem);
 
             // Assert
-            Assert.IsNull(infPublish.Error);
-            Assert.IsNotNull(infPublish.Result);
+            Assert.IsTrue(infPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
 
             // Stage - create a new PublishEntity instance
-            infStreamItem = new PublishEntity("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
+            infStreamItem = new PublishEntity("root", new List<string> { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, "Some StreamItem Data".ToHex(), StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
             infPublish = await _wallet.PublishStreamItemKeysFrom(_wallet.RpcOptions.ChainAdminAddress, infStreamItem);
 
             // Assert
-            Assert.IsNull(infPublish.Error);
-            Assert.IsNotNull(infPublish.Result);
+            Assert.IsTrue(infPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
         }
 
@@ -693,21 +657,19 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var expPublish = await _wallet.PublishStreamItemKeyFrom(_chainName, UUID.NoHyphens, _address, expStreamItem);
 
             // Assert
-            Assert.IsNull(expPublish.Error);
-            Assert.IsNotNull(expPublish.Result);
+            Assert.IsTrue(expPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             // Stage - Create a new BinaryCache and then create a new PublishEntity instance
             expBinaryCache = await _utility.CreateBinaryCacheAsync();
             expCachedData = new DataCached(expBinaryCache.Result);
-            expStreamItem = new PublishEntity<DataCached>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, expCachedData, StreamRestrictTypes.OffChain);
+            expStreamItem = new PublishEntity<DataCached>("root", new List<string> { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, expCachedData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
             expPublish = await _wallet.PublishStreamItemKeysFrom(_chainName, UUID.NoHyphens, _address, expStreamItem);
 
             // Assert
-            Assert.IsNull(expPublish.Error);
-            Assert.IsNotNull(expPublish.Result);
+            Assert.IsTrue(expPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             /*
@@ -723,21 +685,19 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var infPublish = await _wallet.PublishStreamItemKeyFrom(_address, infStreamItem);
 
             // Assert
-            Assert.IsNull(infPublish.Error);
-            Assert.IsNotNull(infPublish.Result);
+            Assert.IsTrue(infPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
 
             // Stage - Create a new BinaryCache and then create a new PublishEntity instance
             infBinaryCache = await _utility.CreateBinaryCacheAsync();
             infCachedData = new DataCached(infBinaryCache.Result);
-            infStreamItem = new PublishEntity<DataCached>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, infCachedData, StreamRestrictTypes.OffChain);
+            infStreamItem = new PublishEntity<DataCached>("root", new List<string> { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, infCachedData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
             infPublish = await _wallet.PublishStreamItemKeysFrom(_address, infStreamItem);
 
             // Assert
-            Assert.IsNull(infPublish.Error);
-            Assert.IsNotNull(infPublish.Result);
+            Assert.IsTrue(infPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
         }
 
@@ -756,20 +716,18 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var expPublish = await _wallet.PublishStreamItemKeyFrom(_chainName, UUID.NoHyphens, _address, expStreamItem);
 
             // Assert
-            Assert.IsNull(expPublish.Error);
-            Assert.IsNotNull(expPublish.Result);
+            Assert.IsTrue(expPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             // Stage - create a new PublishEntity instance
             expJsonData = new DataJson(new { description = "Some Text Stuff".ToHex() });
-            expStreamItem = new PublishEntity<DataJson>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, expJsonData, StreamRestrictTypes.OffChain);
+            expStreamItem = new PublishEntity<DataJson>("root", new List<string> { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, expJsonData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
             expPublish = await _wallet.PublishStreamItemKeysFrom(_chainName, UUID.NoHyphens, _address, expStreamItem);
 
             // Assert
-            Assert.IsNull(expPublish.Error);
-            Assert.IsNotNull(expPublish.Result);
+            Assert.IsTrue(expPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             /*
@@ -784,20 +742,18 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var infPublish = await _wallet.PublishStreamItemKeyFrom(_address, infStreamItem);
 
             // Assert
-            Assert.IsNull(infPublish.Error);
-            Assert.IsNotNull(infPublish.Result);
+            Assert.IsTrue(infPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
 
             // Stage - create a new PublishEntity instance
             infJsonData = new DataJson(new { description = "Some Text Stuff".ToHex() });
-            infStreamItem = new PublishEntity<DataJson>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, infJsonData, StreamRestrictTypes.OffChain);
+            infStreamItem = new PublishEntity<DataJson>("root", new List<string> { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, infJsonData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
             infPublish = await _wallet.PublishStreamItemKeysFrom(_address, infStreamItem);
 
             // Assert
-            Assert.IsNull(infPublish.Error);
-            Assert.IsNotNull(infPublish.Result);
+            Assert.IsTrue(infPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
         }
 
@@ -816,20 +772,18 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var expPublish = await _wallet.PublishStreamItemKeyFrom(_chainName, UUID.NoHyphens, _address, expStreamItem);
 
             // Assert
-            Assert.IsNull(expPublish.Error);
-            Assert.IsNotNull(expPublish.Result);
+            Assert.IsTrue(expPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             // Stage - create a new PublishEntity instance
             expTextData = new DataText("Some Data Text for the stream item.");
-            expStreamItem = new PublishEntity<DataText>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, expTextData, StreamRestrictTypes.OffChain);
+            expStreamItem = new PublishEntity<DataText>("root", new List<string> { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, expTextData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
             expPublish = await _wallet.PublishStreamItemKeysFrom(_chainName, UUID.NoHyphens, _address, expStreamItem);
 
             // Assert
-            Assert.IsNull(expPublish.Error);
-            Assert.IsNotNull(expPublish.Result);
+            Assert.IsTrue(expPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             /*
@@ -844,20 +798,18 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var infPublish = await _wallet.PublishStreamItemKeyFrom(_address, infStreamItem);
 
             // Assert
-            Assert.IsNull(infPublish.Error);
-            Assert.IsNotNull(infPublish.Result);
+            Assert.IsTrue(infPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
 
             // Stage - create a new PublishEntity instance
             infTextData = new DataText("Some Data Text for the stream item.");
-            infStreamItem = new PublishEntity<DataText>("root", new[] { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, infTextData, StreamRestrictTypes.OffChain);
+            infStreamItem = new PublishEntity<DataText>("root", new List<string> { PublishEntity.GetUUID(), PublishEntity.GetUUID() }, infTextData, StreamRestrictTypes.OffChain);
 
             // Act - attempt to Publish a new stream item using the inferred blockchain name
             infPublish = await _wallet.PublishStreamItemKeysFrom(_wallet.RpcOptions.ChainAdminAddress, infStreamItem);
 
             // Assert
-            Assert.IsNull(infPublish.Error);
-            Assert.IsNotNull(infPublish.Result);
+            Assert.IsTrue(infPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
         }
 
@@ -878,72 +830,72 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             // Stage - Create a single instance of each available Data object type
             var expDataHexEntityKey = new PublishMultiItemKeyEntity
             {
-                For = "root",
-                Key = ChainEntity.GetUUID(),
-                Options = StreamRestrictTypes.OffChain,
-                DataHex = "Some data string converted to Hex".ToHex()
+                @for = "root",
+                key = ChainEntity.GetUUID(),
+                options = StreamRestrictTypes.OffChain,
+                data = "Some data string converted to Hex".ToHex()
             };
 
             var expDataHexEntityKeys = new PublishMultiItemKeysEntity
             {
-                For = "root",
-                Keys = new[] { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
-                Options = StreamRestrictTypes.OffChain,
-                DataHex = "Some data string converted to Hex".ToHex()
+                @for = "root",
+                keys = new List<string> { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
+                options = StreamRestrictTypes.OffChain,
+                data = "Some data string converted to Hex".ToHex()
             };
 
             var expCache = await _utility.CreateBinaryCacheAsync();
             var expDataCachedEntityKey = new PublishMultiItemKeyEntity<DataCached>
             {
-                For = "root",
-                Key = ChainEntity.GetUUID(),
-                Options = StreamRestrictTypes.OffChain,
-                Data = new DataCached(expCache.Result)
+                @for = "root",
+                key = ChainEntity.GetUUID(),
+                options = StreamRestrictTypes.OffChain,
+                data = new DataCached(expCache.Result)
             };
 
             expCache = await _utility.CreateBinaryCacheAsync();
             var expDataCachedEntityKeys = new PublishMultiItemKeysEntity<DataCached>
             {
-                For = "root",
-                Keys = new[] { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
-                Options = StreamRestrictTypes.OffChain,
-                Data = new DataCached(expCache.Result)
+                @for = "root",
+                keys = new List<string> { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
+                options = StreamRestrictTypes.OffChain,
+                data = new DataCached(expCache.Result)
             };
 
             var expDataJsonEntityKey = new PublishMultiItemKeyEntity<DataJson>
             {
-                For = "root",
-                Key = ChainEntity.GetUUID(),
-                Options = StreamRestrictTypes.OffChain,
-                Data = new DataJson(new { description = "Some description text in Hex".ToHex() })
+                @for = "root",
+                key = ChainEntity.GetUUID(),
+                options = StreamRestrictTypes.OffChain,
+                data = new DataJson(new { description = "Some description text in Hex".ToHex() })
             };
 
             var expDataJsonEntityKeys = new PublishMultiItemKeysEntity<DataJson>
             {
-                For = "root",
-                Keys = new[] { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
-                Options = StreamRestrictTypes.OffChain,
-                Data = new DataJson(new { description = "Some description text in Hex".ToHex() })
+                @for = "root",
+                keys = new List<string> { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
+                options = StreamRestrictTypes.OffChain,
+                data = new DataJson(new { description = "Some description text in Hex".ToHex() })
             };
 
             var expDataTextEntityKey = new PublishMultiItemKeyEntity<DataText>
             {
-                For = "root",
-                Key = ChainEntity.GetUUID(),
-                Options = StreamRestrictTypes.OffChain,
-                Data = new DataText("Some plain text for the DataText")
+                @for = "root",
+                key = ChainEntity.GetUUID(),
+                options = StreamRestrictTypes.OffChain,
+                data = new DataText("Some plain text for the DataText")
             };
 
             var expDataTextEntityKeys = new PublishMultiItemKeysEntity<DataText>
             {
-                For = "root",
-                Keys = new[] { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
-                Options = StreamRestrictTypes.OffChain,
-                Data = new DataText("Some plain text for the DataText")
+                @for = "root",
+                keys = new List<string> { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
+                options = StreamRestrictTypes.OffChain,
+                data = new DataText("Some plain text for the DataText")
             };
 
             // Stage - Append each data object to an array and assign it to the multi variable
-            expMulti.Items = (new object[]
+            expMulti.Items = new List<object>
             {
                 expDataHexEntityKey,
                 expDataHexEntityKeys,
@@ -953,14 +905,13 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
                 expDataJsonEntityKeys,
                 expDataTextEntityKey,
                 expDataTextEntityKeys
-            });
+            };
 
             // Asert - Attempt to Publish multiple items to the blockchain stream
             var expPublish = await _wallet.PublishMultiStreamItems(_chainName, UUID.NoHyphens, expMulti);
 
             // Assert
-            Assert.IsNull(expPublish.Error);
-            Assert.IsNotNull(expPublish.Result);
+            Assert.IsTrue(expPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             /*
@@ -977,72 +928,72 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             // Stage - Create a single instance of each available Data object type
             var infDataHexEntityKey = new PublishMultiItemKeyEntity
             {
-                For = "root",
-                Key = ChainEntity.GetUUID(),
-                Options = StreamRestrictTypes.OffChain,
-                DataHex = "Some data string converted to Hex".ToHex()
+                @for = "root",
+                key = ChainEntity.GetUUID(),
+                options = StreamRestrictTypes.OffChain,
+                data = "Some data string converted to Hex".ToHex()
             };
 
             var infDataHexEntityKeys = new PublishMultiItemKeysEntity
             {
-                For = "root",
-                Keys = new[] { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
-                Options = StreamRestrictTypes.OffChain,
-                DataHex = "Some data string converted to Hex".ToHex()
+                @for = "root",
+                keys = new List<string> { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
+                options = StreamRestrictTypes.OffChain,
+                data = "Some data string converted to Hex".ToHex()
             };
 
             var infCache = await _utility.CreateBinaryCacheAsync();
             var infDataCachedEntityKey = new PublishMultiItemKeyEntity<DataCached>
             {
-                For = "root",
-                Key = ChainEntity.GetUUID(),
-                Options = StreamRestrictTypes.OffChain,
-                Data = new DataCached(infCache.Result)
+                @for = "root",
+                key = ChainEntity.GetUUID(),
+                options = StreamRestrictTypes.OffChain,
+                data = new DataCached(infCache.Result)
             };
 
             infCache = await _utility.CreateBinaryCacheAsync();
             var infDataCachedEntityKeys = new PublishMultiItemKeysEntity<DataCached>
             {
-                For = "root",
-                Keys = new[] { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
-                Options = StreamRestrictTypes.OffChain,
-                Data = new DataCached(infCache.Result)
+                @for = "root",
+                keys = new List<string> { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
+                options = StreamRestrictTypes.OffChain,
+                data = new DataCached(infCache.Result)
             };
 
             var infDataJsonEntityKey = new PublishMultiItemKeyEntity<DataJson>
             {
-                For = "root",
-                Key = ChainEntity.GetUUID(),
-                Options = StreamRestrictTypes.OffChain,
-                Data = new DataJson(new { description = "Some description text in Hex".ToHex() })
+                @for = "root",
+                key = ChainEntity.GetUUID(),
+                options = StreamRestrictTypes.OffChain,
+                data = new DataJson(new { description = "Some description text in Hex".ToHex() })
             };
 
             var infDataJsonEntityKeys = new PublishMultiItemKeysEntity<DataJson>
             {
-                For = "root",
-                Keys = new[] { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
-                Options = StreamRestrictTypes.OffChain,
-                Data = new DataJson(new { description = "Some description text in Hex".ToHex() })
+                @for = "root",
+                keys = new List<string> { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
+                options = StreamRestrictTypes.OffChain,
+                data = new DataJson(new { description = "Some description text in Hex".ToHex() })
             };
 
             var infDataTextEntityKey = new PublishMultiItemKeyEntity<DataText>
             {
-                For = "root",
-                Key = ChainEntity.GetUUID(),
-                Options = StreamRestrictTypes.OffChain,
-                Data = new DataText("Some plain text for the DataText")
+                @for = "root",
+                key = ChainEntity.GetUUID(),
+                options = StreamRestrictTypes.OffChain,
+                data = new DataText("Some plain text for the DataText")
             };
 
             var infDataTextEntityKeys = new PublishMultiItemKeysEntity<DataText>
             {
-                For = "root",
-                Keys = new[] { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
-                Options = StreamRestrictTypes.OffChain,
-                Data = new DataText("Some plain text for the DataText")
+                @for = "root",
+                keys = new List<string> { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
+                options = StreamRestrictTypes.OffChain,
+                data = new DataText("Some plain text for the DataText")
             };
 
             // Stage - Append each data object to an array and assign it to the multi variable
-            infMulti.Items = (new object[]
+            infMulti.Items = new List<object>
             {
                 infDataHexEntityKey,
                 infDataHexEntityKeys,
@@ -1052,14 +1003,13 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
                 infDataJsonEntityKeys,
                 infDataTextEntityKey,
                 infDataTextEntityKeys
-            });
+            };
 
             // Asert - Attempt to Publish multiple items to the blockchain stream
             var infPublish = await _wallet.PublishMultiStreamItems(infMulti);
 
             // Assert
-            Assert.IsNull(infPublish.Error);
-            Assert.IsNotNull(infPublish.Result);
+            Assert.IsTrue(infPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
         }
 
@@ -1080,72 +1030,72 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             // Stage - Create a single instance of each available Data object type
             var expDataHexEntityKey = new PublishMultiItemKeyEntity
             {
-                For = "root",
-                Key = ChainEntity.GetUUID(),
-                Options = StreamRestrictTypes.OffChain,
-                DataHex = "Some data string converted to Hex".ToHex()
+                @for = "root",
+                key = ChainEntity.GetUUID(),
+                options = StreamRestrictTypes.OffChain,
+                data = "Some data string converted to Hex".ToHex()
             };
 
             var expDataHexEntityKeys = new PublishMultiItemKeysEntity
             {
-                For = "root",
-                Keys = new[] { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
-                Options = StreamRestrictTypes.OffChain,
-                DataHex = "Some data string converted to Hex".ToHex()
+                @for = "root",
+                keys = new List<string> { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
+                options = StreamRestrictTypes.OffChain,
+                data = "Some data string converted to Hex".ToHex()
             };
 
             var expCache = await _utility.CreateBinaryCacheAsync();
             var expDataCachedEntityKey = new PublishMultiItemKeyEntity<DataCached>
             {
-                For = "root",
-                Key = ChainEntity.GetUUID(),
-                Options = StreamRestrictTypes.OffChain,
-                Data = new DataCached(expCache.Result)
+                @for = "root",
+                key = ChainEntity.GetUUID(),
+                options = StreamRestrictTypes.OffChain,
+                data = new DataCached(expCache.Result)
             };
 
             expCache = await _utility.CreateBinaryCacheAsync();
             var expDataCachedEntityKeys = new PublishMultiItemKeysEntity<DataCached>
             {
-                For = "root",
-                Keys = new[] { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
-                Options = StreamRestrictTypes.OffChain,
-                Data = new DataCached(expCache.Result)
+                @for = "root",
+                keys = new List<string> { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
+                options = StreamRestrictTypes.OffChain,
+                data = new DataCached(expCache.Result)
             };
 
             var expDataJsonEntityKey = new PublishMultiItemKeyEntity<DataJson>
             {
-                For = "root",
-                Key = ChainEntity.GetUUID(),
-                Options = StreamRestrictTypes.OffChain,
-                Data = new DataJson(new { description = "Some description text in Hex".ToHex() })
+                @for = "root",
+                key = ChainEntity.GetUUID(),
+                options = StreamRestrictTypes.OffChain,
+                data = new DataJson(new { description = "Some description text in Hex".ToHex() })
             };
 
             var expDataJsonEntityKeys = new PublishMultiItemKeysEntity<DataJson>
             {
-                For = "root",
-                Keys = new[] { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
-                Options = StreamRestrictTypes.OffChain,
-                Data = new DataJson(new { description = "Some description text in Hex".ToHex() })
+                @for = "root",
+                keys = new List<string> { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
+                options = StreamRestrictTypes.OffChain,
+                data = new DataJson(new { description = "Some description text in Hex".ToHex() })
             };
 
             var expDataTextEntityKey = new PublishMultiItemKeyEntity<DataText>
             {
-                For = "root",
-                Key = ChainEntity.GetUUID(),
-                Options = StreamRestrictTypes.OffChain,
-                Data = new DataText("Some plain text for the DataText")
+                @for = "root",
+                key = ChainEntity.GetUUID(),
+                options = StreamRestrictTypes.OffChain,
+                data = new DataText("Some plain text for the DataText")
             };
 
             var expDataTextEntityKeys = new PublishMultiItemKeysEntity<DataText>
             {
-                For = "root",
-                Keys = new[] { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
-                Options = StreamRestrictTypes.OffChain,
-                Data = new DataText("Some plain text for the DataText")
+                @for = "root",
+                keys = new List<string> { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
+                options = StreamRestrictTypes.OffChain,
+                data = new DataText("Some plain text for the DataText")
             };
 
             // Stage - Append each data object to an array and assign it to the multi variable
-            expMulti.Items = new object[]
+            expMulti.Items = new List<object>
             {
                 expDataHexEntityKey,
                 expDataHexEntityKeys,
@@ -1161,8 +1111,7 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var expPublish = await _wallet.PublishMultiStreamItemsFrom(_chainName, UUID.NoHyphens, _address, expMulti);
 
             // Assert
-            Assert.IsNull(expPublish.Error);
-            Assert.IsNotNull(expPublish.Result);
+            Assert.IsTrue(expPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expPublish);
 
             /*
@@ -1179,72 +1128,72 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             // Stage - Create a single instance of each available Data object type
             var infDataHexEntityKey = new PublishMultiItemKeyEntity
             {
-                For = "root",
-                Key = ChainEntity.GetUUID(),
-                Options = StreamRestrictTypes.OffChain,
-                DataHex = "Some data string converted to Hex".ToHex()
+                @for = "root",
+                key = ChainEntity.GetUUID(),
+                options = StreamRestrictTypes.OffChain,
+                data = "Some data string converted to Hex".ToHex()
             };
 
             var infDataHexEntityKeys = new PublishMultiItemKeysEntity
             {
-                For = "root",
-                Keys = new[] { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
-                Options = StreamRestrictTypes.OffChain,
-                DataHex = "Some data string converted to Hex".ToHex()
+                @for = "root",
+                keys = new List<string> { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
+                options = StreamRestrictTypes.OffChain,
+                data = "Some data string converted to Hex".ToHex()
             };
 
             var infCache = await _utility.CreateBinaryCacheAsync();
             var infDataCachedEntityKey = new PublishMultiItemKeyEntity<DataCached>
             {
-                For = "root",
-                Key = ChainEntity.GetUUID(),
-                Options = StreamRestrictTypes.OffChain,
-                Data = new DataCached(infCache.Result)
+                @for = "root",
+                key = ChainEntity.GetUUID(),
+                options = StreamRestrictTypes.OffChain,
+                data = new DataCached(infCache.Result)
             };
 
             infCache = await _utility.CreateBinaryCacheAsync();
             var infDataCachedEntityKeys = new PublishMultiItemKeysEntity<DataCached>
             {
-                For = "root",
-                Keys = new[] { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
-                Options = StreamRestrictTypes.OffChain,
-                Data = new DataCached(infCache.Result)
+                @for = "root",
+                keys = new List<string> { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
+                options = StreamRestrictTypes.OffChain,
+                data = new DataCached(infCache.Result)
             };
 
             var infDataJsonEntityKey = new PublishMultiItemKeyEntity<DataJson>
             {
-                For = "root",
-                Key = ChainEntity.GetUUID(),
-                Options = StreamRestrictTypes.OffChain,
-                Data = new DataJson(new { description = "Some description text in Hex".ToHex() })
+                @for = "root",
+                key = ChainEntity.GetUUID(),
+                options = StreamRestrictTypes.OffChain,
+                data = new DataJson(new { description = "Some description text in Hex".ToHex() })
             };
 
             var infDataJsonEntityKeys = new PublishMultiItemKeysEntity<DataJson>
             {
-                For = "root",
-                Keys = new[] { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
-                Options = StreamRestrictTypes.OffChain,
-                Data = new DataJson(new { description = "Some description text in Hex".ToHex() })
+                @for = "root",
+                keys = new List<string> { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
+                options = StreamRestrictTypes.OffChain,
+                data = new DataJson(new { description = "Some description text in Hex".ToHex() })
             };
 
             var infDataTextEntityKey = new PublishMultiItemKeyEntity<DataText>
             {
-                For = "root",
-                Key = ChainEntity.GetUUID(),
-                Options = StreamRestrictTypes.OffChain,
-                Data = new DataText("Some plain text for the DataText")
+                @for = "root",
+                key = ChainEntity.GetUUID(),
+                options = StreamRestrictTypes.OffChain,
+                data = new DataText("Some plain text for the DataText")
             };
 
             var infDataTextEntityKeys = new PublishMultiItemKeysEntity<DataText>
             {
-                For = "root",
-                Keys = new[] { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
-                Options = StreamRestrictTypes.OffChain,
-                Data = new DataText("Some plain text for the DataText")
+                @for = "root",
+                keys = new List<string> { ChainEntity.GetUUID(), ChainEntity.GetUUID() },
+                options = StreamRestrictTypes.OffChain,
+                data = new DataText("Some plain text for the DataText")
             };
 
             // Stage - Append each data object to an array and assign it to the multi variable
-            infMulti.Items = new object[]
+            infMulti.Items = new List<object>
             {
                     infDataHexEntityKey,
                     infDataHexEntityKeys,
@@ -1260,8 +1209,7 @@ namespace MCWrapper.RPC.Test.Wallet.Extensions
             var infPublish = await _wallet.PublishMultiStreamItemsFrom(_address, infMulti);
 
             // Assert
-            Assert.IsNull(infPublish.Error);
-            Assert.IsNotNull(infPublish.Result);
+            Assert.IsTrue(infPublish.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infPublish);
         }
     }

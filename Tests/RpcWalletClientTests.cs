@@ -63,8 +63,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var exp = await _wallet.AddMultiSigAddressAsync(_chainName, UUID.NoHyphens, 1, new[] { _address });
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
+            Assert.IsTrue(exp.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(exp);
 
             /*
@@ -75,8 +74,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var inf = await _wallet.AddMultiSigAddressAsync(1, new[] { _address });
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNotNull(inf.Result);
+            Assert.IsTrue(inf.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(inf);
         }
 
@@ -96,8 +94,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var expAppendRaw = await _wallet.AppendRawExchangeAsync(_chainName, UUID.NoHyphens, expRawExch.Result, expLocked.Result.Txid, expLocked.Result.Vout, new Dictionary<string, int> { { "", 0 } });
 
             // Assert
-            Assert.IsNull(expAppendRaw.Error);
-            Assert.IsNotNull(expAppendRaw.Result);
+            Assert.IsTrue(expAppendRaw.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<AppendRawExchangeResult>>(expAppendRaw);
 
             // Clean-up
@@ -116,8 +113,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var infAppendRaw = await _wallet.AppendRawExchangeAsync(infRawExch.Result, infLocked.Result.Txid, infLocked.Result.Vout, new Dictionary<string, int> { { "", 0 } });
 
             // Assert
-            Assert.IsNull(infAppendRaw.Error);
-            Assert.IsNotNull(infAppendRaw.Result);
+            Assert.IsTrue(infAppendRaw.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<AppendRawExchangeResult>>(infAppendRaw);
 
             // Clean-up
@@ -138,8 +134,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var expApprove = await _wallet.ApproveFromAsync(_chainName, UUID.NoHyphens, _address, expFilter.Result, true);
 
             // Assert
-            Assert.IsNull(expApprove.Error);
-            Assert.IsNotNull(expApprove.Result);
+            Assert.IsTrue(expApprove.IsSuccess()); ;
             Assert.IsInstanceOf<RpcResponse<object>>(expApprove);
 
             /*
@@ -153,8 +148,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var infApprove = await _wallet.ApproveFromAsync(_address, infFilter.Result, true);
 
             // Assert
-            Assert.IsNull(infApprove.Error);
-            Assert.IsNotNull(infApprove.Result);
+            Assert.IsTrue(infApprove.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(infApprove);
         }
 
@@ -169,8 +163,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var expCombine = await _wallet.CombineUnspentAsync(_chainName, UUID.NoHyphens, _address, 1, 100, 2, 1000, 15);
 
             // Assert
-            Assert.IsNull(expCombine.Error);
-            Assert.IsNotNull(expCombine.Result);
+            Assert.IsTrue(expCombine.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(expCombine);
 
             /*
@@ -181,8 +174,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var infCombine = await _wallet.CombineUnspentAsync(_address, 1, 100, 2, 1000, 15);
 
             // Assert
-            Assert.IsNull(infCombine.Error);
-            Assert.IsNotNull(infCombine.Result);
+            Assert.IsTrue(infCombine.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(infCombine);
         }
 
@@ -202,8 +194,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var expComplete = await _wallet.CompleteRawExchangeAsync(_chainName, UUID.NoHyphens, expAppendRaw.Result.Hex, expPrepareLockUnspent.Result.Txid, expPrepareLockUnspent.Result.Vout, new Dictionary<string, int> { { "", 0 } }, "test".ToHex());
 
             // Assert
-            Assert.IsNull(expComplete.Error);
-            Assert.IsNotNull(expComplete.Result);
+            Assert.IsTrue(expComplete.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(expComplete);
 
             /*
@@ -219,8 +210,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var infComplete = await _wallet.CompleteRawExchangeAsync(infAppendRaw.Result.Hex, infPrepareLockUnspent.Result.Txid, infPrepareLockUnspent.Result.Vout, new Dictionary<string, int> { { "", 0 } }, "test".ToHex());
 
             // Assert
-            Assert.IsNull(infComplete.Error);
-            Assert.IsNotNull(infComplete.Result);
+            Assert.IsTrue(infComplete.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(infComplete);
         }
 
@@ -239,8 +229,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var expDecode = await _wallet.DecodeRawExchangeAsync(_chainName, UUID.NoHyphens, rawExchange.Result, true);
 
             // Assert
-            Assert.IsNull(expDecode.Error);
-            Assert.IsNotNull(expDecode.Result);
+            Assert.IsTrue(expDecode.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<DecodeRawExchangeResult>>(expDecode);
 
             // Clean-up
@@ -258,8 +247,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var infDecode = await _wallet.DecodeRawExchangeAsync(infRawExchange.Result, true);
 
             // Assert
-            Assert.IsNull(infDecode.Error);
-            Assert.IsNotNull(infDecode.Result);
+            Assert.IsTrue(infDecode.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<DecodeRawExchangeResult>>(infDecode);
 
             // Clean-up
@@ -281,8 +269,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var expDisable = await _wallet.DisableRawTransactionAsync(_chainName, UUID.NoHyphens, iexpRawExchange.Result);
 
             // Assert
-            Assert.IsNull(expDisable.Error);
-            Assert.IsNotNull(expDisable.Result);
+            Assert.IsTrue(expDisable.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(expDisable);
 
             /*
@@ -297,8 +284,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var infDisable = await _wallet.DisableRawTransactionAsync(infRawExchange.Result);
 
             // Assert
-            Assert.IsNull(infDisable.Error);
-            Assert.IsNotNull(infDisable.Result);
+            Assert.IsTrue(infDisable.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(infDisable);
         }
 
@@ -313,8 +299,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var exp = await _wallet.KeyPoolRefillAsync(_chainName, UUID.NoHyphens, 200);
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNull(exp.Result);
+            Assert.IsTrue(exp.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(exp);
 
             /*
@@ -325,8 +310,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var inf = await _wallet.KeyPoolRefillAsync(200);
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNull(inf.Result);
+            Assert.IsTrue(inf.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(inf);
         }
 
@@ -341,11 +325,10 @@ namespace MCWrapper.RPC.Test.Wallet
             var expUnspent = await _wallet.PrepareLockUnspentAsync(_chainName, UUID.NoHyphens, new Dictionary<string, int> { { "", 0 } }, true);
 
             // Act
-            var exp = await _wallet.LockUnspentAsync(_chainName, UUID.NoHyphens, false, new Transaction[] { new Transaction { Txid = expUnspent.Result.Txid, Vout = expUnspent.Result.Vout } });
+            var exp = await _wallet.LockUnspentAsync(_chainName, UUID.NoHyphens, false, new Transaction[] { new Transaction { txid = expUnspent.Result.Txid, vout = expUnspent.Result.Vout } });
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
+            Assert.IsTrue(exp.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(exp);
 
             /*
@@ -356,11 +339,10 @@ namespace MCWrapper.RPC.Test.Wallet
             var infUnspent = await _wallet.PrepareLockUnspentAsync(new Dictionary<string, int> { { "", 0 } }, true);
 
             // Act
-            var inf = await _wallet.LockUnspentAsync(false, new Transaction[] { new Transaction { Txid = infUnspent.Result.Txid, Vout = infUnspent.Result.Vout } });
+            var inf = await _wallet.LockUnspentAsync(false, new Transaction[] { new Transaction { txid = infUnspent.Result.Txid, vout = infUnspent.Result.Vout } });
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNotNull(inf.Result);
+            Assert.IsTrue(inf.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(inf);
         }
 
@@ -375,8 +357,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var exp = await _wallet.MoveAsync(_chainName, UUID.NoHyphens, "from_account", "to_account", 0.01, 6, "Testing the Move function");
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
+            Assert.IsTrue(exp.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(exp);
 
             /*
@@ -387,8 +368,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var inf = await _wallet.MoveAsync("from_account", "to_account", 0.01, 6, "Testing the Move function");
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNotNull(inf.Result);
+            Assert.IsTrue(inf.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(inf);
         }
 
@@ -403,8 +383,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var exp = await _wallet.PrepareLockUnspentAsync(_chainName, UUID.NoHyphens, new Dictionary<string, double> { { "", 0 } }, false);
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
+            Assert.IsTrue(exp.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<PrepareLockUnspentResult>>(exp);
 
             /*
@@ -415,8 +394,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var inf = await _wallet.PrepareLockUnspentAsync(new Dictionary<string, double> { { "", 0 } }, false);
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNotNull(inf.Result);
+            Assert.IsTrue(inf.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<PrepareLockUnspentResult>>(inf);
         }
 
@@ -431,8 +409,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var exp = await _wallet.PrepareLockUnspentFromAsync(_chainName, UUID.NoHyphens, _address, new Dictionary<string, double> { { "", 0 } }, false);
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
+            Assert.IsTrue(exp.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<PrepareLockUnspentFromResult>>(exp);
 
             /*
@@ -443,8 +420,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var inf = await _wallet.PrepareLockUnspentFromAsync(_address, new Dictionary<string, double> { { "", 0 } }, false);
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNotNull(inf.Result);
+            Assert.IsTrue(inf.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<PrepareLockUnspentFromResult>>(inf);
         }
 
@@ -459,8 +435,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var exp = await _wallet.ResendWalletTransactionsAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
+            Assert.IsTrue(exp.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(exp);
 
             /*
@@ -471,8 +446,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var inf = await _wallet.ResendWalletTransactionsAsync();
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNotNull(inf.Result);
+            Assert.IsTrue(inf.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(inf);
         }
 
@@ -487,15 +461,14 @@ namespace MCWrapper.RPC.Test.Wallet
             var expNewAddress = await _wallet.GetNewAddressAsync(_chainName, UUID.NoHyphens);
 
             // Stage - Grant new address receive permissions
-            await _wallet.GrantAsync(_chainName, UUID.NoHyphens, expNewAddress.Result, $"{Permission.Receive},{Permission.Send}", 0, 0, 10000, "", "");
+            await _wallet.GrantAsync(_chainName, UUID.NoHyphens, expNewAddress.Result, $"{Permission.Receive},{Permission.Send}", 0, 0, Permission.MaxEndblock, "", "");
 
             // Act - Revoke send permission
             var exp = await _wallet.RevokeAsync(_chainName, UUID.NoHyphens, expNewAddress.Result, "send", 0, "Permissions", "Permissions set");
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(exp);
+            Assert.IsTrue(exp.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<string>>(exp);
 
             /*
                Inferred blockchain name test
@@ -505,15 +478,14 @@ namespace MCWrapper.RPC.Test.Wallet
             var infNewAddress = await _wallet.GetNewAddressAsync();
 
             // Stage - Grant new address receive permissions
-            await _wallet.GrantAsync(infNewAddress.Result, $"{Permission.Receive},{Permission.Send}", 0, 0, 10000, "", "");
+            await _wallet.GrantAsync(infNewAddress.Result, $"{Permission.Receive},{Permission.Send}", 0, 0, Permission.MaxEndblock, "", "");
 
             // Act - Revoke send permission
             var inf = await _wallet.RevokeAsync(infNewAddress.Result, "send", 0, "Permissions", "Permissions set");
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNotNull(inf.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(inf);
+            Assert.IsTrue(inf.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<string>>(inf);
         }
 
         [Test]
@@ -533,9 +505,8 @@ namespace MCWrapper.RPC.Test.Wallet
             var exp = await _wallet.RevokeFromAsync(_chainName, UUID.NoHyphens, _address, expNewAddress.Result, "send", 0, "", "");
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(exp);
+            Assert.IsTrue(exp.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<string>>(exp);
 
             /*
                Inferred blockchain name test
@@ -551,9 +522,8 @@ namespace MCWrapper.RPC.Test.Wallet
             var inf = await _wallet.RevokeFromAsync(_address, infNewAddress.Result, "send", 0, "", "");
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNotNull(inf.Result);
-            Assert.IsInstanceOf<RpcResponse<object>>(inf);
+            Assert.IsTrue(inf.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<string>>(inf);
         }
 
         [Test, Ignore("Accounts are not supported with scalable wallet - if you need move, run multichaind -walletdbversion=1 -rescan, but the wallet will perform worse")]
@@ -567,8 +537,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var exp = await _wallet.SetAccountAsync(_chainName, UUID.NoHyphens, _address, "master_account");
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
+            Assert.IsTrue(exp.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(exp);
 
             /*
@@ -579,8 +548,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var inf = await _wallet.SetAccountAsync(_address, "master_account");
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNotNull(inf.Result);
+            Assert.IsTrue(inf.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(inf);
         }
 
@@ -595,8 +563,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var exp = await _wallet.SetTxFeeAsync(_chainName, UUID.NoHyphens, 0.0001);
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
+            Assert.IsTrue(exp.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(exp);
 
             /*
@@ -607,8 +574,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var inf = await _wallet.SetTxFeeAsync(0.0001);
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNotNull(inf.Result);
+            Assert.IsTrue(inf.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(inf);
         }
 
@@ -623,8 +589,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var exp = await _wallet.SignMessageAsync(_chainName, UUID.NoHyphens, _address, "Testing the SignMessage function");
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
+            Assert.IsTrue(exp.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(exp);
 
             /*
@@ -635,8 +600,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var inf = await _wallet.SignMessageAsync(_address, "Testing the SignMessage function");
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNotNull(inf.Result);
+            Assert.IsTrue(inf.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(inf);
         }
 
@@ -651,8 +615,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var exp = await _wallet.SubscribeAsync(_chainName, UUID.NoHyphens, "root", false, "");
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNull(exp.Result);
+            Assert.IsTrue(exp.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(exp);
 
             /*
@@ -663,8 +626,7 @@ namespace MCWrapper.RPC.Test.Wallet
             var inf = await _wallet.SubscribeAsync("root", false, "");
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNull(inf.Result);
+            Assert.IsTrue(inf.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(inf);
         }
 
@@ -687,8 +649,7 @@ namespace MCWrapper.RPC.Test.Wallet
             await _utility.DeleteBinaryCacheAsync(_chainName, UUID.NoHyphens, expBinaryCache.Result);
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
+            Assert.IsTrue(exp.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<double>>(exp);
 
             /*
@@ -707,8 +668,7 @@ namespace MCWrapper.RPC.Test.Wallet
             await _utility.DeleteBinaryCacheAsync(infBinaryCache.Result);
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNotNull(inf.Result);
+            Assert.IsTrue(inf.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<double>>(inf);
         }
 
@@ -726,8 +686,7 @@ namespace MCWrapper.RPC.Test.Wallet
             await _wallet.SubscribeAsync(_chainName, UUID.NoHyphens, "root", false, "");
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNull(exp.Result);
+            Assert.IsTrue(exp.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(exp);
 
             /*
@@ -741,8 +700,7 @@ namespace MCWrapper.RPC.Test.Wallet
             await _wallet.SubscribeAsync("root", false, "");
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNull(inf.Result);
+            Assert.IsTrue(inf.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(inf);
         }
     }

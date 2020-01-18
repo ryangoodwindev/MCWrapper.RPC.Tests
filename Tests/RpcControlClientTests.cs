@@ -56,8 +56,7 @@ namespace MCWrapper.RPC.Test.Control
             var expParams = await _control.GetBlockchainParamsAsync(_chainName, UUID.NoHyphens, true, true);
 
             // Assert
-            Assert.IsNull(expParams.Error);
-            Assert.IsNotNull(expParams.Result);
+            Assert.IsTrue(expParams.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetBlockchainParamsResult>>(expParams);
 
             /*
@@ -68,8 +67,7 @@ namespace MCWrapper.RPC.Test.Control
             var infParams = await _control.GetBlockchainParamsAsync(true, true);
 
             // Assert
-            Assert.IsNull(infParams.Error);
-            Assert.IsNotNull(infParams.Result);
+            Assert.IsTrue(infParams.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetBlockchainParamsResult>>(infParams);
         }
 
@@ -84,8 +82,7 @@ namespace MCWrapper.RPC.Test.Control
             var expInfo = await _control.GetInfoAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(expInfo.Error);
-            Assert.IsNotNull(expInfo.Result);
+            Assert.IsTrue(expInfo.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetInfoResult>>(expInfo);
 
             /*
@@ -96,8 +93,7 @@ namespace MCWrapper.RPC.Test.Control
             var infInfo = await _control.GetInfoAsync();
 
             // Assert
-            Assert.IsNull(infInfo.Error);
-            Assert.IsNotNull(infInfo.Result);
+            Assert.IsTrue(infInfo.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetInfoResult>>(infInfo);
         }
 
@@ -112,8 +108,7 @@ namespace MCWrapper.RPC.Test.Control
             var expInit = await _control.GetInitStatusAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(expInit.Error);
-            Assert.IsNotNull(expInit.Result);
+            Assert.IsTrue(expInit.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetInitStatusResult>>(expInit);
 
             /*
@@ -124,8 +119,7 @@ namespace MCWrapper.RPC.Test.Control
             var infInit = await _control.GetInitStatusAsync();
 
             // Assert
-            Assert.IsNull(infInit.Error);
-            Assert.IsNotNull(infInit.Result);
+            Assert.IsTrue(infInit.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetInitStatusResult>>(infInit);
         }
 
@@ -140,8 +134,7 @@ namespace MCWrapper.RPC.Test.Control
             var expParams = await _control.GetRuntimeParamsAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(expParams.Error);
-            Assert.IsNotNull(expParams.Result);
+            Assert.IsTrue(expParams.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetRuntimeParamsResult>>(expParams);
 
             /*
@@ -152,8 +145,7 @@ namespace MCWrapper.RPC.Test.Control
             var infParams = await _control.GetRuntimeParamsAsync();
 
             // Assert
-            Assert.IsNull(infParams.Error);
-            Assert.IsNotNull(infParams.Result);
+            Assert.IsTrue(expParams.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<GetRuntimeParamsResult>>(infParams);
         }
 
@@ -168,8 +160,7 @@ namespace MCWrapper.RPC.Test.Control
             var expHelp = await _control.HelpAsync(_chainName, UUID.NoHyphens, BlockchainAction.GetAssetInfoMethod);
 
             // Assert
-            Assert.IsNull(expHelp.Error);
-            Assert.IsNotNull(expHelp.Result);
+            Assert.IsTrue(expHelp.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expHelp);
 
             /*
@@ -180,8 +171,7 @@ namespace MCWrapper.RPC.Test.Control
             var infHelp = await _control.HelpAsync(BlockchainAction.GetAssetInfoMethod);
 
             // Assert
-            Assert.IsNull(infHelp.Error);
-            Assert.IsNotNull(infHelp.Result);
+            Assert.IsTrue(infHelp.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infHelp);
         }
 
@@ -196,8 +186,7 @@ namespace MCWrapper.RPC.Test.Control
             var expSet = await _control.SetRuntimeParamAsync(_chainName, UUID.NoHyphens, RuntimeParam.MaxShownData, 1048576);
 
             // Assert
-            Assert.IsNull(expSet.Error);
-            Assert.IsNull(expSet.Result);
+            Assert.IsTrue(expSet.IsSuccess());
             Assert.IsInstanceOf<RpcResponse>(expSet);
 
             /*
@@ -208,8 +197,7 @@ namespace MCWrapper.RPC.Test.Control
             var infSet = await _control.SetRuntimeParamAsync(RuntimeParam.MaxShownData, 1048576);
 
             // Assert
-            Assert.IsNull(infSet.Error);
-            Assert.IsNull(infSet.Result);
+            Assert.IsTrue(infSet.IsSuccess());
             Assert.IsInstanceOf<RpcResponse>(infSet);
         }
 
@@ -224,24 +212,21 @@ namespace MCWrapper.RPC.Test.Control
             var expPause = await _control.PauseAsync(_chainName, UUID.NoHyphens, NodeTask.All);
 
             // Assert
-            Assert.IsNull(expPause.Error);
-            Assert.IsNotNull(expPause.Result);
+            Assert.IsTrue(expPause.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expPause);
 
             // Act - Clear blockchain mem pool
             var expClearMemPool = await _control.ClearMemPoolAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(expClearMemPool.Error);
-            Assert.IsNotNull(expClearMemPool.Result);
+            Assert.IsTrue(expClearMemPool.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expClearMemPool);
 
             // Act - Resume blockchain network actions
             var expResume = await _control.ResumeAsync(_chainName, UUID.NoHyphens, NodeTask.All);
 
             // Assert
-            Assert.IsNull(expResume.Error);
-            Assert.IsNotNull(expResume.Result);
+            Assert.IsTrue(expResume.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expResume);
 
             /*
@@ -252,24 +237,21 @@ namespace MCWrapper.RPC.Test.Control
             var infPause = await _control.PauseAsync(tasks: NodeTask.All);
 
             // Assert
-            Assert.IsNull(infPause.Error);
-            Assert.IsNotNull(infPause.Result);
+            Assert.IsTrue(infPause.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infPause);
 
             // Act - Clear blockchain mem pool
             var infClearMemPool = await _control.ClearMemPoolAsync();
 
             // Assert
-            Assert.IsNull(infClearMemPool.Error);
-            Assert.IsNotNull(infClearMemPool.Result);
+            Assert.IsTrue(infClearMemPool.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infClearMemPool);
 
             // Act - Resume blockchain network actions
             var infResume = await _control.ResumeAsync(tasks: NodeTask.All);
 
             // Assert
-            Assert.IsNull(infResume.Error);
-            Assert.IsNotNull(infResume.Result);
+            Assert.IsTrue(infResume.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infResume);
         }
 
@@ -286,8 +268,7 @@ namespace MCWrapper.RPC.Test.Control
             await _control.ResumeAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(expSet.Error);
-            Assert.IsNotNull(expSet.Result);
+            Assert.IsTrue(expSet.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expSet);
 
             /*
@@ -300,8 +281,7 @@ namespace MCWrapper.RPC.Test.Control
             await _control.ResumeAsync();
 
             // Assert
-            Assert.IsNull(infSet.Error);
-            Assert.IsNotNull(infSet.Result);
+            Assert.IsTrue(infSet.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infSet);
         }
 
@@ -316,8 +296,7 @@ namespace MCWrapper.RPC.Test.Control
             var expStop = await _control.StopAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(expStop.Error);
-            Assert.IsNotNull(expStop.Result);
+            Assert.IsTrue(expStop.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expStop);
 
             /*
@@ -329,8 +308,7 @@ namespace MCWrapper.RPC.Test.Control
             // var infStop = await _control.StopAsync();
 
             // Assert
-            // Assert.IsNull(infStop.Error);
-            // Assert.IsNotNull(infStop.Result);
+            // Assert.IsTrue(infStop.IsSuccess());
             // Assert.IsInstanceOf<RpcResponse<string>>(infStop);
         }
     }

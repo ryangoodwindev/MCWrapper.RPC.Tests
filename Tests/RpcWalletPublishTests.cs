@@ -5,7 +5,7 @@ using MCWrapper.RPC.Test.ServicesPipeline;
 using NUnit.Framework;
 using System.Threading.Tasks;
 
-namespace MCWrapper.RPC.Tests.Tests
+namespace MCWrapper.RPC.Test.Publish
 {
     [TestFixture]
     public class RpcWalletPublishTests
@@ -52,8 +52,7 @@ namespace MCWrapper.RPC.Tests.Tests
             var exp = await _wallet.PublishAsync(_chainName, UUID.NoHyphens, "root", "test_key", "some_data".ToHex(), "offchain");
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
+            Assert.IsTrue(exp.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(exp);
 
             /*
@@ -64,8 +63,7 @@ namespace MCWrapper.RPC.Tests.Tests
             var inf = await _wallet.PublishAsync("root", "test_key", "some_data".ToHex(), "offchain");
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNotNull(inf.Result);
+            Assert.IsTrue(inf.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(inf);
         }
 
@@ -80,8 +78,7 @@ namespace MCWrapper.RPC.Tests.Tests
             var exp = await _wallet.PublishFromAsync(_chainName, UUID.NoHyphens, _address, "root", "test_key", "some_data".ToHex(), "offchain");
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
+            Assert.IsTrue(exp.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(exp);
 
             /*
@@ -92,8 +89,7 @@ namespace MCWrapper.RPC.Tests.Tests
             var inf = await _wallet.PublishFromAsync(_address, "root", "test_key", "some_data".ToHex(), "offchain");
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNotNull(inf.Result);
+            Assert.IsTrue(inf.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(inf);
         }
 
@@ -108,8 +104,7 @@ namespace MCWrapper.RPC.Tests.Tests
             var exp = await _wallet.PublishMultiAsync(_chainName, UUID.NoHyphens, "root", new object[] { new { key = "some_key", data = "some_data".ToHex() } }, "offchain");
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
+            Assert.IsTrue(exp.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(exp);
 
             /*
@@ -120,8 +115,7 @@ namespace MCWrapper.RPC.Tests.Tests
             var inf = await _wallet.PublishMultiAsync("root", new object[] { new { key = "some_key", data = "some_data".ToHex() } }, "offchain");
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNotNull(inf.Result);
+            Assert.IsTrue(inf.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(inf);
         }
 
@@ -136,8 +130,7 @@ namespace MCWrapper.RPC.Tests.Tests
             var exp = await _wallet.PublishMultiFromAsync(_chainName, UUID.NoHyphens, _address, "root", new object[] { new { key = "some_key", data = "some_data".ToHex() } }, "offchain");
 
             // Assert
-            Assert.IsNull(exp.Error);
-            Assert.IsNotNull(exp.Result);
+            Assert.IsTrue(exp.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(exp);
 
             /*
@@ -148,8 +141,7 @@ namespace MCWrapper.RPC.Tests.Tests
             var inf = await _wallet.PublishMultiFromAsync(_address, "root", new object[] { new { key = "some_key", data = "some_data".ToHex() } }, "offchain");
 
             // Assert
-            Assert.IsNull(inf.Error);
-            Assert.IsNotNull(inf.Result);
+            Assert.IsTrue(inf.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(inf);
         }
     }

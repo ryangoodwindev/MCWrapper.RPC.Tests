@@ -53,8 +53,7 @@ namespace MCWrapper.RPC.Test.Generate
             var expGet = await _generate.GetGenerateAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(expGet.Error);
-            Assert.IsNotNull(expGet.Result);
+            Assert.IsTrue(expGet.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<bool>>(expGet);
 
             /*
@@ -65,8 +64,7 @@ namespace MCWrapper.RPC.Test.Generate
             var infGet = await _generate.GetGenerateAsync();
 
             // Assert
-            Assert.IsNull(infGet.Error);
-            Assert.IsNotNull(infGet.Result);
+            Assert.IsTrue(infGet.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<bool>>(infGet);
         }
 
@@ -81,8 +79,7 @@ namespace MCWrapper.RPC.Test.Generate
             var expGet = await _generate.GetHashesPerSecAsync(_chainName, UUID.NoHyphens);
 
             // Assert
-            Assert.IsNull(expGet.Error);
-            Assert.IsNotNull(expGet.Result);
+            Assert.IsTrue(expGet.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<int>>(expGet);
 
             /*
@@ -93,8 +90,7 @@ namespace MCWrapper.RPC.Test.Generate
             var infGet = await _generate.GetHashesPerSecAsync();
 
             // Assert
-            Assert.IsNull(infGet.Error);
-            Assert.IsNotNull(infGet.Result);
+            Assert.IsTrue(infGet.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<int>>(infGet);
         }
 
@@ -109,8 +105,7 @@ namespace MCWrapper.RPC.Test.Generate
             var expSet = await _generate.SetGenerateAsync(_chainName, UUID.NoHyphens, true, 1);
 
             // Assert
-            Assert.IsNull(expSet.Error);
-            Assert.IsInstanceOf<object>(expSet.Result);
+            Assert.IsTrue(expSet.IsSuccess());
             Assert.IsInstanceOf<RpcResponse>(expSet);
 
             /*
@@ -120,8 +115,7 @@ namespace MCWrapper.RPC.Test.Generate
             var infSet = await _generate.SetGenerateAsync(true, 1);
 
             // Assert
-            Assert.IsNull(infSet.Error);
-            Assert.IsInstanceOf<object>(infSet.Result);
+            Assert.IsTrue(infSet.IsSuccess());
             Assert.IsInstanceOf<RpcResponse>(infSet);
         }
     }

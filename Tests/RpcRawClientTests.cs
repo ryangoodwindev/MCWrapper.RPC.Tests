@@ -1,5 +1,4 @@
 ﻿using MCWrapper.Data.Models.Raw;
-using MCWrapper.Data.Models.Wallet;
 using MCWrapper.Ledger.Entities;
 using MCWrapper.Ledger.Entities.Constants;
 using MCWrapper.Ledger.Entities.Extensions;
@@ -73,8 +72,8 @@ namespace MCWrapper.RPC.Test.Raw
 
             var infListUnspent = await _wallet.ListUnspentAsync(_chainName, UUID.NoHyphens, 0, 9999, new[] { _address });
 
-            var unspentAsset_0 = infListUnspent.Result.SingleOrDefault(s => s.Assets.Any(a => a.Name == infAssetModel_0.Name));
-            var unspentAsset_1 = infListUnspent.Result.SingleOrDefault(s => s.Assets.Any(a => a.Name == infAssetModel_1.Name));
+            var unspentAsset_0 = infListUnspent.Result.SingleOrDefault(s => s.Assets.Any(a => a.Name == infAssetModel_0.name));
+            var unspentAsset_1 = infListUnspent.Result.SingleOrDefault(s => s.Assets.Any(a => a.Name == infAssetModel_1.name));
             var infCreateRaw = await _raw.CreateRawTransactionAsync(_chainName, UUID.NoHyphens, new object[]
             {
                 new Dictionary<string, object>
@@ -93,51 +92,45 @@ namespace MCWrapper.RPC.Test.Raw
                 {
                     infNewAddress_0.Result, new Dictionary<string, int>
                     {
-                        { infAssetModel_0.Name, 1 },
-                        { infAssetModel_1.Name, 2 }
+                        { infAssetModel_0.name, 1 },
+                        { infAssetModel_1.name, 2 }
                     }
                 },
                 {
                     infNewAddress_1.Result, new Dictionary<string, int>
                     {
-                        { infAssetModel_0.Name, 3 },
-                        { infAssetModel_1.Name, 4 }
+                        { infAssetModel_0.name, 3 },
+                        { infAssetModel_1.name, 4 }
                     }
                 }
             }, Array.Empty<object>(), string.Empty);
 
-            Assert.IsNull(infCreateRaw.Error);
-            Assert.IsNotNull(infCreateRaw.Result);
+            Assert.IsTrue(infCreateRaw.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(infCreateRaw);
 
             var infDecode = await _raw.DecodeRawTransactionAsync(_chainName, UUID.NoHyphens, $"{infCreateRaw.Result}");
 
-            Assert.IsNull(infDecode.Error);
-            Assert.IsNotNull(infDecode.Result);
+            Assert.IsTrue(infDecode.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<DecodeRawTransactionResult>>(infDecode);
 
             var infRawChange = await _raw.AppendRawChangeAsync(_chainName, UUID.NoHyphens, $"{infCreateRaw.Result}", _address, 0);
 
-            Assert.IsNull(infRawChange.Error);
-            Assert.IsNotNull(infRawChange.Result);
+            Assert.IsTrue(infRawChange.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infRawChange);
 
             var infRawData = await _raw.AppendRawDataAsync(_chainName, UUID.NoHyphens, $"{infRawChange.Result}", "Some metadta".ToHex());
 
-            Assert.IsNull(infRawData.Error);
-            Assert.IsNotNull(infRawData.Result);
+            Assert.IsTrue(infRawData.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infRawData);
 
             var infSignRaw = await _raw.SignRawTransactionAsync(_chainName, UUID.NoHyphens, $"{infRawData.Result}");
 
-            Assert.IsNull(infSignRaw.Error);
-            Assert.IsNotNull(infSignRaw.Result);
+            Assert.IsTrue(infSignRaw.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<SignRawTransactionResult>>(infSignRaw);
 
             var infSendRaw = await _raw.SendRawTransactionAsync(_chainName, UUID.NoHyphens, infSignRaw.Result.Hex, false);
 
-            Assert.IsNull(infSendRaw.Error);
-            Assert.IsNotNull(infSendRaw.Result);
+            Assert.IsTrue(infSendRaw.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(infSendRaw);
 
             /*
@@ -157,8 +150,8 @@ namespace MCWrapper.RPC.Test.Raw
 
             var expListUnspent = await _wallet.ListUnspentAsync(0, 9999, new[] { _address });
 
-            var expUnspentAsset_0 = expListUnspent.Result.SingleOrDefault(s => s.Assets.Any(a => a.Name == expAssetModel_0.Name));
-            var expUnspentAsset_1 = expListUnspent.Result.SingleOrDefault(s => s.Assets.Any(a => a.Name == expAssetModel_1.Name));
+            var expUnspentAsset_0 = expListUnspent.Result.SingleOrDefault(s => s.Assets.Any(a => a.Name == expAssetModel_0.name));
+            var expUnspentAsset_1 = expListUnspent.Result.SingleOrDefault(s => s.Assets.Any(a => a.Name == expAssetModel_1.name));
 
             var expCreateRaw = await _raw.CreateRawTransactionAsync(new object[]
             {
@@ -178,51 +171,45 @@ namespace MCWrapper.RPC.Test.Raw
                 {
                     expNewAddress_0.Result, new Dictionary<string, int>
                     {
-                        { expAssetModel_0.Name, 1 },
-                        { expAssetModel_1.Name, 2 }
+                        { expAssetModel_0.name, 1 },
+                        { expAssetModel_1.name, 2 }
                     }
                 },
                 {
                     expNewAddress_1.Result, new Dictionary<string, int>
                     {
-                        { expAssetModel_0.Name, 3 },
-                        { expAssetModel_1.Name, 4 }
+                        { expAssetModel_0.name, 3 },
+                        { expAssetModel_1.name, 4 }
                     }
                 }
             }, Array.Empty<object>(), string.Empty);
 
-            Assert.IsNull(expCreateRaw.Error);
-            Assert.IsNotNull(expCreateRaw.Result);
+            Assert.IsTrue(expCreateRaw.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<object>>(expCreateRaw);
 
             var expDecode = await _raw.DecodeRawTransactionAsync($"{expCreateRaw.Result}");
 
-            Assert.IsNull(expDecode.Error);
-            Assert.IsNotNull(expDecode.Result);
+            Assert.IsTrue(expDecode.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<DecodeRawTransactionResult>>(expDecode);
 
             var expRawChange = await _raw.AppendRawChangeAsync($"{expCreateRaw.Result}", _address, 0);
 
-            Assert.IsNull(expRawChange.Error);
-            Assert.IsNotNull(expRawChange.Result);
+            Assert.IsTrue(expRawChange.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expRawChange);
 
             var expRawData = await _raw.AppendRawDataAsync($"{expRawChange.Result}", "Some metadta".ToHex());
 
-            Assert.IsNull(expRawData.Error);
-            Assert.IsNotNull(expRawData.Result);
+            Assert.IsTrue(expRawData.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expRawData);
 
             var expSignRaw = await _raw.SignRawTransactionAsync($"{expRawData.Result}");
 
-            Assert.IsNull(expSignRaw.Error);
-            Assert.IsNotNull(expSignRaw.Result);
+            Assert.IsTrue(expSignRaw.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<SignRawTransactionResult>>(expSignRaw);
 
             var expSendRaw = await _raw.SendRawTransactionAsync(expSignRaw.Result.Hex, false);
 
-            Assert.IsNull(expSendRaw.Error);
-            Assert.IsNotNull(expSendRaw.Result);
+            Assert.IsTrue(expSendRaw.IsSuccess());
             Assert.IsInstanceOf<RpcResponse<string>>(expSendRaw);
         }
     }

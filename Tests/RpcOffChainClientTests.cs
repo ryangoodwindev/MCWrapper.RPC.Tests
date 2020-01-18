@@ -49,7 +49,7 @@ namespace MCWrapper.RPC.Test.OffChain
 
             var expPurge = await _offChain.PurgePublishedItemsAsync(_chainName, nameof(PurgePublishedItemsAsyncTest), "some_txid(s)");
 
-            Assert.IsNotNull(expPurge);
+            Assert.IsTrue(expPurge.IsSuccess());
 
             /*
                Inferred blockchain name test
@@ -57,7 +57,7 @@ namespace MCWrapper.RPC.Test.OffChain
 
             var infPurge = await _offChain.PurgePublishedItemsAsync("some_txid(s)");
 
-            Assert.IsNotNull(infPurge);
+            Assert.IsTrue(infPurge.IsSuccess());
         }
 
         [Test, Ignore("Ignored until I can test with enterprise edition")]
@@ -69,7 +69,7 @@ namespace MCWrapper.RPC.Test.OffChain
 
             var expPurge = await _offChain.PurgeStreamItemsAsync(_chainName, nameof(PurgeStreamItemsAsyncTest), "some_stream_identifier", "some_txid(s)");
 
-            Assert.IsNotNull(expPurge);
+            Assert.IsTrue(expPurge.IsSuccess());
 
             /*
                Inferred blockchain name test
@@ -77,7 +77,7 @@ namespace MCWrapper.RPC.Test.OffChain
 
             var infPurge = await _offChain.PurgeStreamItemsAsync("some_stream_identifier", "some_txid(s)");
 
-            Assert.IsNotNull(infPurge);
+            Assert.IsTrue(infPurge.IsSuccess());
         }
 
         [Test, Ignore("Ignored until I can test with enterprise edition")]
@@ -89,7 +89,7 @@ namespace MCWrapper.RPC.Test.OffChain
 
             var expRetrieve = await _offChain.RetrieveStreamItemsAsync(_chainName, nameof(RetrieveStreamItemsAsyncTest), "some_stream_identifier", "some_txid(s)");
 
-            Assert.IsNotNull(expRetrieve);
+            Assert.IsTrue(expRetrieve.IsSuccess());
 
             /*
                Inferred blockchain name test
@@ -97,7 +97,7 @@ namespace MCWrapper.RPC.Test.OffChain
 
             var infRetrieve = await _offChain.RetrieveStreamItemsAsync("some_stream_identifier", "some_txid(s)");
 
-            Assert.IsNotNull(infRetrieve);
+            Assert.IsTrue(infRetrieve.IsSuccess());
         }
     }
 }
