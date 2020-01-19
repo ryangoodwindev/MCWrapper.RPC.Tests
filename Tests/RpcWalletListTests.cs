@@ -1,4 +1,5 @@
 ﻿using MCWrapper.Data.Models.Wallet;
+using MCWrapper.Data.Models.Wallet.CustomModels;
 using MCWrapper.Ledger.Entities;
 using MCWrapper.Ledger.Entities.Extensions;
 using MCWrapper.RPC.Connection;
@@ -114,7 +115,7 @@ namespace MCWrapper.RPC.Test.Lists
 
             // Assert
             Assert.IsTrue(expActual.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(expActual);
+            Assert.IsInstanceOf<RpcResponse<IList<object>>>(expActual);
 
             /*
               Inferred blockchain name test
@@ -125,7 +126,7 @@ namespace MCWrapper.RPC.Test.Lists
 
             // Assert
             Assert.IsTrue(infActual.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(infActual);
+            Assert.IsInstanceOf<RpcResponse<IList<object>>>(infActual);
         }
 
         [Test]
@@ -196,7 +197,7 @@ namespace MCWrapper.RPC.Test.Lists
 
             // Assert
             Assert.IsTrue(expActual.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(expActual);
+            Assert.IsInstanceOf<RpcResponse<IList<Transaction>>>(expActual);
 
             /*
               Inferred blockchain name test
@@ -207,7 +208,7 @@ namespace MCWrapper.RPC.Test.Lists
 
             // Assert
             Assert.IsTrue(infActual.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(infActual);
+            Assert.IsInstanceOf<RpcResponse<IList<Transaction>>>(infActual);
         }
 
         [Test, Ignore("Accounts are not supported with scalable wallet - if you need listaccounts, run multichaind -walletdbversion=1 -rescan, but the wallet will perform worse")]
@@ -222,7 +223,7 @@ namespace MCWrapper.RPC.Test.Lists
 
             // Assert
             Assert.IsTrue(expActual.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(expActual);
+            Assert.IsInstanceOf<RpcResponse<IList<object>>>(expActual);
 
             /*
               Inferred blockchain name test
@@ -233,7 +234,7 @@ namespace MCWrapper.RPC.Test.Lists
 
             // Assert
             Assert.IsTrue(infActual.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(infActual);
+            Assert.IsInstanceOf<RpcResponse<IList<object>>>(infActual);
         }
 
         [Test, Ignore("Accounts are not supported with scalable wallet - if you need listaccounts, run multichaind -walletdbversion=1 -rescan, but the wallet will perform worse")]
@@ -248,7 +249,7 @@ namespace MCWrapper.RPC.Test.Lists
 
             // Assert
             Assert.IsTrue(expActual.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(expActual);
+            Assert.IsInstanceOf<RpcResponse<IList<object>>>(expActual);
 
             /*
               Inferred blockchain name test
@@ -259,7 +260,7 @@ namespace MCWrapper.RPC.Test.Lists
 
             // Assert
             Assert.IsTrue(infActual.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(infActual);
+            Assert.IsInstanceOf<RpcResponse<IList<object>>>(infActual);
         }
 
         [Test]
@@ -277,7 +278,7 @@ namespace MCWrapper.RPC.Test.Lists
 
             // Assert
             Assert.IsTrue(expActual.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(expActual);
+            Assert.IsInstanceOf<RpcResponse>(expActual);
 
             /*
               Inferred blockchain name test
@@ -288,7 +289,7 @@ namespace MCWrapper.RPC.Test.Lists
 
             // Assert
             Assert.IsTrue(infActual.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(infActual);
+            Assert.IsInstanceOf<RpcResponse>(infActual);
         }
 
         [Test]
@@ -303,7 +304,7 @@ namespace MCWrapper.RPC.Test.Lists
 
             // Assert
             Assert.IsTrue(expActual.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(expActual);
+            Assert.IsInstanceOf<RpcResponse<IList<object>>>(expActual);
 
             /*
               Inferred blockchain name test
@@ -314,7 +315,7 @@ namespace MCWrapper.RPC.Test.Lists
 
             // Assert
             Assert.IsTrue(infActual.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(infActual);
+            Assert.IsInstanceOf<RpcResponse<IList<object>>>(infActual);
         }
 
         [Test]
@@ -459,7 +460,7 @@ namespace MCWrapper.RPC.Test.Lists
 
             // Assert
             Assert.IsTrue(expActual.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(expActual);
+            Assert.IsInstanceOf<RpcResponse<IList<object>>>(expActual);
 
             /*
               Inferred blockchain name test
@@ -470,7 +471,7 @@ namespace MCWrapper.RPC.Test.Lists
 
             // Assert
             Assert.IsTrue(infActual.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(infActual);
+            Assert.IsInstanceOf<RpcResponse<IList<object>>>(infActual);
         }
 
         [Test]
@@ -488,7 +489,7 @@ namespace MCWrapper.RPC.Test.Lists
 
             // Assert
             Assert.IsTrue(expActual.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(expActual);
+            Assert.IsInstanceOf<RpcResponse<IList<object>>>(expActual);
 
             /*
               Inferred blockchain name test
@@ -499,7 +500,7 @@ namespace MCWrapper.RPC.Test.Lists
 
             // Assert
             Assert.IsTrue(infActual.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(infActual);
+            Assert.IsInstanceOf<RpcResponse<IList<object>>>(infActual);
         }
 
         [Test, Ignore("Not supported with scalable wallet - if you need listtransactions, run multichaind -walletdbversion=1 -rescan, but the wallet will perform worse")]

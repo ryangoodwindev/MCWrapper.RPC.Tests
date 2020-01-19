@@ -106,7 +106,7 @@ namespace MCWrapper.RPC.Test.Raw
             }, Array.Empty<object>(), string.Empty);
 
             Assert.IsTrue(infCreateRaw.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(infCreateRaw);
+            Assert.IsInstanceOf<RpcResponse>(infCreateRaw);
 
             var infDecode = await _raw.DecodeRawTransactionAsync(_chainName, UUID.NoHyphens, $"{infCreateRaw.Result}");
 
@@ -185,7 +185,7 @@ namespace MCWrapper.RPC.Test.Raw
             }, Array.Empty<object>(), string.Empty);
 
             Assert.IsTrue(expCreateRaw.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(expCreateRaw);
+            Assert.IsInstanceOf<RpcResponse>(expCreateRaw);
 
             var expDecode = await _raw.DecodeRawTransactionAsync($"{expCreateRaw.Result}");
 

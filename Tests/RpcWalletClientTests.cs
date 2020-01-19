@@ -64,7 +64,7 @@ namespace MCWrapper.RPC.Test.Wallet
 
             // Assert
             Assert.IsTrue(exp.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(exp);
+            Assert.IsInstanceOf<RpcResponse<string>>(exp);
 
             /*
                Inferred blockchain name test
@@ -75,7 +75,7 @@ namespace MCWrapper.RPC.Test.Wallet
 
             // Assert
             Assert.IsTrue(inf.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(inf);
+            Assert.IsInstanceOf<RpcResponse<string>>(inf);
         }
 
         [Test]
@@ -135,7 +135,7 @@ namespace MCWrapper.RPC.Test.Wallet
 
             // Assert
             Assert.IsTrue(expApprove.IsSuccess()); ;
-            Assert.IsInstanceOf<RpcResponse<object>>(expApprove);
+            Assert.IsInstanceOf<RpcResponse<string>>(expApprove);
 
             /*
                Inferred blockchain name test
@@ -149,7 +149,7 @@ namespace MCWrapper.RPC.Test.Wallet
 
             // Assert
             Assert.IsTrue(infApprove.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(infApprove);
+            Assert.IsInstanceOf<RpcResponse<string>>(infApprove);
         }
 
         [Test]
@@ -164,7 +164,7 @@ namespace MCWrapper.RPC.Test.Wallet
 
             // Assert
             Assert.IsTrue(expCombine.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(expCombine);
+            Assert.IsInstanceOf<RpcResponse<IList<string>>>(expCombine);
 
             /*
                Inferred blockchain name test
@@ -175,7 +175,7 @@ namespace MCWrapper.RPC.Test.Wallet
 
             // Assert
             Assert.IsTrue(infCombine.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(infCombine);
+            Assert.IsInstanceOf<RpcResponse<IList<string>>>(infCombine);
         }
 
         [Test]
@@ -195,7 +195,7 @@ namespace MCWrapper.RPC.Test.Wallet
 
             // Assert
             Assert.IsTrue(expComplete.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(expComplete);
+            Assert.IsInstanceOf<RpcResponse<string>>(expComplete);
 
             /*
                Inferred blockchain name test
@@ -211,7 +211,7 @@ namespace MCWrapper.RPC.Test.Wallet
 
             // Assert
             Assert.IsTrue(infComplete.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(infComplete);
+            Assert.IsInstanceOf<RpcResponse<string>>(infComplete);
         }
 
         [Test]
@@ -270,7 +270,7 @@ namespace MCWrapper.RPC.Test.Wallet
 
             // Assert
             Assert.IsTrue(expDisable.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(expDisable);
+            Assert.IsInstanceOf<RpcResponse<string>>(expDisable);
 
             /*
                Inferred blockchain name test
@@ -285,7 +285,7 @@ namespace MCWrapper.RPC.Test.Wallet
 
             // Assert
             Assert.IsTrue(infDisable.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(infDisable);
+            Assert.IsInstanceOf<RpcResponse<string>>(infDisable);
         }
 
         [Test]
@@ -300,7 +300,7 @@ namespace MCWrapper.RPC.Test.Wallet
 
             // Assert
             Assert.IsTrue(exp.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(exp);
+            Assert.IsInstanceOf<RpcResponse>(exp);
 
             /*
                Inferred blockchain name test
@@ -311,7 +311,7 @@ namespace MCWrapper.RPC.Test.Wallet
 
             // Assert
             Assert.IsTrue(inf.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(inf);
+            Assert.IsInstanceOf<RpcResponse>(inf);
         }
 
         [Test]
@@ -329,7 +329,7 @@ namespace MCWrapper.RPC.Test.Wallet
 
             // Assert
             Assert.IsTrue(exp.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(exp);
+            Assert.IsInstanceOf<RpcResponse<bool>>(exp);
 
             /*
                Inferred blockchain name test
@@ -343,7 +343,7 @@ namespace MCWrapper.RPC.Test.Wallet
 
             // Assert
             Assert.IsTrue(inf.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(inf);
+            Assert.IsInstanceOf<RpcResponse<bool>>(inf);
         }
 
         [Test, Ignore("Accounts are not supported with scalable wallet - if you need move, run multichaind -walletdbversion=1 -rescan, but the wallet will perform worse")]
@@ -616,7 +616,7 @@ namespace MCWrapper.RPC.Test.Wallet
 
             // Assert
             Assert.IsTrue(exp.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(exp);
+            Assert.IsInstanceOf<RpcResponse>(exp);
 
             /*
                Inferred blockchain name test
@@ -627,7 +627,7 @@ namespace MCWrapper.RPC.Test.Wallet
 
             // Assert
             Assert.IsTrue(inf.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(inf);
+            Assert.IsInstanceOf<RpcResponse>(inf);
         }
 
         [Test]
@@ -687,7 +687,7 @@ namespace MCWrapper.RPC.Test.Wallet
 
             // Assert
             Assert.IsTrue(exp.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(exp);
+            Assert.IsInstanceOf<RpcResponse>(exp);
 
             /*
                Inferred blockchain name test
@@ -701,7 +701,7 @@ namespace MCWrapper.RPC.Test.Wallet
 
             // Assert
             Assert.IsTrue(inf.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(inf);
+            Assert.IsInstanceOf<RpcResponse>(inf);
         }
     }
 }

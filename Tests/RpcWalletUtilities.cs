@@ -79,7 +79,7 @@ namespace MCWrapper.RPC.Test.Wallet.Utilities
 
             // Assert
             Assert.IsTrue(exp.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(exp);
+            Assert.IsInstanceOf<RpcResponse<string>>(exp);
 
             /*
                Inferred blockchain name test
@@ -90,7 +90,7 @@ namespace MCWrapper.RPC.Test.Wallet.Utilities
 
             // Assert
             Assert.IsTrue(inf.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(inf);
+            Assert.IsInstanceOf<RpcResponse<string>>(inf);
         }
 
         [Test, Ignore("Dumping the wallet seems to slow down the network. Test is passing and ignored.")]

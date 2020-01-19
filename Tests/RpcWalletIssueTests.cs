@@ -192,7 +192,7 @@ namespace MCWrapper.RPC.Test.Issue
 
             // Assert
             Assert.IsTrue(expAct_1.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(expAct_1);
+            Assert.IsInstanceOf<RpcResponse<string>>(expAct_1);
 
 
             // Act
@@ -201,7 +201,7 @@ namespace MCWrapper.RPC.Test.Issue
 
             // Assert
             Assert.IsTrue(expAct_2.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(expAct_2);
+            Assert.IsInstanceOf<RpcResponse<string>>(expAct_2);
 
             /*
               Inferred blockchain name test
@@ -213,7 +213,7 @@ namespace MCWrapper.RPC.Test.Issue
 
             // Assert
             Assert.IsTrue(infAct_1.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(infAct_1);
+            Assert.IsInstanceOf<RpcResponse<string>>(infAct_1);
 
 
             // Act
@@ -222,7 +222,7 @@ namespace MCWrapper.RPC.Test.Issue
 
             // Assert
             Assert.IsTrue(infAct_2.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(infAct_2);
+            Assert.IsInstanceOf<RpcResponse<string>>(infAct_2);
         }
 
         [Test]
@@ -241,7 +241,7 @@ namespace MCWrapper.RPC.Test.Issue
 
             // Assert
             Assert.IsTrue(expAct_1.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(expAct_1);
+            Assert.IsInstanceOf<RpcResponse<string>>(expAct_1);
 
             // Act
             var expAct_2 = await _wallet.IssueMoreAsync(_chainName, UUID.NoHyphens, _address, issue.Result, 100, 0,
@@ -249,7 +249,7 @@ namespace MCWrapper.RPC.Test.Issue
 
             // Assert
             Assert.IsTrue(expAct_2.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(expAct_2);
+            Assert.IsInstanceOf<RpcResponse<string>>(expAct_2);
 
             /*
               Inferred blockchain name test
@@ -261,7 +261,7 @@ namespace MCWrapper.RPC.Test.Issue
 
             // Assert
             Assert.IsTrue(infAct_1.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(infAct_1);
+            Assert.IsInstanceOf<RpcResponse<string>>(infAct_1);
 
             // Act
             var infAct_2 = await _wallet.IssueMoreAsync(_address, issue.Result, 100, 0,
@@ -269,7 +269,7 @@ namespace MCWrapper.RPC.Test.Issue
 
             // Assert
             Assert.IsTrue(infAct_2.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(infAct_2);
+            Assert.IsInstanceOf<RpcResponse<string>>(infAct_2);
         }
 
         [Test]

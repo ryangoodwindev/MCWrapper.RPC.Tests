@@ -100,7 +100,7 @@ namespace MCWrapper.RPC.Test.Create
 
             // Assert
             Assert.IsTrue(expDisable.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(expDisable);
+            Assert.IsInstanceOf<RpcResponse<string>>(expDisable);
 
             /*
                Inferred blockchain name test
@@ -125,7 +125,7 @@ namespace MCWrapper.RPC.Test.Create
 
             // Assert
             Assert.IsTrue(infDisable.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(infDisable);
+            Assert.IsInstanceOf<RpcResponse<string>>(infDisable);
         }
 
         [Test]
@@ -140,7 +140,7 @@ namespace MCWrapper.RPC.Test.Create
 
             // Assert
             Assert.IsTrue(exp.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(exp);
+            Assert.IsInstanceOf<RpcResponse>(exp);
 
             /*
                Inferred blockchain name test
@@ -151,7 +151,7 @@ namespace MCWrapper.RPC.Test.Create
 
             // Assert
             Assert.IsTrue(inf.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<object>>(inf);
+            Assert.IsInstanceOf<RpcResponse>(inf);
         }
 
         [Test]
