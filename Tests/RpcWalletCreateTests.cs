@@ -49,6 +49,32 @@ namespace MCWrapper.RPC.Test.Create
         }
 
         [Test]
+        public async Task CreateTestAsync()
+        {
+            /*
+               Explicit blockchain name test
+            */
+
+            // Act
+            var exp = await _wallet.CreateAsync(_chainName, UUID.NoHyphens, Entity.Stream, StreamEntity.GetUUID(), true, new { });
+
+            // Assert
+            Assert.IsTrue(exp.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<string>>(exp);
+
+            /*
+               Inferred blockchain name test
+            */
+
+            // Act
+            var inf = await _wallet.CreateAsync(Entity.Stream, StreamEntity.GetUUID(), true, new { });
+
+            // Assert
+            Assert.IsTrue(inf.IsSuccess());
+            Assert.IsInstanceOf<RpcResponse<string>>(inf);
+        }
+
+        [Test]
         public async Task CreateFromTestAsync()
         {
             /*
@@ -152,32 +178,6 @@ namespace MCWrapper.RPC.Test.Create
             // Assert
             Assert.IsTrue(inf.IsSuccess());
             Assert.IsInstanceOf<RpcResponse>(inf);
-        }
-
-        [Test]
-        public async Task CreateTestAsync()
-        {
-            /*
-               Explicit blockchain name test
-            */
-
-            // Act
-            var exp = await _wallet.CreateAsync(_chainName, UUID.NoHyphens, Entity.Stream, StreamEntity.GetUUID(), true, new { });
-
-            // Assert
-            Assert.IsTrue(exp.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<string>>(exp);
-
-            /*
-               Inferred blockchain name test
-            */
-
-            // Act
-            var inf = await _wallet.CreateAsync(Entity.Stream, StreamEntity.GetUUID(), true, new { });
-
-            // Assert
-            Assert.IsTrue(inf.IsSuccess());
-            Assert.IsInstanceOf<RpcResponse<string>>(inf);
         }
     }
 }

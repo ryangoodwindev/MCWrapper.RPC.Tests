@@ -27,7 +27,7 @@ namespace MCWrapper.RPC.Test.ServicesPipeline
             {
                 rpcOptions.ChainHostname = "localhost";
                 rpcOptions.ChainRpcPort = 8384;
-                rpcOptions.ChainUseSsl = true;
+                rpcOptions.ChainUseSsl = false;
 
                 rpcOptions.ChainName = "CurrencyTestCoin";
                 rpcOptions.ChainUsername = "multichainrpc";
@@ -63,7 +63,7 @@ namespace MCWrapper.RPC.Test.ServicesPipeline
             {
                 rpcOptions.ChainHostname = "localhost";
                 rpcOptions.ChainRpcPort = 8384;
-                rpcOptions.ChainUseSsl = true;
+                rpcOptions.ChainUseSsl = false;
 
                 rpcOptions.ChainName = "CurrencyTestCoin";
                 rpcOptions.ChainUsername = "multichainrpc";

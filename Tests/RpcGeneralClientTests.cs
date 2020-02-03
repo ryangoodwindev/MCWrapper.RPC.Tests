@@ -489,7 +489,7 @@ namespace MCWrapper.RPC.Test.General
         }
 
         [Test]
-        public async Task GetTxOutExplicitTestAsync()
+        public async Task GetTxOutTestAsync()
         {
             /*
                Explicit blockchain name test
